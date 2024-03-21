@@ -10,6 +10,7 @@ export const Wrapper = styled.button`
   align-items: center;
   height: 5%;
   padding-left: 10%;
+  cursor: pointer;
 `;
 
 export const Icon = styled.img`
@@ -17,10 +18,11 @@ export const Icon = styled.img`
   width: 20%;
 `;
 
-export const Title = styled.h1`
+export const Title = styled.h1<{ color: string }>`
   color: #ffffff;
   font-size: 1.5em;
   margin: 0;
-  margin-left: 1%;
+  margin-left: 4%;
   font-family: 'Roboto Flex';
+  color: ${(props) => props.color};
 `;

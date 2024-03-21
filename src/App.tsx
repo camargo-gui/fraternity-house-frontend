@@ -1,6 +1,6 @@
-import React from 'react';
 import './App.css';
-import { BaseScreen } from './screen/base-screen';
+import React from 'react';
+import { BaseScreen } from './common/components/base-screen/base-screen';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function App() {
