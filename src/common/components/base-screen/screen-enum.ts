@@ -10,6 +10,12 @@ export enum Screens {
   Physical = 'Physical',
 }
 
+export interface ScreenListItemProps {
+  title: string;
+  icon: string;
+  route?: string;
+}
+
 export const screenList = [
   {
     title: 'Fichas',
@@ -39,9 +45,11 @@ export const screenList = [
   {
     title: 'Nutricionista',
     icon: Icon.nutritionist_icon,
+    route: '/nutricionista',
   },
   {
     title: 'Avaliação Física',
     icon: Icon.physical_icon,
+    route: '/avaliacao-fisica',
   },
 ];

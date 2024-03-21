@@ -4,8 +4,9 @@ import { Title, Wrapper } from './list-item.styles';
 interface ListItemProps {
   title: string;
   icon: React.ElementType;
+  route: string;
   isActive: boolean;
-  onClick: () => void;
+  onClick: (route: string, title: string) => void;
 }
 
 export const ListItem = ({
@@ -13,14 +14,19 @@ export const ListItem = ({
   title,
   isActive,
   onClick,
+  route,
 }: ListItemProps): ReactElement => {
   const getColor = (): string => {
     return isActive ? '#007bff' : '#ffffff';
   };
 
   return (
-    <Wrapper onClick={onClick}>
-      <Icon fill={getColor()} stroke={getColor()} />
+    <Wrapper
+      onClick={() => {
+        onClick(route, title);
+      }}
+    >
+      <Icon fill={getColor()} stroke={getColor()} width="32px" height="32px" />
       <Title color={getColor()}>{title}</Title>
     </Wrapper>
   );
