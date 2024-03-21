@@ -3,6 +3,7 @@ import { StyledButton } from './button.styles';
 
 interface Props {
   text: string;
+  onClick: () => void;
   backgroundColor?: string;
   border?: string;
   color?: string;
@@ -11,10 +12,9 @@ interface Props {
   margin?: string;
   borderRadius?: string;
   hoverBackgroundColor?: string;
+  width?: string;
 }
 
 export const Button = ({ text, ...props }: Props): React.ReactElement => {
   return <StyledButton {...props}>{text}</StyledButton>;
 };
-
-export default Button;

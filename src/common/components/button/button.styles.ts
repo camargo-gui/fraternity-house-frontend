@@ -9,6 +9,7 @@ interface StyledButtonProps {
   margin?: string;
   borderRadius?: string;
   hoverBackgroundColor?: string;
+  width?: string;
 }
 
 export const StyledButton = styled.button<StyledButtonProps>`
@@ -21,6 +22,7 @@ export const StyledButton = styled.button<StyledButtonProps>`
   display: inline-block;
   font-size: ${({ fontSize }) => fontSize ?? '16px'};
   margin: ${({ margin }) => margin ?? '4px 2px'};
+  width: ${({ width }) => width ?? '170px'};
   cursor: pointer;
   border-radius: ${({ borderRadius }) => borderRadius ?? '25px'};
   &:hover {

@@ -26,7 +26,7 @@ export const ListItem = ({
         onClick(route, title);
       }}
     >
-      <Icon fill={getColor()} stroke={getColor()} width="32px" height="32px" />
+      <Icon fill={getColor()} stroke={getColor()} width="24px" height="24px" />
       <Title color={getColor()}>{title}</Title>
     </Wrapper>
   );
