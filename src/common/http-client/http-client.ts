@@ -1,5 +1,7 @@
 import axios, { type AxiosError } from 'axios';
 import { toast } from 'react-toastify';
+import { HttpClientResponse } from './http-client-response';
+import { type HttpClientRequest } from './http-client-request';
 
 interface ApiResponse<T> {
   data: T;
@@ -22,29 +24,19 @@ export class HttpClient {
     this.instance.defaults.headers.Authorization = `Bearer ${token}`;
   }
 
-  // get
-  public async get<T>(url: string): Promise<T | undefined> {
+  public async request(
+    request: HttpClientRequest,
+  ): Promise<HttpClientResponse | undefined> {
     try {
-      const response = await this.instance.get<ApiResponse<T>>(
-        this.baseUrl + url,
-      );
-      return response.data.data;
-    } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(
-        (axiosError.response?.data as { message: string[] })?.message
-          .map((message: string) => message)
-          .join('\n'),
-      );
-      return undefined;
-    }
-  }
+      const response = await this.instance.request<ApiResponse<unknown>>({
+        url: this.baseUrl + request.path,
+        method: request.method,
+        data: request.data,
+        params: request.params,
+        headers: request.headers,
+      });
 
-  // post
-  public async post<T>(url: string, data: T): Promise<boolean> {
-    try {
-      await this.instance.post(this.baseUrl + url, data);
-      return true;
+      return new HttpClientResponse(response.status, response.data);
     } catch (error) {
       const axiosError = error as AxiosError;
       toast.error(
@@ -52,39 +44,7 @@ export class HttpClient {
           .map((message: string) => message)
           .join('\n'),
       );
-      return false;
-    }
-  }
-
-  // put
-  public async put<T>(url: string, data: T): Promise<boolean> {
-    try {
-      await this.instance.put(this.baseUrl + url, data);
-      return true;
-    } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(
-        (axiosError.response?.data as { message: string[] })?.message
-          .map((message: string) => message)
-          .join('\n'),
-      );
-      return false;
-    }
-  }
-
-  // delete
-  public async delete(url: string): Promise<boolean> {
-    try {
-      await this.instance.delete(this.baseUrl + url);
-      return true;
-    } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(
-        (axiosError.response?.data as { message: string[] })?.message
-          .map((message: string) => message)
-          .join('\n'),
-      );
-      return false;
+      throw new Error();
     }
   }
 }
