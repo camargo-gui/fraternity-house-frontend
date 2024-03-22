@@ -1,7 +1,12 @@
 import React, { type ReactElement } from 'react';
 import Card from 'react-bootstrap/Card';
+import { type ResidentDTO } from '../dto/resident-dto';
 
-export const CardListItem = (): ReactElement => {
+interface Props {
+  residents: ResidentDTO[];
+}
+
+export const CardListItem = ({ residents }: Props): ReactElement => {
   return (
     <Card style={{ width: '18rem' }}>
       <Card.Img
@@ -9,8 +14,12 @@ export const CardListItem = (): ReactElement => {
         src={require('../../assets/images/116609218.jpg')}
       />
       <Card.Body>
-        <Card.Title>Pedro Felitto</Card.Title>
-        <Card.Text>Idade: 20 anos</Card.Text>
+        {residents.map((resident) => (
+          <div key={resident.cpf}>
+            <Card.Title>Nome: {resident.name}</Card.Title>
+            <Card.Text>CPF: {resident.cpf} anos</Card.Text>
+          </div>
+        ))}
       </Card.Body>
     </Card>
   );

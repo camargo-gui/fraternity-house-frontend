@@ -1,6 +1,7 @@
-import React, { useState, type ReactElement } from 'react';
-import { ResidentScreenForm } from './resident-screen';
-import { ResidentList } from './resident-list-screen';
+import React, { useState, type ReactElement, useEffect } from 'react';
+import { ResidentScreenForm } from './forms/resident-screen-form';
+import { ResidentList } from './lists/resident-list-screen';
+import { useResident } from '../hooks/use-resident';
 
 enum Screen {
   Register = 'Register',
@@ -9,6 +10,12 @@ enum Screen {
 
 export const ResidentContainer = (): ReactElement => {
   const [screen, setScreen] = useState<Screen>(Screen.List);
+  const { residents, refetch } = useResident();
+
+  useEffect(() => {
+    void refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [screen]);
 
   const changeScreen = (): void => {
     setScreen(screen === Screen.Register ? Screen.List : Screen.Register);
@@ -17,6 +24,6 @@ export const ResidentContainer = (): ReactElement => {
   return screen === Screen.Register ? (
     <ResidentScreenForm changeScreen={changeScreen} />
   ) : (
-    <ResidentList changeScreen={changeScreen} />
+    <ResidentList changeScreen={changeScreen} residents={residents} />
   );
 };
