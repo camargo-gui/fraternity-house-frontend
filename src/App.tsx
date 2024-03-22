@@ -11,12 +11,13 @@ import React from 'react';
 import { ScreenTitle } from './common/components/base-screen/base-screen.styles';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ApplicationContext } from './application-context';
+import { HttpClient } from './common/http-client/http-client';
 
 function App(): ReactElement {
   return (
-    <>
+    <ApplicationContext.Provider value={{ httpClient: new HttpClient() }}>
       <ToastContainer />
-
       <Router>
         <Routes>
           {screenList.map((screen) => {
@@ -37,7 +38,7 @@ function App(): ReactElement {
           <Route path="/" element={<Navigate to="/fichas" replace />} />
         </Routes>
       </Router>
-    </>
+    </ApplicationContext.Provider>
   );
 }
 

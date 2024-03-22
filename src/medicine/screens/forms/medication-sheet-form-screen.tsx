@@ -1,4 +1,4 @@
-import React, { type ReactElement } from 'react';
+import { type ReactElement } from 'react';
 import { FormInput } from '../../../common/components/form-input/form-input';
 import type { Medicine } from '../../entities/medicine';
 import { Button, ButtonGroup, Wrapper } from '../medicine.styles';

@@ -1,4 +1,4 @@
-import React, { useState, type ReactElement, useEffect } from 'react';
+import { useState, type ReactElement, useEffect } from 'react';
 import { ResidentScreenForm } from './forms/resident-screen-form';
 import { ResidentList } from './lists/resident-list-screen';
 import { useResident } from '../hooks/use-resident';

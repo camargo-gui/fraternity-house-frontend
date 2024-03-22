@@ -6,6 +6,7 @@ import {
 import * as Icon from '../../../assets/icons-mapping';
 import { ResidentContainer } from './../../../resident/screens/resident.container';
 import { MedicineContainer } from '../../../medicine/screens/medicine.container';
+import { EmployeeContainer } from '../../../employee/screens/employee.container';
 
 export enum Screens {
   Files = 'Files',
@@ -43,7 +44,7 @@ export const screenList: ScreenListItemProps[] = [
     title: 'Funcionários',
     icon: Icon.employees_icon,
     route: '/funcionarios',
-    element: ResidentContainer,
+    element: EmployeeContainer,
   },
   {
     title: 'Fichas de Medicamentos',
