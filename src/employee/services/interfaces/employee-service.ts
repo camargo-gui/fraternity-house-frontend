@@ -5,5 +5,5 @@ export interface EmployeeService {
   registerEmployee: (
     httpClient: HttpClient,
     employee: Employee,
-  ) => Promise<boolean>;
+  ) => Promise<void>;
 }

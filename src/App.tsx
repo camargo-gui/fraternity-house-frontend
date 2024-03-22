@@ -13,6 +13,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ApplicationContext } from './application-context';
 import { HttpClient } from './common/http-client/http-client';
+import { LoginContainer } from './login/screens/login.container';
 
 function App(): ReactElement {
   return (
@@ -35,7 +36,8 @@ function App(): ReactElement {
               />
             );
           })}
-          <Route path="/" element={<Navigate to="/fichas" replace />} />
+          <Route path="/login" element={<LoginContainer />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
         </Routes>
       </Router>
     </ApplicationContext.Provider>

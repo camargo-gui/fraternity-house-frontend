@@ -3,7 +3,6 @@ import { EmployeeScreen } from './employee';
 import { type Role } from '../entities/role';
 import { ObjectionRoleService } from '../services/objection/objection-role-service';
 import { ObjectionEmployeeService } from '../services/objection/objection-employee-service';
-import { toast } from 'react-toastify';
 import { type Employee } from '../entities/employee';
 import { ApplicationContext } from '../../application-context';
 
@@ -14,19 +13,15 @@ export const EmployeeContainer = (): ReactElement => {
 
   useEffect(() => {
     const fetchRoles = async (): Promise<void> => {
-      const response = await new ObjectionRoleService().getRoles();
+      const response = await new ObjectionRoleService().getRoles(httpClient);
       setRoles(response);
     };
     fetchRoles().catch(() => {});
-  }, []);
+  }, [httpClient]);
 
   const onSubmit = async (employee: Employee): Promise<void> => {
     setIsSubmitting(true);
-    const response = await new ObjectionEmployeeService().registerEmployee(
-      httpClient,
-      employee,
-    );
-    if (response) toast.success('Funcionário cadastrado com sucesso!');
+    await new ObjectionEmployeeService().registerEmployee(httpClient, employee);
     setIsSubmitting(false);
   };
 
