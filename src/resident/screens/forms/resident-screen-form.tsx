@@ -1,15 +1,17 @@
-import React, { useState, type ReactElement } from 'react';
+import React, { useState, type ReactElement, useContext } from 'react';
 import { FormInput } from '../../../common/components/form-input/form-input';
 import { Button, Wrapper } from '../resident.styles';
 import { ObjectionResidentService } from '../../services/objection/objection-resident-service';
 import { toast } from 'react-toastify';
 import { type ResidentDTO } from '../../dto/resident-dto';
+import { ApplicationContext } from '../../../application-context';
 
 interface Props {
   changeScreen: () => void;
 }
 
 export const ResidentScreenForm = ({ changeScreen }: Props): ReactElement => {
+  const { httpClient } = useContext(ApplicationContext);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [resident, setResident] = useState<ResidentDTO>({
     cpf: '',
@@ -21,15 +23,12 @@ export const ResidentScreenForm = ({ changeScreen }: Props): ReactElement => {
   const service = new ObjectionResidentService();
 
   const handleSubmit = async (): Promise<void> => {
-    try {
-      setIsSubmitting(true);
-      await service.postResident(resident);
+    setIsSubmitting(true);
+    const response = await service.postResident(httpClient, resident);
+    if (response) {
       toast.success('Morador cadastrado com sucesso!');
-    } catch (e) {
-      toast.error('Erro ao cadastrar morador!');
-    } finally {
-      setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   return (

@@ -1,49 +1,43 @@
-import axios from 'axios';
-import { type ResidentDTO } from '../../dto/resident-dto';
+import { type ResidentDTO } from './../../dto/resident-dto';
+import { type HttpClient } from './../../../common/http-client/http-client';
 import { type ResidentService } from '../interfaces/resident-service';
 
 export class ObjectionResidentService implements ResidentService {
   private readonly url = 'http://localhost:3344/resident';
 
-  public async getAllResidents(): Promise<ResidentDTO[]> {
-    const response = await axios.get<{ residents: ResidentDTO[] }>(this.url, {
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZUlkIjoxLCJpYXQiOjE3MTEwNjc1NDcsImV4cCI6MTcxMTE1Mzk0N30.jva2LgJ0TwunGeR9oNDq9x93zPmrtOXyEN4i9O7Gyho`,
-      },
-    });
-    return response.data.residents;
+  public async getAllResidents(
+    httpClient: HttpClient,
+  ): Promise<ResidentDTO[] | undefined> {
+    return await httpClient.get<ResidentDTO[]>(this.url);
   }
 
-  public async getResidents(cpf: string): Promise<ResidentDTO> {
-    const response = await axios.get<ResidentDTO>(`${this.url}/${cpf}`, {
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZUlkIjoxLCJpYXQiOjE3MTEwNjc1NDcsImV4cCI6MTcxMTE1Mzk0N30.jva2LgJ0TwunGeR9oNDq9x93zPmrtOXyEN4i9O7Gyho`,
-      },
-    });
-    return response.data;
+  public async getResidents(
+    httpClient: HttpClient,
+    cpf: string,
+  ): Promise<ResidentDTO | undefined> {
+    const response = await httpClient.get<ResidentDTO>(`${this.url}/${cpf}`);
+    return response;
   }
 
-  public async postResident(resident: ResidentDTO): Promise<void> {
-    await axios.post(this.url, resident, {
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZUlkIjoxLCJpYXQiOjE3MTEwNjc1NDcsImV4cCI6MTcxMTE1Mzk0N30.jva2LgJ0TwunGeR9oNDq9x93zPmrtOXyEN4i9O7Gyho`,
-      },
-    });
+  public async postResident(
+    httpClient: HttpClient,
+    resident: ResidentDTO,
+  ): Promise<boolean> {
+    const response = await httpClient.post(this.url, resident);
+    return response;
   }
 
-  public async updateResident(resident: ResidentDTO): Promise<void> {
-    await axios.put(this.url, resident, {
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZUlkIjoxLCJpYXQiOjE3MTEwNjc1NDcsImV4cCI6MTcxMTE1Mzk0N30.jva2LgJ0TwunGeR9oNDq9x93zPmrtOXyEN4i9O7Gyho`,
-      },
-    });
+  public async updateResident(
+    httpClient: HttpClient,
+    resident: ResidentDTO,
+  ): Promise<boolean> {
+    return await httpClient.put(this.url, resident);
   }
 
-  public async deleteResident(cpf: string): Promise<void> {
-    await axios.delete(`${this.url}/${cpf}`, {
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZUlkIjoxLCJpYXQiOjE3MTEwNjc1NDcsImV4cCI6MTcxMTE1Mzk0N30.jva2LgJ0TwunGeR9oNDq9x93zPmrtOXyEN4i9O7Gyho`,
-      },
-    });
+  public async deleteResident(
+    httpClient: HttpClient,
+    cpf: string,
+  ): Promise<boolean> {
+    return await httpClient.delete(`${this.url}/${cpf}`);
   }
 }

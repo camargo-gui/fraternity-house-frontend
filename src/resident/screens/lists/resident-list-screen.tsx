@@ -5,7 +5,7 @@ import { type ResidentDTO } from '../../dto/resident-dto';
 
 interface Props {
   changeScreen: () => void;
-  residents: ResidentDTO[];
+  residents?: ResidentDTO[];
 }
 
 export const ResidentList = ({

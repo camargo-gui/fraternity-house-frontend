@@ -3,10 +3,11 @@ import Card from 'react-bootstrap/Card';
 import { type ResidentDTO } from '../dto/resident-dto';
 
 interface Props {
-  residents: ResidentDTO[];
+  residents?: ResidentDTO[];
 }
 
 export const CardListItem = ({ residents }: Props): ReactElement => {
+  if (residents == null) return <div>Carregando...</div>;
   return (
     <Card style={{ width: '18rem' }}>
       <Card.Img

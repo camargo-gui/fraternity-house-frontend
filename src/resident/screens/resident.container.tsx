@@ -1,7 +1,8 @@
-import { useState, type ReactElement, useEffect } from 'react';
+import { useState, type ReactElement, useEffect, useContext } from 'react';
 import { ResidentScreenForm } from './forms/resident-screen-form';
 import { ResidentList } from './lists/resident-list-screen';
 import { useResident } from '../hooks/use-resident';
+import { ApplicationContext } from '../../application-context';
 
 enum Screen {
   Register = 'Register',
@@ -9,8 +10,9 @@ enum Screen {
 }
 
 export const ResidentContainer = (): ReactElement => {
+  const { httpClient } = useContext(ApplicationContext);
   const [screen, setScreen] = useState<Screen>(Screen.List);
-  const { residents, refetch } = useResident();
+  const { residents, refetch } = useResident({ httpClient });
 
   useEffect(() => {
     void refetch();
