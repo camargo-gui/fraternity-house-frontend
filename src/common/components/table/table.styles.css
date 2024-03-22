@@ -1,0 +1,13 @@
+.custom-table .table {
+  font-size: 1.2rem;
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 1rem;
+}
+
+.custom-table thead th {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+}

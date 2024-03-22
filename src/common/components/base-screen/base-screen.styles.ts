@@ -18,4 +18,5 @@ export const ScreenTitle = styled.h1`
   font-family: 'Roboto flex';
   color: #002b5e;
   font-weight: 500;
+  margin-bottom: 60px;
 `;

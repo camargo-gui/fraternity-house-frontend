@@ -15,6 +15,7 @@ export const ResidentList = ({ changeScreen }: Props): ReactElement => {
         onClick={changeScreen}
         backgroundColor="#6c757d"
         hoverBackgroundColor="#595f64"
+        width="auto"
       />
     </Wrapper>
   );

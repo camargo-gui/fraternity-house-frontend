@@ -1,10 +1,11 @@
-import { ResidentContainer } from './../../../resident/screens/resident.container';
 import {
   type ComponentType,
   type FunctionComponent,
   type SVGProps,
 } from 'react';
 import * as Icon from '../../../assets/icons-mapping';
+import { ResidentContainer } from './../../../resident/screens/resident.container';
+import { MedicineContainer } from '../../../medicine/screens/medicine.container';
 
 export enum Screens {
   Files = 'Files',
@@ -45,10 +46,10 @@ export const screenList: ScreenListItemProps[] = [
     element: ResidentContainer,
   },
   {
-    title: 'Medicamentos',
+    title: 'Fichas de Medicamentos',
     icon: Icon.medicines_icon,
     route: '/medicamentos',
-    element: ResidentContainer,
+    element: MedicineContainer,
   },
   {
     title: 'Psicólogo',

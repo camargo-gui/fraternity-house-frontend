@@ -1,5 +1,5 @@
 import React, { useState, type ReactElement } from 'react';
-import { ResidentScreen } from './resident-screen';
+import { ResidentScreenForm } from './resident-screen';
 import { ResidentList } from './resident-list-screen';
 
 enum Screen {
@@ -15,7 +15,7 @@ export const ResidentContainer = (): ReactElement => {
   };
 
   return screen === Screen.Register ? (
-    <ResidentScreen changeScreen={changeScreen} />
+    <ResidentScreenForm changeScreen={changeScreen} />
   ) : (
     <ResidentList changeScreen={changeScreen} />
   );
