@@ -1,4 +1,4 @@
-import React, { type ReactElement } from 'react';
+import { type ReactElement } from 'react';
 import Card from 'react-bootstrap/Card';
 
 export const CardListItem = (): ReactElement => {

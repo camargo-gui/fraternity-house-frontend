@@ -1,4 +1,4 @@
-import React, { useState, type ReactElement } from 'react';
+import { useState, type ReactElement } from 'react';
 import { FormInput } from '../../../common/components/form-input/form-input';
 import type { Medicine } from '../../entities/medicine';
 import type { PharmacologicalName } from '../../entities/pharmacological-name';

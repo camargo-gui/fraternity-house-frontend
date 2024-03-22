@@ -1,4 +1,4 @@
-import React, { type ReactElement } from 'react';
+import { type ReactElement } from 'react';
 import { Wrapper, Button } from './resident.styles';
 import { CardListItem } from '../components/card-list-item';
 

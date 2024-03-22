@@ -1,4 +1,4 @@
-import React, { useState, type ReactElement } from 'react';
+import { useState, type ReactElement } from 'react';
 import { ResidentScreenForm } from './resident-screen';
 import { ResidentList } from './resident-list-screen';
 

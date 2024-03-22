@@ -1,5 +1,5 @@
 import TableComponent from '../../common/components/table/table';
-import React, { type ReactElement } from 'react';
+import { type ReactElement } from 'react';
 import type { Medicine } from '../entities/medicine';
 
 export const MedicineTable = ({
