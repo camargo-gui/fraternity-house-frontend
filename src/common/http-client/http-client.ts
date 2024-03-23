@@ -1,7 +1,7 @@
 import axios, { type AxiosError } from 'axios';
 import { toast } from 'react-toastify';
-import { HttpClientResponse } from './http-client-response';
 import { type HttpClientRequest } from './http-client-request';
+import { HttpClientResponse } from './http-client-response';
 
 interface ApiResponse<T> {
   data: T;
@@ -14,9 +14,13 @@ export class HttpClient {
 
   public constructor() {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.baseUrl = 'http://localhost:3344';
+    this.baseUrl = process.env.REACT_APP_API_URL ?? 'http://localhost:3344';
     this.instance = axios.create({
       baseURL: this.baseUrl,
+      headers: {
+        Authorization:
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZUlkIjoxLCJpYXQiOjE3MTExNjEzOTQsImV4cCI6MTcxMTI0Nzc5NH0.Yai9aEdkHotnxdEg1sp3OUSzbyeY0BBhh-WFfe8Deb4',
+      },
     });
   }
 

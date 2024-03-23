@@ -1,4 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { noop } from 'lodash';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { ApplicationContext } from '../../application-context';
+import { setLoading } from '../../redux/slices/loadingSlice';
+import type { AppDispatch } from '../../redux/store/store';
 import { type Medicine } from '../entities/medicine';
 import type { PharmacologicalName } from '../entities/pharmacological-name';
 import { ObjectionMedicineService } from '../services/objection/objection-medicine-service';
@@ -7,44 +12,47 @@ import { ObjectionPharmacologicalNameService } from '../services/objection/objec
 export const useMedicines = (): {
   medicines: Medicine[];
   pharmacologicalNames: PharmacologicalName[];
-  loading: boolean;
-  error: Error | null;
   refetch: () => Promise<void>;
 } => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [pharmacologicalNames, setPharmacologicalNames] = useState<
     PharmacologicalName[]
   >([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
+  const { httpClient } = useContext(ApplicationContext);
+  const dispatch: AppDispatch = useDispatch();
 
   const fetchMedicines = useCallback(async () => {
-    const medicineService = new ObjectionMedicineService();
-    const pharmacologicalNameservice =
-      new ObjectionPharmacologicalNameService();
-    setLoading(true);
-    try {
-      const meds = await medicineService.getMedicines();
-      setMedicines(meds);
-      const pharmaNames =
-        await pharmacologicalNameservice.getPharmacologicalNames();
-      setPharmacologicalNames(pharmaNames);
-    } catch (err) {
-      setError(err as Error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    const meds = await new ObjectionMedicineService().getMedicines(httpClient);
+    if (meds !== undefined) setMedicines(meds);
+  }, [httpClient]);
+
+  const fetchPharmacologicalNames = useCallback(async () => {
+    const names =
+      await new ObjectionPharmacologicalNameService().getPharmacologicalNames(
+        httpClient,
+      );
+
+    console.log(names);
+
+    if (names !== undefined) setPharmacologicalNames(names);
+  }, [httpClient]);
+
+  async function getAllMedicinesInformation(): Promise<void> {
+    dispatch(setLoading(true));
+    void fetchMedicines().catch(noop);
+    void fetchPharmacologicalNames()
+      .catch(noop)
+      .finally(() => dispatch(setLoading(false)));
+  }
 
   useEffect(() => {
-    void fetchMedicines();
-  }, [fetchMedicines]);
+    void getAllMedicinesInformation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return {
     medicines,
     pharmacologicalNames,
-    loading,
-    error,
-    refetch: fetchMedicines,
+    refetch: getAllMedicinesInformation,
   };
 };

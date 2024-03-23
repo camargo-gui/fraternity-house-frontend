@@ -1,41 +1,33 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { useState, type ReactElement } from 'react';
 import { FormInput } from '../../../common/components/form-input/form-input';
 import type { Medicine } from '../../entities/medicine';
 import type { PharmacologicalName } from '../../entities/pharmacological-name';
-import { ObjectionMedicineService } from '../../services/objection/objection-medicine-service';
-import { toast } from 'react-toastify';
 import { Button, Wrapper } from '../medicine.styles';
 
 interface Props {
   changeScreen: () => void;
   pharmacologicalNames: PharmacologicalName[];
+  handleSubmit: (medicine: Medicine) => Promise<void>;
+  isSubmitting: boolean;
+  editingMedicine: Medicine | null;
 }
 
 export const MedicineFormScreen = ({
   changeScreen,
   pharmacologicalNames,
+  handleSubmit,
+  isSubmitting,
+  editingMedicine,
 }: Props): ReactElement => {
-  const [medicine, setMedicine] = useState<Medicine>({
-    id: '',
-    name: '',
-    pharmaceuticalForms: '',
-    pharmacologicalName: { id: '', name: '' },
-  });
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-
-  const service = new ObjectionMedicineService();
-
-  const handleSubmit = async (): Promise<void> => {
-    setIsSubmitting(true);
-    try {
-      await service.createMedicine(medicine);
-      toast.success('Medicamento cadastrado com sucesso!');
-    } catch (error) {
-      toast.error('Falha ao cadastrar medicamento. Tente novamente.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const [medicine, setMedicine] = useState<Medicine>(
+    editingMedicine ?? {
+      id: '',
+      name: '',
+      pharmaceutical_forms: '',
+      PharmacologicalName: { id: '', name: '' },
+    },
+  );
 
   return (
     <Wrapper>
@@ -48,6 +40,7 @@ export const MedicineFormScreen = ({
           setMedicine({ ...medicine, name: target.value });
         }}
         type="text"
+        value={medicine.name}
       />
       <FormInput
         id="forma-farmaceutica"
@@ -55,9 +48,10 @@ export const MedicineFormScreen = ({
         placeholder="Forma farmacêutica"
         onChange={(e) => {
           const target = e.target as HTMLInputElement;
-          setMedicine({ ...medicine, pharmaceuticalForms: target.value });
+          setMedicine({ ...medicine, pharmaceutical_forms: target.value });
         }}
         type="text"
+        value={medicine.pharmaceutical_forms}
       />
       <FormInput
         label="Nome farmacológico"
@@ -65,9 +59,10 @@ export const MedicineFormScreen = ({
           const target = e.target as HTMLInputElement;
           setMedicine({
             ...medicine,
-            pharmacologicalName: { id: target.value, name: '' },
+            PharmacologicalName: { id: target.value, name: '' },
           });
         }}
+        value={medicine.PharmacologicalName.id}
         type="select"
         options={pharmacologicalNames.map((pharmaName) => ({
           label: pharmaName.name,
@@ -76,10 +71,9 @@ export const MedicineFormScreen = ({
         id="nome-farmacologico"
       />
       <Button
-        text="Cadastrar"
-        onClick={() => {
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          handleSubmit();
+        text={editingMedicine !== null ? 'Atualizar' : 'Cadastrar'}
+        onClick={async () => {
+          await handleSubmit(medicine);
         }}
         isLoading={isSubmitting}
       />

@@ -1,7 +1,6 @@
 import { type ReactElement } from 'react';
 import { MedicationSheetTable } from '../../components/medication-sheet-table';
 import { Button, ButtonGroup, Wrapper } from '../medicine.styles';
-import React from 'react';
 
 interface Props {
   changeScreen: () => void;

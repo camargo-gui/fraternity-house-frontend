@@ -4,7 +4,8 @@ import Table from 'react-bootstrap/Table';
 
 interface TableColumn {
   header: string;
-  accessor: string;
+  accessor: string | ((row: any) => any);
+  render?: (row: any) => React.ReactNode;
 }
 
 interface TableComponentProps {
@@ -34,9 +35,13 @@ const TableComponent: React.FC<TableComponentProps> = ({ columns, data }) => {
           </tr>
         </thead>
         <tbody>
-          {data?.map((row, rowIndex) => (
+          {data.map((row, rowIndex) => (
             <tr key={rowIndex}>
               {columns.map((column, colIndex) => {
+                if (column.render !== undefined) {
+                  return <td key={colIndex}>{column.render(row)}</td>;
+                }
+
                 const cellData = resolveAccessor(row, column.accessor);
                 const displayValue =
                   typeof cellData === 'object'
