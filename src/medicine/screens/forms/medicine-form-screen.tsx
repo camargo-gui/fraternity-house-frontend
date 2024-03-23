@@ -28,6 +28,38 @@ export const MedicineFormScreen = ({
       PharmacologicalName: { id: '', name: '' },
     },
   );
+  const [errors, setErrors] = useState({
+    name: '',
+    pharmaceutical_forms: '',
+    PharmacologicalName: '',
+  });
+
+  function validateFields(): boolean {
+    let isValid = true;
+    const newErrors = {
+      name: '',
+      pharmaceutical_forms: '',
+      PharmacologicalName: '',
+    };
+
+    if (medicine.name.length === 0) {
+      newErrors.name = 'O nome do medicamento é obrigatório.';
+      isValid = false;
+    }
+
+    if (medicine.pharmaceutical_forms.length === 0) {
+      newErrors.pharmaceutical_forms = 'A forma farmacêutica é obrigatória.';
+      isValid = false;
+    }
+
+    if (medicine.PharmacologicalName.id.length === 0) {
+      newErrors.PharmacologicalName = 'O nome farmacológico é obrigatório.';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  }
 
   return (
     <Wrapper>
@@ -38,9 +70,12 @@ export const MedicineFormScreen = ({
         onChange={(e) => {
           const target = e.target as HTMLInputElement;
           setMedicine({ ...medicine, name: target.value });
+          setErrors({ ...errors, name: '' });
         }}
         type="text"
         value={medicine.name}
+        errorMessage={errors.name}
+        required
       />
       <FormInput
         id="forma-farmaceutica"
@@ -49,9 +84,12 @@ export const MedicineFormScreen = ({
         onChange={(e) => {
           const target = e.target as HTMLInputElement;
           setMedicine({ ...medicine, pharmaceutical_forms: target.value });
+          setErrors({ ...errors, pharmaceutical_forms: '' });
         }}
         type="text"
         value={medicine.pharmaceutical_forms}
+        errorMessage={errors.pharmaceutical_forms}
+        required
       />
       <FormInput
         label="Nome farmacológico"
@@ -61,6 +99,7 @@ export const MedicineFormScreen = ({
             ...medicine,
             PharmacologicalName: { id: target.value, name: '' },
           });
+          setErrors({ ...errors, PharmacologicalName: '' });
         }}
         value={medicine.PharmacologicalName.id}
         type="select"
@@ -69,11 +108,15 @@ export const MedicineFormScreen = ({
           value: pharmaName.id,
         }))}
         id="nome-farmacologico"
+        errorMessage={errors.PharmacologicalName}
+        required
       />
       <Button
         text={editingMedicine !== null ? 'Atualizar' : 'Cadastrar'}
         onClick={async () => {
-          await handleSubmit(medicine);
+          if (validateFields()) {
+            await handleSubmit(medicine);
+          }
         }}
         isLoading={isSubmitting}
       />
