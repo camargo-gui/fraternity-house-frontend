@@ -3,7 +3,7 @@ import Spinner from 'react-bootstrap/Spinner'; // Importe o Spinner do React Boo
 import { StyledButton } from './button.styles';
 
 interface Props {
-  text: string;
+  text?: string;
   onClick: () => void;
   backgroundColor?: string;
   border?: string;

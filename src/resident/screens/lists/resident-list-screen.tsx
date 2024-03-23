@@ -13,8 +13,10 @@ export const ResidentList = ({
   residents,
 }: Props): ReactElement => {
   return (
-    <Wrapper>
-      <CardListItem residents={residents} />
+    <>
+      <Wrapper>
+        <CardListItem residents={residents} />
+      </Wrapper>
       <Button
         text="Novo Morador"
         onClick={changeScreen}
@@ -22,6 +24,6 @@ export const ResidentList = ({
         hoverBackgroundColor="#595f64"
         width="auto"
       />
-    </Wrapper>
+    </>
   );
 };

@@ -12,10 +12,10 @@ export interface ResidentService {
   postResident: (
     httpCliente: HttpClient,
     resident: ResidentDTO,
-  ) => Promise<boolean>;
+  ) => Promise<void>;
   updateResident: (
     httpClient: HttpClient,
     resident: ResidentDTO,
-  ) => Promise<boolean>;
-  deleteResident: (httpClient: HttpClient, cpf: string) => Promise<boolean>;
+  ) => Promise<void>;
+  deleteResident: (httpClient: HttpClient, cpf: string) => Promise<void>;
 }

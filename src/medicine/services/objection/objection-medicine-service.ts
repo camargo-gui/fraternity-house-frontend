@@ -3,7 +3,7 @@ import type { Medicine } from '../../entities/medicine';
 import type { MedicineService } from '../interfaces/medicine-service';
 
 export class ObjectionMedicineService implements MedicineService {
-  private readonly apiUrl = 'http://localhost:3344/medicine';
+  private readonly apiUrl = 'https://fraternity-house-backend.onrender.com';
 
   public async getMedicines(): Promise<Medicine[]> {
     const response = await axios.get<{ medicines: Medicine[] }>(this.apiUrl, {

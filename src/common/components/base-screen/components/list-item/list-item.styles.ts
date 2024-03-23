@@ -20,7 +20,7 @@ export const Icon = styled.img`
 
 export const Title = styled.h1<{ color: string }>`
   color: #ffffff;
-  font-size: 1.5em;
+  font-size: 1.3em;
   margin: 0;
   margin-left: 4%;
   font-family: 'Roboto Flex';
