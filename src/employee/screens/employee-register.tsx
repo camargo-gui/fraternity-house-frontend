@@ -4,16 +4,19 @@ import { Wrapper } from '../../resident/screens/resident.styles';
 import { type Role } from '../entities/role';
 import { Button } from '../../common/components/button/button';
 import { type Employee } from '../entities/employee';
+import { ButtonWrapper } from './employee.styles';
 
 interface Props {
   roles: Role[];
   onSubmit: (employee: Employee) => Promise<void>;
+  changeScreen: () => void;
   isSubmitting: boolean;
 }
 
 export const EmployeeScreen = ({
   roles,
   isSubmitting,
+  changeScreen,
   onSubmit,
 }: Props): ReactElement => {
   const [employee, setEmployee] = useState<Employee>({
@@ -22,7 +25,10 @@ export const EmployeeScreen = ({
     email: '',
     password: '',
     phone: '',
-    role_id: 0,
+    Role: {
+      id: '',
+      name: '',
+    },
   });
 
   return (
@@ -32,10 +38,11 @@ export const EmployeeScreen = ({
         type="text"
         placeholder="Nome"
         id="name"
-        onChange={() => {
+        onChange={(e) => {
+          const target = e.target as HTMLInputElement;
           setEmployee({
             ...employee,
-            name: 'name',
+            name: target.value,
           });
         }}
       />
@@ -45,10 +52,11 @@ export const EmployeeScreen = ({
         type="text"
         placeholder="CPF"
         id="document"
-        onChange={() => {
+        onChange={(e) => {
+          const target = e.target as HTMLInputElement;
           setEmployee({
             ...employee,
-            document: 'document',
+            document: target.value,
           });
         }}
       />
@@ -58,23 +66,25 @@ export const EmployeeScreen = ({
         type="text"
         placeholder="Email"
         id="email"
-        onChange={() => {
+        onChange={(e) => {
+          const target = e.target as HTMLInputElement;
           setEmployee({
             ...employee,
-            email: 'email',
+            email: target.value,
           });
         }}
       />
 
       <FormInput
         label="Primeira senha"
-        type="text"
+        type="password"
         placeholder="Primeira senha"
         id="password"
-        onChange={() => {
+        onChange={(e) => {
+          const target = e.target as HTMLInputElement;
           setEmployee({
             ...employee,
-            password: 'password',
+            password: target.value,
           });
         }}
       />
@@ -84,10 +94,11 @@ export const EmployeeScreen = ({
         type="text"
         placeholder="Telefone"
         id="phone"
-        onChange={() => {
+        onChange={(e) => {
+          const target = e.target as HTMLInputElement;
           setEmployee({
             ...employee,
-            phone: 'phone',
+            phone: target.value,
           });
         }}
       />
@@ -105,21 +116,34 @@ export const EmployeeScreen = ({
           const target = e.target as HTMLInputElement;
           setEmployee({
             ...employee,
-            role_id: Number(target.value),
+            Role: {
+              id: target.value,
+              name: '',
+            },
           });
         }}
       />
 
-      <Button
-        text="Cadastrar"
-        onClick={() => {
-          void onSubmit(employee);
-        }}
-        backgroundColor="#6c757d"
-        hoverBackgroundColor="#595f64"
-        width="auto"
-        isLoading={isSubmitting}
-      />
+      <ButtonWrapper>
+        <Button
+          text="Cadastrar"
+          onClick={() => {
+            void onSubmit(employee);
+          }}
+          backgroundColor="#6c757d"
+          hoverBackgroundColor="#595f64"
+          width="auto"
+          isLoading={isSubmitting}
+        />
+
+        <Button
+          text="Listar funcionários"
+          onClick={changeScreen}
+          backgroundColor="#413dca"
+          hoverBackgroundColor="#3a37b3"
+          width="auto"
+        />
+      </ButtonWrapper>
     </Wrapper>
   );
 };
