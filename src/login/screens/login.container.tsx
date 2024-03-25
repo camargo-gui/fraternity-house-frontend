@@ -14,7 +14,7 @@ export const LoginContainer = (): ReactElement => {
     setIsLoading(true);
     const service = new ObjectionLoginService();
     const token = await service.login(httpClient, data);
-    if (token !== undefined) {
+    if (token !== '') {
       localStorage.setItem('token', token);
       httpClient.setAuthorization(token);
       navigate('/fichas');

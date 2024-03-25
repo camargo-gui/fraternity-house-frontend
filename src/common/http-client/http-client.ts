@@ -14,9 +14,13 @@ export class HttpClient {
 
   public constructor() {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.baseUrl = 'https://fraternity-house-backend.onrender.com';
+    this.baseUrl = 'http://localhost:3344';
     this.instance = axios.create({
       baseURL: this.baseUrl,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     });
   }
 
