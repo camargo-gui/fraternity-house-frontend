@@ -56,7 +56,6 @@ export class ObjectionMedicineService implements MedicineService {
       });
       toast.success('Medicamento cadastrado com sucesso');
     } catch (e) {
-      toast.error('Falha ao cadastrar medicamento');
       noop();
     }
   }
@@ -82,7 +81,6 @@ export class ObjectionMedicineService implements MedicineService {
       });
       toast.success('Medicamento atualizado com sucesso');
     } catch (e) {
-      toast.error('Falha ao atualizar medicamento');
       noop();
     }
   }
@@ -100,7 +98,6 @@ export class ObjectionMedicineService implements MedicineService {
       });
       toast.success('Medicamento deletado com sucesso');
     } catch (e) {
-      toast.error('Falha ao deletar medicamento');
       noop();
     }
   }

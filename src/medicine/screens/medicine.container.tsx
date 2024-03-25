@@ -1,8 +1,9 @@
-import { useContext, useEffect, useState, type ReactElement } from 'react';
+import { useContext, useState, type ReactElement } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { ApplicationContext } from '../../application-context';
 import { ConfirmationModal } from '../../common/components/confirmation-modal/confirmation-modal';
+import LoadingSpinner from '../../common/components/loading-spinner/loading-spinner';
 import type { RootState } from '../../redux/store/store';
 import type { Medicine } from '../entities/medicine';
 import { useMedicines } from '../hooks/use-medicine';
@@ -12,7 +13,6 @@ import { MedicineFormScreen } from './forms/medicine-form-screen';
 import { MedicationSheet } from './lists/medication-sheet-screen';
 import { MedicineList } from './lists/medicine-list-screen';
 import { GoBackButton } from './medicine.styles';
-import LoadingSpinner from '../../common/components/loading-spinner/loading-spinner';
 
 enum Screen {
   MedicineRegister = 'MedicineRegister',
@@ -34,18 +34,15 @@ export const MedicineContainer = (): ReactElement => {
 
   const { medicines, pharmacologicalNames, refetch } = useMedicines();
 
-  useEffect(() => {
-    void refetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [screen]);
-
   async function handleSubmit(medicine: Medicine): Promise<void> {
     setIsSubmitting(true);
 
     if (medicine.id !== '') {
       await medicineService.updateMedicine(httpClient, medicine);
+      void refetch();
     } else {
       await medicineService.createMedicine(httpClient, medicine);
+      void refetch();
     }
 
     setIsSubmitting(false);
