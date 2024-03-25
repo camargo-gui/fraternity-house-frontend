@@ -42,7 +42,7 @@ export const LoginScreen = ({
           id="password"
           label="Senha"
           placeholder="Senha"
-          type="text"
+          type="password"
           onChange={(e) => {
             const target = e.target as HTMLInputElement;
             setLogin({

@@ -9,12 +9,15 @@ type InputType =
   | 'date'
   | 'time'
   | 'search'
-  | 'textarea';
+  | 'textarea'
+  | 'password';
 
 interface Option {
   label: string;
   value: string;
 }
+
+// type Mask = 'document' | 'phone' | 'cep' | 'date' | 'time' | 'currency';
 
 interface FormInputProps {
   id: string;
