@@ -17,10 +17,6 @@ export class HttpClient {
     this.baseUrl = process.env.REACT_APP_API_URL ?? 'http://localhost:3344';
     this.instance = axios.create({
       baseURL: this.baseUrl,
-      headers: {
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZUlkIjoxLCJpYXQiOjE3MTExNjEzOTQsImV4cCI6MTcxMTI0Nzc5NH0.Yai9aEdkHotnxdEg1sp3OUSzbyeY0BBhh-WFfe8Deb4',
-      },
     });
   }
 

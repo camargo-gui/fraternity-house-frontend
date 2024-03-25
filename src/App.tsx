@@ -1,4 +1,4 @@
-import { type ReactElement } from 'react';
+import { useEffect, type ReactElement, useContext } from 'react';
 import { Provider } from 'react-redux';
 import {
   Navigate,
@@ -17,6 +17,16 @@ import { LoginContainer } from './login/screens/login.container';
 import { store } from './redux/store/store';
 
 function App(): ReactElement {
+  const { httpClient } = useContext(ApplicationContext);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    if (token) {
+      httpClient.setAuthorization(token);
+    }
+  }, [httpClient]);
+
   return (
     <Provider store={store}>
       <ApplicationContext.Provider value={{ httpClient: new HttpClient() }}>
