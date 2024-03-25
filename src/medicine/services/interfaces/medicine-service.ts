@@ -1,9 +1,13 @@
+import type { HttpClient } from '../../../common/http-client/http-client';
 import type { Medicine } from '../../entities/medicine';
 
 export interface MedicineService {
-  getMedicines: () => Promise<Medicine[]>;
-  getMedicine: (id: string) => Promise<Medicine>;
-  createMedicine: (medicine: Medicine) => Promise<void>;
-  updateMedicine: (medicine: Medicine) => Promise<void>;
-  deleteMedicine: (id: string) => Promise<void>;
+  getMedicines: (httpClient: HttpClient) => Promise<Medicine[]>;
+  getMedicine: (
+    httpClient: HttpClient,
+    id: string,
+  ) => Promise<Medicine | undefined>;
+  createMedicine: (httpClient: HttpClient, medicine: Medicine) => Promise<void>;
+  updateMedicine: (httpClient: HttpClient, medicine: Medicine) => Promise<void>;
+  deleteMedicine: (httpClient: HttpClient, id: string) => Promise<void>;
 }

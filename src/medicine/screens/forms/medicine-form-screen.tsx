@@ -1,41 +1,65 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { useState, type ReactElement } from 'react';
 import { FormInput } from '../../../common/components/form-input/form-input';
 import type { Medicine } from '../../entities/medicine';
 import type { PharmacologicalName } from '../../entities/pharmacological-name';
-import { ObjectionMedicineService } from '../../services/objection/objection-medicine-service';
-import { toast } from 'react-toastify';
 import { Button, Wrapper } from '../medicine.styles';
 
 interface Props {
   changeScreen: () => void;
   pharmacologicalNames: PharmacologicalName[];
+  handleSubmit: (medicine: Medicine) => Promise<void>;
+  isSubmitting: boolean;
+  editingMedicine: Medicine | null;
 }
 
 export const MedicineFormScreen = ({
   changeScreen,
   pharmacologicalNames,
+  handleSubmit,
+  isSubmitting,
+  editingMedicine,
 }: Props): ReactElement => {
-  const [medicine, setMedicine] = useState<Medicine>({
-    id: '',
+  const [medicine, setMedicine] = useState<Medicine>(
+    editingMedicine ?? {
+      id: '',
+      name: '',
+      pharmaceutical_forms: '',
+      PharmacologicalName: { id: '', name: '' },
+    },
+  );
+  const [errors, setErrors] = useState({
     name: '',
-    pharmaceuticalForms: '',
-    pharmacologicalName: { id: '', name: '' },
+    pharmaceutical_forms: '',
+    PharmacologicalName: '',
   });
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const service = new ObjectionMedicineService();
+  function validateFields(): boolean {
+    let isValid = true;
+    const newErrors = {
+      name: '',
+      pharmaceutical_forms: '',
+      PharmacologicalName: '',
+    };
 
-  const handleSubmit = async (): Promise<void> => {
-    setIsSubmitting(true);
-    try {
-      await service.createMedicine(medicine);
-      toast.success('Medicamento cadastrado com sucesso!');
-    } catch (error) {
-      toast.error('Falha ao cadastrar medicamento. Tente novamente.');
-    } finally {
-      setIsSubmitting(false);
+    if (medicine.name.length === 0) {
+      newErrors.name = 'O nome do medicamento é obrigatório.';
+      isValid = false;
     }
-  };
+
+    if (medicine.pharmaceutical_forms.length === 0) {
+      newErrors.pharmaceutical_forms = 'A forma farmacêutica é obrigatória.';
+      isValid = false;
+    }
+
+    if (medicine.PharmacologicalName.id.length === 0) {
+      newErrors.PharmacologicalName = 'O nome farmacológico é obrigatório.';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  }
 
   return (
     <Wrapper>
@@ -46,8 +70,12 @@ export const MedicineFormScreen = ({
         onChange={(e) => {
           const target = e.target as HTMLInputElement;
           setMedicine({ ...medicine, name: target.value });
+          setErrors({ ...errors, name: '' });
         }}
         type="text"
+        value={medicine.name}
+        errorMessage={errors.name}
+        required
       />
       <FormInput
         id="forma-farmaceutica"
@@ -55,9 +83,13 @@ export const MedicineFormScreen = ({
         placeholder="Forma farmacêutica"
         onChange={(e) => {
           const target = e.target as HTMLInputElement;
-          setMedicine({ ...medicine, pharmaceuticalForms: target.value });
+          setMedicine({ ...medicine, pharmaceutical_forms: target.value });
+          setErrors({ ...errors, pharmaceutical_forms: '' });
         }}
         type="text"
+        value={medicine.pharmaceutical_forms}
+        errorMessage={errors.pharmaceutical_forms}
+        required
       />
       <FormInput
         label="Nome farmacológico"
@@ -65,21 +97,26 @@ export const MedicineFormScreen = ({
           const target = e.target as HTMLInputElement;
           setMedicine({
             ...medicine,
-            pharmacologicalName: { id: target.value, name: '' },
+            PharmacologicalName: { id: target.value, name: '' },
           });
+          setErrors({ ...errors, PharmacologicalName: '' });
         }}
+        value={medicine.PharmacologicalName.id}
         type="select"
         options={pharmacologicalNames.map((pharmaName) => ({
           label: pharmaName.name,
           value: pharmaName.id,
         }))}
         id="nome-farmacologico"
+        errorMessage={errors.PharmacologicalName}
+        required
       />
       <Button
-        text="Cadastrar"
-        onClick={() => {
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          handleSubmit();
+        text={editingMedicine !== null ? 'Atualizar' : 'Cadastrar'}
+        onClick={async () => {
+          if (validateFields()) {
+            await handleSubmit(medicine);
+          }
         }}
         isLoading={isSubmitting}
       />

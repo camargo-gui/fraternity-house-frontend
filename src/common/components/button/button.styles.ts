@@ -11,6 +11,7 @@ interface StyledButtonProps {
   hoverBackgroundColor?: string;
   width?: string;
   fontWeight?: string;
+  isDisabled?: boolean;
 }
 
 export const StyledButton = styled.button<StyledButtonProps>`

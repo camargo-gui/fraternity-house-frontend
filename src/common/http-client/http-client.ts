@@ -1,7 +1,7 @@
 import axios, { type AxiosError } from 'axios';
 import { toast } from 'react-toastify';
-import { HttpClientResponse } from './http-client-response';
 import { type HttpClientRequest } from './http-client-request';
+import { HttpClientResponse } from './http-client-response';
 
 interface ApiResponse<T> {
   data: T;

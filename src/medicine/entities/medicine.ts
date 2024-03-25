@@ -4,7 +4,7 @@ export class Medicine {
   public constructor(
     public id: string,
     public name: string,
-    public pharmaceuticalForms: string,
-    public pharmacologicalName: PharmacologicalName,
+    public pharmaceutical_forms: string,
+    public PharmacologicalName: PharmacologicalName,
   ) {}
 }

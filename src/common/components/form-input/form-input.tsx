@@ -24,6 +24,8 @@ interface FormInputProps {
   placeholder?: string;
   value?: string;
   checked?: boolean;
+  required?: boolean;
+  errorMessage?: string;
   onChange: (e: React.ChangeEvent<unknown>) => void;
 }
 
@@ -36,6 +38,8 @@ export const FormInput = ({
   value,
   checked,
   onChange,
+  required,
+  errorMessage,
 }: FormInputProps): ReactElement => {
   const renderTextarea = (): ReactElement => (
     <Form.Control
@@ -45,6 +49,7 @@ export const FormInput = ({
       onChange={onChange}
       type="textarea"
       style={{ height: '100px' }}
+      required={required}
     />
   );
 
@@ -54,11 +59,12 @@ export const FormInput = ({
       placeholder={placeholder}
       value={value}
       onChange={onChange}
+      required={required}
     />
   );
 
   const renderSelect = (): ReactElement => (
-    <Form.Select value={value} onChange={onChange}>
+    <Form.Select value={value} onChange={onChange} required={required}>
       <option value="">{placeholder}</option>
       {options?.map((option, index) => (
         <option key={index} value={option.value}>
@@ -74,6 +80,7 @@ export const FormInput = ({
       label={label}
       checked={checked}
       onChange={onChange}
+      required={required}
     />
   );
 
@@ -90,6 +97,17 @@ export const FormInput = ({
         return renderTextInput();
     }
   };
+
+  if (errorMessage !== null && errorMessage !== '') {
+    return (
+      <>
+        <FloatingLabel controlId={id} label={label} className="mb-3">
+          {renderInput()}
+        </FloatingLabel>
+        <div className="text-danger mb-3">{errorMessage}</div>
+      </>
+    );
+  }
 
   return (
     <FloatingLabel controlId={id} label={label} className="mb-3">

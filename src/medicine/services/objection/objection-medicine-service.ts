@@ -1,51 +1,107 @@
-import axios from 'axios';
-import type { Medicine } from '../../entities/medicine';
+import { noop } from 'lodash';
+import { toast } from 'react-toastify';
+import type { HttpClient } from '../../../common/http-client/http-client';
+import { Medicine } from '../../entities/medicine';
 import type { MedicineService } from '../interfaces/medicine-service';
+import { MedicineArrayResponse } from '../response/medicine-array-response';
 
 export class ObjectionMedicineService implements MedicineService {
-  private readonly apiUrl = 'https://fraternity-house-backend.onrender.com';
+  private readonly apiUrl = '/medicine';
 
-  public async getMedicines(): Promise<Medicine[]> {
-    const response = await axios.get<{ medicines: Medicine[] }>(this.apiUrl, {
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZUlkIjoxLCJpYXQiOjE3MTEwNjc1NDcsImV4cCI6MTcxMTE1Mzk0N30.jva2LgJ0TwunGeR9oNDq9x93zPmrtOXyEN4i9O7Gyho`,
-      },
-    });
-    return response.data.medicines;
+  public async getMedicines(httpClient: HttpClient): Promise<Medicine[]> {
+    try {
+      const response = await httpClient.request({
+        path: this.apiUrl,
+        method: 'get',
+      });
+
+      return response?.getData(MedicineArrayResponse).medicines ?? [];
+    } catch (e) {
+      return [];
+    }
   }
 
-  public async getMedicine(id: string): Promise<Medicine> {
-    const response = await axios.get<Medicine>(`${this.apiUrl}/${id}`, {
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZUlkIjoxLCJpYXQiOjE3MTEwNjc1NDcsImV4cCI6MTcxMTE1Mzk0N30.jva2LgJ0TwunGeR9oNDq9x93zPmrtOXyEN4i9O7Gyho`,
-      },
-    });
-    return response.data;
+  public async getMedicine(
+    httpClient: HttpClient,
+    id: string,
+  ): Promise<Medicine | undefined> {
+    const getMedicineUrl = `${this.apiUrl}/${id}`;
+    try {
+      const response = await httpClient.request({
+        path: getMedicineUrl,
+        method: 'get',
+      });
+
+      return response?.getData(Medicine) ?? undefined;
+    } catch (e) {
+      return undefined;
+    }
   }
 
-  public async createMedicine(medicine: Medicine): Promise<void> {
+  public async createMedicine(
+    httpClient: HttpClient,
+    medicine: Medicine,
+  ): Promise<void> {
     const medicineDTO = {
       name: medicine.name,
-      pharmaceutical_forms: medicine.pharmaceuticalForms,
-      id_pharmacological_name: Number(medicine.pharmacologicalName.id),
+      pharmaceutical_forms: medicine.pharmaceutical_forms,
+      id_pharmacological_name: Number(medicine.PharmacologicalName.id),
     };
-    await axios.post(this.apiUrl, medicineDTO, {
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZUlkIjoxLCJpYXQiOjE3MTEwNjc1NDcsImV4cCI6MTcxMTE1Mzk0N30.jva2LgJ0TwunGeR9oNDq9x93zPmrtOXyEN4i9O7Gyho`,
-      },
-    });
+
+    try {
+      await httpClient.request({
+        path: this.apiUrl,
+        method: 'post',
+        data: medicineDTO,
+      });
+      toast.success('Medicamento cadastrado com sucesso');
+    } catch (e) {
+      toast.error('Falha ao cadastrar medicamento');
+      noop();
+    }
   }
 
-  public async updateMedicine(medicine: Medicine): Promise<void> {
+  public async updateMedicine(
+    httpClient: HttpClient,
+    medicine: Medicine,
+  ): Promise<void> {
     const medicineDTO = {
+      id: medicine.id,
       name: medicine.name,
-      pharmaceutical_forms: medicine.pharmaceuticalForms,
-      id_pharmacological_name: medicine.pharmacologicalName.id,
+      pharmaceutical_forms: medicine.pharmaceutical_forms,
+      id_pharmacological_name: medicine.PharmacologicalName.id,
     };
-    await axios.put(`${this.apiUrl}/${medicine.id}`, medicineDTO);
+
+    const updateMedicineUrl = `${this.apiUrl}`;
+
+    try {
+      await httpClient.request({
+        path: updateMedicineUrl,
+        method: 'put',
+        data: medicineDTO,
+      });
+      toast.success('Medicamento atualizado com sucesso');
+    } catch (e) {
+      toast.error('Falha ao atualizar medicamento');
+      noop();
+    }
   }
 
-  public async deleteMedicine(id: string): Promise<void> {
-    await axios.delete(`${this.apiUrl}/${id}`);
+  public async deleteMedicine(
+    httpClient: HttpClient,
+    id: string,
+  ): Promise<void> {
+    const deleteMedicineUrl = `${this.apiUrl}/${id}`;
+
+    try {
+      await httpClient.request({
+        path: deleteMedicineUrl,
+        method: 'delete',
+      });
+      toast.success('Medicamento deletado com sucesso');
+    } catch (e) {
+      toast.error('Falha ao deletar medicamento');
+      noop();
+    }
   }
 }
