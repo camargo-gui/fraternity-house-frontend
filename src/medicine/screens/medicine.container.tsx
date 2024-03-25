@@ -135,8 +135,6 @@ export const MedicineContainer = (): ReactElement => {
     }
   };
 
-  console.log('isLoading', isLoading);
-
   if (isLoading) {
     return <LoadingSpinner />;
   }
