@@ -14,7 +14,7 @@ export class HttpClient {
 
   public constructor() {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.baseUrl = process.env.REACT_APP_API_URL ?? 'http://localhost:3344';
+    this.baseUrl = 'https://fraternity-house-backend.onrender.com';
     this.instance = axios.create({
       baseURL: this.baseUrl,
     });
@@ -35,7 +35,6 @@ export class HttpClient {
         params: request.params,
         headers: request.headers,
       });
-
       return new HttpClientResponse(response.status, response.data);
     } catch (error) {
       const axiosError = error as AxiosError;
