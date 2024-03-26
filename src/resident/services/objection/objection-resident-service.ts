@@ -76,8 +76,9 @@ export class ObjectionResidentService implements ResidentService {
   ): Promise<void> {
     try {
       await httpClient.request({
-        path: `${this.url}/${cpf}`,
+        path: this.url,
         method: 'delete',
+        data: { cpf },
       });
       toast.success('Residente deletado com sucesso');
     } catch (e) {

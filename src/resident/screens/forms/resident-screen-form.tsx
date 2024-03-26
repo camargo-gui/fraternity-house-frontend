@@ -1,12 +1,14 @@
-import React, { useState, type ReactElement, useContext } from 'react';
+import React, { useState, type ReactElement } from 'react';
 import { FormInput } from '../../../common/components/form-input/form-input';
 import { Button, Wrapper } from '../resident.styles';
-import { ObjectionResidentService } from '../../services/objection/objection-resident-service';
 import { type ResidentDTO } from '../../dto/resident-dto';
-import { ApplicationContext } from '../../../application-context';
 
 interface Props {
   changeScreen: () => void;
+  handleSubmit: (resident: ResidentDTO) => Promise<void>;
+  isSubmitting: boolean;
+  editingResident: ResidentDTO | null;
+  isEditing: boolean;
 }
 
 const initialResidentState: ResidentDTO = {
@@ -17,17 +19,20 @@ const initialResidentState: ResidentDTO = {
   birthday: new Date(),
 };
 
-export const ResidentScreenForm = ({ changeScreen }: Props): ReactElement => {
-  const { httpClient } = useContext(ApplicationContext);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [resident, setResident] = useState<ResidentDTO>(initialResidentState);
-  const service = new ObjectionResidentService();
+export const ResidentScreenForm = ({
+  changeScreen,
+  handleSubmit,
+  isSubmitting,
+  editingResident,
+  isEditing,
+}: Props): ReactElement => {
+  const [resident, setResident] = useState<ResidentDTO>(
+    editingResident ?? initialResidentState,
+  );
 
-  const handleSubmit = async (): Promise<void> => {
-    setIsSubmitting(true);
-    await service.postResident(httpClient, resident);
-    setIsSubmitting(false);
-  };
+  function clearFields(): void {
+    setResident(initialResidentState);
+  }
 
   return (
     <Wrapper>
@@ -35,6 +40,7 @@ export const ResidentScreenForm = ({ changeScreen }: Props): ReactElement => {
         id="nome"
         label="Nome"
         placeholder="Nome"
+        value={resident.name}
         onChange={(e) => {
           const target = e.target as HTMLInputElement;
           setResident({ ...resident, name: target.value });
@@ -44,8 +50,10 @@ export const ResidentScreenForm = ({ changeScreen }: Props): ReactElement => {
       <FormInput
         id="cpf"
         label="CPF"
+        value={resident.cpf}
         type="text"
         placeholder="CPF"
+        disabled={isEditing}
         onChange={(e) => {
           const target = e.target as HTMLInputElement;
           setResident({ ...resident, cpf: target.value });
@@ -55,7 +63,9 @@ export const ResidentScreenForm = ({ changeScreen }: Props): ReactElement => {
         id="rg"
         label="RG"
         type="text"
+        value={resident.rg}
         placeholder="RG"
+        disabled={isEditing}
         onChange={(e) => {
           const target = e.target as HTMLInputElement;
           setResident({ ...resident, rg: target.value });
@@ -65,6 +75,7 @@ export const ResidentScreenForm = ({ changeScreen }: Props): ReactElement => {
         id="contato"
         label="Contato"
         type="text"
+        value={resident.contact_phone}
         placeholder="Contato"
         onChange={(e) => {
           const target = e.target as HTMLInputElement;
@@ -75,6 +86,7 @@ export const ResidentScreenForm = ({ changeScreen }: Props): ReactElement => {
         id="dataNascimento"
         label="Data de Nascimento"
         type="date"
+        value={JSON.stringify(resident.birthday).slice(1, 11)}
         placeholder="Data de Nascimento"
         onChange={(e) => {
           const target = e.target as HTMLInputElement;
@@ -86,9 +98,9 @@ export const ResidentScreenForm = ({ changeScreen }: Props): ReactElement => {
         text="Cadastrar"
         onClick={() => {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          handleSubmit();
+          handleSubmit(resident);
+          clearFields();
         }}
-        isLoading={isSubmitting}
       />
       <Button
         text="Listar Moradores"

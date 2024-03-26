@@ -13,7 +13,12 @@ export const ActionButton = styled(Button).attrs({
 export const Div = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
+  justify-content: left;
+  gap: 0px;
   margin-top: 20px;
+  margin-bottom: 20px;
+`;
+
+export const DivCardIcons = styled.div`
+  margin-top: 10px;
 `;

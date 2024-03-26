@@ -11,6 +11,7 @@ export const ContentContainer = styled.div`
   overflow-y: auto;
   height: 98vh;
   padding: 2%;
+  width: 1000px;
 `;
 
 export const ScreenTitle = styled.h1`
