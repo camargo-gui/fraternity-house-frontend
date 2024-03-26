@@ -6,16 +6,27 @@ import { type ResidentDTO } from '../../dto/resident-dto';
 interface Props {
   changeScreen: () => void;
   residents?: ResidentDTO[];
+  onEdit: (cpf: string) => void;
+  onDelete: (cpf: string) => Promise<void>;
+  isLoading: boolean;
 }
 
 export const ResidentList = ({
   changeScreen,
   residents,
+  onEdit,
+  onDelete,
+  isLoading,
 }: Props): ReactElement => {
   return (
     <>
       <Wrapper>
-        <CardListItem residents={residents} />
+        <CardListItem
+          residents={residents}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          isLoading={isLoading}
+        />
       </Wrapper>
       <Button
         text="Novo Morador"

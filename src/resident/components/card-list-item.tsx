@@ -1,14 +1,23 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { type ReactElement } from 'react';
 import Card from 'react-bootstrap/Card';
 import { type ResidentDTO } from '../dto/resident-dto';
 import { FaPen, FaTrash } from 'react-icons/fa';
-import { ActionButton, Div } from './card-list-item.styles';
+import { ActionButton, Div, DivCardIcons } from './card-list-item.styles';
 
 interface Props {
   residents?: ResidentDTO[];
+  onEdit: (cpf: string) => void;
+  onDelete: (cpf: string) => Promise<void>;
+  isLoading: boolean;
 }
 
-export const CardListItem = ({ residents }: Props): ReactElement => {
+export const CardListItem = ({
+  residents,
+  onEdit,
+  onDelete,
+  isLoading,
+}: Props): ReactElement => {
   if (residents == null) return <div>Carregando...</div>;
   return (
     <Div>
@@ -27,21 +36,34 @@ export const CardListItem = ({ residents }: Props): ReactElement => {
             variant="top"
             src={require('../../assets/images/116609218.jpg')}
           />
-          <Card.Body>
-            <Card.Title>Nome: {resident.name}</Card.Title>
-            <Card.Text>CPF: {resident.cpf}</Card.Text>
-            <ActionButton
-              onClick={() => {
-                console.log('delete');
-              }}
-              leadingIcon={<FaTrash color="red" />}
-            />
-            <ActionButton
-              onClick={() => {
-                console.log('edit');
-              }}
-              leadingIcon={<FaPen color="#2a1aa5" />}
-            />
+          <Card.Body
+            style={{
+              flex: 1,
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div>
+              <Card.Title>{resident.name}</Card.Title>
+              <Card.Text>CPF: {resident.cpf}</Card.Text>
+            </div>
+            <DivCardIcons>
+              <ActionButton
+                onClick={async () => {
+                  await onDelete(resident.cpf);
+                }}
+                leadingIcon={<FaTrash color="red" />}
+              />
+              <ActionButton
+                onClick={() => {
+                  onEdit(resident.cpf);
+                }}
+                leadingIcon={<FaPen color="#2a1aa5" />}
+              />
+            </DivCardIcons>
           </Card.Body>
         </Card>
       ))}
