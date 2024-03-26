@@ -112,12 +112,14 @@ export const ResidentScreenForm = ({
         }}
       />
       <Button
-        text="Cadastrar"
+        text={isEditing ? 'Editar Morador' : 'Cadastrar Morador'}
         onClick={() => {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           handleSubmit(resident);
           clearFields();
         }}
+        isLoading={isSubmitting}
+        width="200px"
       />
       <Button
         text="Listar Moradores"

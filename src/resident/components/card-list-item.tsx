@@ -33,10 +33,10 @@ export const CardListItem = ({
           }}
         >
           <Card.Img
+            style={{ objectFit: 'cover' }}
             variant="top"
             src={resident.url_image ?? 'https://via.placeholder.com/150'}
-            width="300px"
-            height="300px"
+            height="210px"
           />
           <Card.Body
             style={{

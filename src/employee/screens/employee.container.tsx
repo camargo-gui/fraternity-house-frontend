@@ -30,7 +30,7 @@ export const EmployeeContainer = (): ReactElement => {
       setRoles(response);
     };
     fetchRoles().catch(() => {});
-  }, []);
+  }, [httpClient]);
 
   const changeScreen = useCallback((): void => {
     setScreen(screen === 'EmployeeList' ? 'EmployeeRegister' : 'EmployeeList');
@@ -45,7 +45,7 @@ export const EmployeeContainer = (): ReactElement => {
     };
 
     fetchEmployees().catch(() => {});
-  }, [changeScreen]);
+  }, [changeScreen, httpClient]);
 
   const onSubmit = async (employee: Employee): Promise<void> => {
     setIsSubmitting(true);
