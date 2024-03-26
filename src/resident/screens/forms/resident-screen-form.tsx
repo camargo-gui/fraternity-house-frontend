@@ -1,7 +1,7 @@
-import React, { useState, type ReactElement } from 'react';
+import { useState, type ReactElement } from 'react';
 import { FormInput } from '../../../common/components/form-input/form-input';
-import { Button, Wrapper } from '../resident.styles';
 import { type ResidentDTO } from '../../dto/resident-dto';
+import { Button, Wrapper } from '../resident.styles';
 
 interface Props {
   changeScreen: () => void;
@@ -9,6 +9,7 @@ interface Props {
   isSubmitting: boolean;
   editingResident: ResidentDTO | null;
   isEditing: boolean;
+  setSelectedFile: (file: File | null) => void;
 }
 
 const initialResidentState: ResidentDTO = {
@@ -17,6 +18,7 @@ const initialResidentState: ResidentDTO = {
   name: '',
   contact_phone: '',
   birthday: new Date(),
+  url_image: '',
 };
 
 export const ResidentScreenForm = ({
@@ -25,6 +27,7 @@ export const ResidentScreenForm = ({
   isSubmitting,
   editingResident,
   isEditing,
+  setSelectedFile,
 }: Props): ReactElement => {
   const [resident, setResident] = useState<ResidentDTO>(
     editingResident ?? initialResidentState,
@@ -92,6 +95,20 @@ export const ResidentScreenForm = ({
           const target = e.target as HTMLInputElement;
           const date = new Date(target.value);
           setResident({ ...resident, birthday: date });
+        }}
+      />
+      <FormInput
+        id="resident_image"
+        label="Imagem"
+        type="file"
+        placeholder="Imagem"
+        onChange={(e) => {
+          const files = (e.target as HTMLInputElement).files;
+          if (files !== null && files.length > 0) {
+            setSelectedFile(files[0]);
+          } else {
+            setSelectedFile(null);
+          }
         }}
       />
       <Button

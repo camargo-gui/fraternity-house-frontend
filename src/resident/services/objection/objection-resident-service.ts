@@ -1,9 +1,9 @@
-import { ResidentDTO } from './../../dto/resident-dto';
-import { type HttpClient } from './../../../common/http-client/http-client';
-import { type ResidentService } from '../interfaces/resident-service';
-import { ResidentResponse } from '../response/resident-response';
 import { noop } from 'lodash';
 import { toast } from 'react-toastify';
+import { type ResidentService } from '../interfaces/resident-service';
+import { ResidentResponse } from '../response/resident-response';
+import { type HttpClient } from './../../../common/http-client/http-client';
+import { ResidentDTO } from './../../dto/resident-dto';
 
 export class ObjectionResidentService implements ResidentService {
   private readonly url = '/resident';
@@ -39,13 +39,25 @@ export class ObjectionResidentService implements ResidentService {
 
   public async postResident(
     httpClient: HttpClient,
-    resident: ResidentDTO,
+    formData: ResidentDTO,
+    imageFile: File | null,
   ): Promise<void> {
     try {
+      console.log('formData', formData);
       await httpClient.request({
         path: this.url,
         method: 'post',
-        data: resident,
+        data: {
+          name: formData.name,
+          cpf: formData.cpf,
+          rg: formData.rg,
+          contact_phone: formData.contact_phone,
+          birthday: formData.birthday,
+          image: imageFile,
+        },
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
 
       toast.success('Residente cadastrado com sucesso');

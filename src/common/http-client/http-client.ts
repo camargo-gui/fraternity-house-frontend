@@ -14,7 +14,7 @@ export class HttpClient {
 
   public constructor() {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.baseUrl = process.env.REACT_APP_API_URL ?? 'http://localhost:3344';
+    this.baseUrl = 'http://localhost:3344';
     this.instance = axios.create({
       baseURL: this.baseUrl,
       headers: {

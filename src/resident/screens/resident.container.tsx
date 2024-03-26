@@ -1,12 +1,12 @@
-import { useState, type ReactElement, useEffect, useContext } from 'react';
+import { useContext, useEffect, useState, type ReactElement } from 'react';
+import { useSelector } from 'react-redux';
+import { ApplicationContext } from '../../application-context';
+import { type RootState } from '../../redux/store/store';
+import { type ResidentDTO } from '../dto/resident-dto';
+import { useResident } from '../hooks/use-resident';
+import { ObjectionResidentService } from '../services/objection/objection-resident-service';
 import { ResidentScreenForm } from './forms/resident-screen-form';
 import { ResidentList } from './lists/resident-list-screen';
-import { useResident } from '../hooks/use-resident';
-import { ApplicationContext } from '../../application-context';
-import { ObjectionResidentService } from '../services/objection/objection-resident-service';
-import { type ResidentDTO } from '../dto/resident-dto';
-import { useSelector } from 'react-redux';
-import { type RootState } from '../../redux/store/store';
 
 enum Screen {
   Register = 'Register',
@@ -19,6 +19,8 @@ export const ResidentContainer = (): ReactElement => {
   const [editingResident, setEditingResident] = useState<ResidentDTO | null>(
     null,
   );
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [screen, setScreen] = useState<Screen>(Screen.List);
   const { residents, refetch } = useResident({ httpClient });
@@ -32,7 +34,7 @@ export const ResidentContainer = (): ReactElement => {
       await residentService.updateResident(httpClient, resident);
       void refetch();
     } else {
-      await residentService.postResident(httpClient, resident);
+      await residentService.postResident(httpClient, resident, selectedFile);
       void refetch();
     }
 
@@ -80,6 +82,7 @@ export const ResidentContainer = (): ReactElement => {
       isSubmitting={isSubmitting}
       editingResident={editingResident}
       isEditing={isEditing}
+      setSelectedFile={setSelectedFile}
     />
   ) : (
     <ResidentList
