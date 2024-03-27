@@ -6,4 +6,6 @@ export interface EmployeeService {
     httpClient: HttpClient,
     employee: Employee,
   ) => Promise<void>;
+
+  getEmployees: (httpClient: HttpClient) => Promise<Employee[]>;
 }

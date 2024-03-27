@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { type ReactElement } from 'react';
 import Card from 'react-bootstrap/Card';
-import { type ResidentDTO } from '../dto/resident-dto';
 import { FaPen, FaTrash } from 'react-icons/fa';
+import { type ResidentDTO } from '../dto/resident-dto';
 import { ActionButton, Div, DivCardIcons } from './card-list-item.styles';
 
 interface Props {
@@ -33,8 +33,10 @@ export const CardListItem = ({
           }}
         >
           <Card.Img
+            style={{ objectFit: 'cover' }}
             variant="top"
-            src={require('../../assets/images/116609218.jpg')}
+            src={resident.url_image ?? 'https://via.placeholder.com/150'}
+            height="210px"
           />
           <Card.Body
             style={{

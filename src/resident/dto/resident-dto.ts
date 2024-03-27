@@ -6,5 +6,6 @@ export class ResidentDTO {
     public contact_phone: string,
     public birthday: Date,
     public id?: string,
+    public url_image?: string,
   ) {}
 }

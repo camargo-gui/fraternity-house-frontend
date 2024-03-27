@@ -10,14 +10,13 @@ type InputType =
   | 'time'
   | 'search'
   | 'textarea'
-  | 'password';
+  | 'password'
+  | 'file';
 
 interface Option {
   label: string;
   value: string;
 }
-
-// type Mask = 'document' | 'phone' | 'cep' | 'date' | 'time' | 'currency';
 
 interface FormInputProps {
   id: string;
@@ -90,12 +89,18 @@ export const FormInput = ({
     />
   );
 
+  const renderFileInput = (): ReactElement => (
+    <Form.Control type="file" onChange={onChange} required={required} />
+  );
+
   const renderInput = (): ReactElement => {
     switch (type) {
       case 'select':
         return renderSelect();
       case 'checkbox':
         return renderCheckbox();
+      case 'file':
+        return renderFileInput();
       case 'textarea':
         return renderTextarea();
       case 'text':
