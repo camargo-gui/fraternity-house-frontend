@@ -10,7 +10,7 @@ export class ObjectionEmployeeService implements EmployeeService {
   public async registerEmployee(
     httpClient: HttpClient,
     employee: Employee,
-  ): Promise<void> {
+  ): Promise<boolean> {
     try {
       const { Role, ...employeeData } = employee;
       await httpClient.request({
@@ -21,8 +21,10 @@ export class ObjectionEmployeeService implements EmployeeService {
           role_id: Number(employee.Role.id),
         },
       });
+      return true;
     } catch (e) {
       noop();
+      return false;
     }
   }
 
@@ -36,6 +38,41 @@ export class ObjectionEmployeeService implements EmployeeService {
       return response?.getData(EmployeeResponse).employees ?? [];
     } catch (e) {
       return [];
+    }
+  }
+
+  public async deleteEmployee(
+    httpClient: HttpClient,
+    document: string,
+  ): Promise<void> {
+    try {
+      await httpClient.request({
+        path: `${this.apiUrl}/${document}`,
+        method: 'delete',
+      });
+    } catch (e) {
+      noop();
+    }
+  }
+
+  public async updateEmployee(
+    httpClient: HttpClient,
+    employee: Employee,
+  ): Promise<boolean> {
+    const { Role, ...employeeData } = employee;
+    try {
+      await httpClient.request({
+        path: `${this.apiUrl}`,
+        method: 'put',
+        data: {
+          ...employeeData,
+          role_id: Number(employee.Role.id),
+        },
+      });
+      return true;
+    } catch (e) {
+      noop();
+      return false;
     }
   }
 }

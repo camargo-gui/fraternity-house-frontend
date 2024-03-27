@@ -5,15 +5,15 @@ import { Wrapper } from './employee.styles';
 import { Button } from '../../common/components/button/button';
 
 interface Props {
-  changeScreen: () => void;
   employees: Employee[];
+  changeScreen: () => void;
   onEdit: (id: string) => void;
-  onDelete: (id: string) => void;
+  onDelete: (id: string) => Promise<void>;
 }
 
 export const EmployeeeList = ({
-  changeScreen,
   employees,
+  changeScreen,
   onEdit,
   onDelete,
 }: Props): ReactElement => {

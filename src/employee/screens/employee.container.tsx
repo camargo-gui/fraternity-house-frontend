@@ -21,6 +21,9 @@ export const EmployeeContainer = (): ReactElement => {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [screen, setScreen] = useState<Screen>('EmployeeList');
 
+  const [isEditting, setIsEditting] = useState<boolean>(false);
+  const [employeeToEdit, setEmployeeToEdit] = useState<Employee | undefined>();
+
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { httpClient } = useContext(ApplicationContext);
 
@@ -36,22 +39,50 @@ export const EmployeeContainer = (): ReactElement => {
     setScreen(screen === 'EmployeeList' ? 'EmployeeRegister' : 'EmployeeList');
   }, [screen]);
 
-  useEffect(() => {
-    const fetchEmployees = async (): Promise<void> => {
-      const response = await new ObjectionEmployeeService().getEmployees(
-        httpClient,
-      );
-      setEmployees(response);
-    };
+  const fetchEmployees = useCallback(async (): Promise<void> => {
+    const response = await new ObjectionEmployeeService().getEmployees(
+      httpClient,
+    );
+    setEmployees(response);
+  }, [httpClient]);
 
-    fetchEmployees().catch(() => {});
-  }, [changeScreen, httpClient]);
+  useEffect(() => {
+    fetchEmployees().catch(noop);
+  }, [changeScreen, fetchEmployees]);
 
   const onSubmit = async (employee: Employee): Promise<void> => {
     setIsSubmitting(true);
-    await new ObjectionEmployeeService().registerEmployee(httpClient, employee);
+    const response = await new ObjectionEmployeeService().registerEmployee(
+      httpClient,
+      employee,
+    );
     setIsSubmitting(false);
-    changeScreen();
+    if (response) changeScreen();
+  };
+
+  const onEditPress = (document: string): void => {
+    const employee = employees.find((emp) => emp.document === document);
+    if (employee !== undefined) {
+      setEmployeeToEdit(employee);
+      setIsEditting(true);
+      changeScreen();
+    }
+  };
+
+  const onEdit = async (employee: Employee): Promise<void> => {
+    setIsSubmitting(true);
+    const response = await new ObjectionEmployeeService().updateEmployee(
+      httpClient,
+      employee,
+    );
+    setIsSubmitting(false);
+    if (response) changeScreen();
+  };
+
+  const onDelete = async (document: string): Promise<void> => {
+    await new ObjectionEmployeeService().deleteEmployee(httpClient, document);
+    setEmployees(employees.filter((employee) => employee.id !== document));
+    fetchEmployees().catch(noop);
   };
 
   if (screen === 'EmployeeList') {
@@ -59,8 +90,8 @@ export const EmployeeContainer = (): ReactElement => {
       <EmployeeeList
         employees={employees}
         changeScreen={changeScreen}
-        onDelete={noop}
-        onEdit={noop}
+        onDelete={onDelete}
+        onEdit={onEditPress}
       />
     );
   }
@@ -69,7 +100,10 @@ export const EmployeeContainer = (): ReactElement => {
     <EmployeeScreen
       roles={roles}
       isSubmitting={isSubmitting}
+      employeeToEdit={employeeToEdit}
+      isEditting={isEditting}
       onSubmit={onSubmit}
+      onEdit={onEdit}
       changeScreen={changeScreen}
     />
   );

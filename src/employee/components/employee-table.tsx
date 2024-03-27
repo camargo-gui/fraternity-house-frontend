@@ -3,6 +3,7 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 import TableComponent from '../../common/components/table/table';
 import { type Employee } from '../entities/employee';
 import { TransparentButton } from '../screens/employee.styles';
+import { noop } from 'lodash';
 
 export const EmployeeTable = ({
   employees,
@@ -11,9 +12,8 @@ export const EmployeeTable = ({
 }: {
   employees: Employee[];
   onEdit: (id: string) => void;
-  onDelete: (id: string) => void;
+  onDelete: (id: string) => Promise<void>;
 }): ReactElement => {
-  console.log(employees);
   const columns = [
     {
       header: 'Nome',
@@ -49,7 +49,7 @@ export const EmployeeTable = ({
 
           <TransparentButton
             onClick={() => {
-              onDelete(row.document);
+              onDelete(row.document).catch(noop);
             }}
             leadingIcon={<FaTrash color="red" />}
           />

@@ -8,28 +8,44 @@ import { ButtonWrapper } from './employee.styles';
 
 interface Props {
   roles: Role[];
+  isSubmitting: boolean;
+  employeeToEdit?: Employee;
+  isEditting: boolean;
   onSubmit: (employee: Employee) => Promise<void>;
   changeScreen: () => void;
-  isSubmitting: boolean;
+  onEdit: (employee: Employee) => Promise<void>;
 }
+
+const initialEmployeeState: Employee = {
+  name: '',
+  document: '',
+  email: '',
+  password: '',
+  phone: '',
+  Role: {
+    id: '',
+    name: '',
+  },
+};
 
 export const EmployeeScreen = ({
   roles,
   isSubmitting,
+  employeeToEdit,
+  isEditting,
   changeScreen,
   onSubmit,
+  onEdit,
 }: Props): ReactElement => {
-  const [employee, setEmployee] = useState<Employee>({
-    name: '',
-    document: '',
-    email: '',
-    password: '',
-    phone: '',
-    Role: {
-      id: '',
-      name: '',
-    },
-  });
+  const [employee, setEmployee] = useState<Employee>(
+    employeeToEdit ?? initialEmployeeState,
+  );
+
+  const onPress = async (): Promise<void> => {
+    if (isEditting) {
+      await onEdit(employee);
+    } else await onSubmit(employee);
+  };
 
   return (
     <Wrapper>
@@ -38,6 +54,7 @@ export const EmployeeScreen = ({
         type="text"
         placeholder="Nome"
         id="name"
+        value={employee?.name}
         onChange={(e) => {
           const target = e.target as HTMLInputElement;
           setEmployee({
@@ -52,6 +69,8 @@ export const EmployeeScreen = ({
         type="text"
         placeholder="CPF"
         id="document"
+        disabled={isEditting}
+        value={employee?.document}
         onChange={(e) => {
           const target = e.target as HTMLInputElement;
           setEmployee({
@@ -66,6 +85,7 @@ export const EmployeeScreen = ({
         type="text"
         placeholder="Email"
         id="email"
+        value={employee?.email}
         onChange={(e) => {
           const target = e.target as HTMLInputElement;
           setEmployee({
@@ -75,25 +95,29 @@ export const EmployeeScreen = ({
         }}
       />
 
-      <FormInput
-        label="Primeira senha"
-        type="password"
-        placeholder="Primeira senha"
-        id="password"
-        onChange={(e) => {
-          const target = e.target as HTMLInputElement;
-          setEmployee({
-            ...employee,
-            password: target.value,
-          });
-        }}
-      />
+      {!isEditting && (
+        <FormInput
+          label="Primeira senha"
+          type="password"
+          placeholder="Primeira senha"
+          id="password"
+          value={employee?.password}
+          onChange={(e) => {
+            const target = e.target as HTMLInputElement;
+            setEmployee({
+              ...employee,
+              password: target.value,
+            });
+          }}
+        />
+      )}
 
       <FormInput
         label="Telefone"
         type="text"
         placeholder="Telefone"
         id="phone"
+        value={employee?.phone}
         onChange={(e) => {
           const target = e.target as HTMLInputElement;
           setEmployee({
@@ -106,6 +130,7 @@ export const EmployeeScreen = ({
         id="role"
         label="Cargo"
         type="select"
+        value={employee.Role.id}
         options={roles.map((role) => {
           return {
             label: role.name,
@@ -126,9 +151,9 @@ export const EmployeeScreen = ({
 
       <ButtonWrapper>
         <Button
-          text="Cadastrar"
+          text={isEditting ? 'Editar funcionário' : 'Cadastrar funcionário'}
           onClick={() => {
-            void onSubmit(employee);
+            void onPress();
           }}
           backgroundColor="#6c757d"
           hoverBackgroundColor="#595f64"

@@ -5,7 +5,14 @@ export interface EmployeeService {
   registerEmployee: (
     httpClient: HttpClient,
     employee: Employee,
-  ) => Promise<void>;
+  ) => Promise<boolean>;
 
   getEmployees: (httpClient: HttpClient) => Promise<Employee[]>;
+
+  deleteEmployee: (httpClient: HttpClient, id: string) => Promise<void>;
+
+  updateEmployee: (
+    httpClient: HttpClient,
+    employee: Employee,
+  ) => Promise<boolean>;
 }
