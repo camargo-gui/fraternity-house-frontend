@@ -17,6 +17,14 @@ export const LoginScreen = ({
     cpf: '',
     password: '',
   });
+
+  addEventListener('keyup', (event) => {
+    if (event.key === 'Enter') {
+      const button = document.getElementById('login_button');
+      button?.click();
+    }
+  });
+
   return (
     <Wrapper>
       <LeftSize>
@@ -59,6 +67,7 @@ export const LoginScreen = ({
           }}
           isLoading={isSubmitting}
           text="Entrar"
+          id="login_button"
         />
       </RightSize>
     </Wrapper>

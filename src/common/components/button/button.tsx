@@ -17,6 +17,7 @@ interface Props {
   leadingIcon?: React.ReactNode;
   isLoading?: boolean;
   fontWeight?: string;
+  id?: string;
 }
 
 export const Button = ({
