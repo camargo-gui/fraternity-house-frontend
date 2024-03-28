@@ -35,8 +35,11 @@ export const CardListItem = ({
           <Card.Img
             style={{ objectFit: 'cover' }}
             variant="top"
-            src={resident.url_image ?? 'https://via.placeholder.com/150'}
-            height="210px"
+            src={
+              resident.url_image ??
+              require('../../assets/images/da7ed7b0-5f66-4f97-a610-51100d3b9fd2.jpg')
+            }
+            height="225px"
           />
           <Card.Body
             style={{
