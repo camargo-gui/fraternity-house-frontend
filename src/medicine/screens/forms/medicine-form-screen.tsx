@@ -115,6 +115,12 @@ export const MedicineFormScreen = ({
         text={editingMedicine !== null ? 'Atualizar' : 'Cadastrar'}
         onClick={async () => {
           if (validateFields()) {
+            setMedicine({
+              id: '',
+              name: '',
+              pharmaceutical_forms: '',
+              PharmacologicalName: { id: '', name: '' },
+            });
             await handleSubmit(medicine);
           }
         }}

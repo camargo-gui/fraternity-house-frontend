@@ -21,3 +21,7 @@ export const GoBackButton = styled(BaseButton).attrs({
   padding: '20px 20px 20px 0',
   fontWeight: 'bold',
 })``;
+
+export const MedicineWrapper = styled.div`
+  padding-right: 80px;
+`;

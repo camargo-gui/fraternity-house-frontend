@@ -59,7 +59,7 @@ export const ResidentContainer = (): ReactElement => {
     );
 
     if (selectedResident !== undefined) {
-      // await residentService.deleteResident(httpClient, selectedResident.cpf);
+      await residentService.deleteResident(httpClient, selectedResident.cpf);
       void refetch();
     }
   }

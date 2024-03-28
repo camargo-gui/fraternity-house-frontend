@@ -23,6 +23,7 @@ export const MedicineList = ({
         onEdit={onEdit}
         onDelete={onDelete}
       />
+
       <Button
         text="Novo Medicamento"
         onClick={changeScreen}

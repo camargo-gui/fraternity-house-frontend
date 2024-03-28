@@ -12,6 +12,10 @@ interface Props {
   isLoading: boolean;
 }
 
+const formatCpf = (cpf: string): string => {
+  return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+};
+
 export const CardListItem = ({
   residents,
   onEdit,
@@ -19,6 +23,7 @@ export const CardListItem = ({
   isLoading,
 }: Props): ReactElement => {
   if (residents == null) return <div>Carregando...</div>;
+
   return (
     <Div>
       {residents.map((resident) => (
@@ -36,8 +41,9 @@ export const CardListItem = ({
             style={{ objectFit: 'cover' }}
             variant="top"
             src={
-              resident.url_image ??
-              require('../../assets/images/da7ed7b0-5f66-4f97-a610-51100d3b9fd2.jpg')
+              resident.url_image != null && resident.url_image !== ''
+                ? resident.url_image
+                : require('../../assets/images/profile.jpg')
             }
             height="225px"
           />
@@ -53,7 +59,7 @@ export const CardListItem = ({
           >
             <div>
               <Card.Title>{resident.name}</Card.Title>
-              <Card.Text>CPF: {resident.cpf}</Card.Text>
+              <Card.Text>CPF: {formatCpf(resident.cpf)}</Card.Text>
             </div>
             <DivCardIcons>
               <ActionButton

@@ -12,7 +12,7 @@ import { MedicationSheetFormScreen } from './forms/medication-sheet-form-screen'
 import { MedicineFormScreen } from './forms/medicine-form-screen';
 import { MedicationSheet } from './lists/medication-sheet-screen';
 import { MedicineList } from './lists/medicine-list-screen';
-import { GoBackButton } from './medicine.styles';
+import { GoBackButton, MedicineWrapper } from './medicine.styles';
 
 enum Screen {
   MedicineRegister = 'MedicineRegister',
@@ -148,7 +148,7 @@ export const MedicineContainer = (): ReactElement => {
           leadingIcon={<FaArrowLeft />}
         />
       ) : null}
-      {renderScreen()}
+      <MedicineWrapper>{renderScreen()}</MedicineWrapper>
       <ConfirmationModal
         show={showConfirmationModal}
         onHide={() => {
