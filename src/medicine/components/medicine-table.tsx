@@ -20,7 +20,7 @@ export const MedicineTable = ({
     },
     {
       header: 'Forma farmacêutica',
-      accessor: 'pharmaceutical_forms',
+      accessor: 'PharmacologicalForm.name',
     },
     {
       header: 'Nome farmacológico',

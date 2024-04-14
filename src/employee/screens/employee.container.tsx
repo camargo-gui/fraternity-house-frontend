@@ -13,6 +13,8 @@ import { type Employee } from '../entities/employee';
 import { ApplicationContext } from '../../application-context';
 import { EmployeeeList } from './employee-list';
 import { noop } from 'lodash';
+import { useDispatch } from 'react-redux';
+import { setLoading } from '../../redux/slices/loadingSlice';
 
 type Screen = 'EmployeeRegister' | 'EmployeeList';
 
@@ -26,6 +28,7 @@ export const EmployeeContainer = (): ReactElement => {
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { httpClient } = useContext(ApplicationContext);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchRoles = async (): Promise<void> => {
@@ -40,11 +43,13 @@ export const EmployeeContainer = (): ReactElement => {
   }, [screen]);
 
   const fetchEmployees = useCallback(async (): Promise<void> => {
+    dispatch(setLoading(true));
     const response = await new ObjectionEmployeeService().getEmployees(
       httpClient,
     );
     setEmployees(response);
-  }, [httpClient]);
+    dispatch(setLoading(false));
+  }, [dispatch, httpClient]);
 
   useEffect(() => {
     fetchEmployees().catch(noop);

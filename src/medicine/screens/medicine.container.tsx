@@ -1,10 +1,7 @@
 import { useContext, useState, type ReactElement } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
-import { useSelector } from 'react-redux';
 import { ApplicationContext } from '../../application-context';
 import { ConfirmationModal } from '../../common/components/confirmation-modal/confirmation-modal';
-import LoadingSpinner from '../../common/components/loading-spinner/loading-spinner';
-import type { RootState } from '../../redux/store/store';
 import type { Medicine } from '../entities/medicine';
 import { useMedicines } from '../hooks/use-medicine';
 import { ObjectionMedicineService } from '../services/objection/objection-medicine-service';
@@ -23,16 +20,18 @@ enum Screen {
 
 export const MedicineContainer = (): ReactElement => {
   const [screen, setScreen] = useState<Screen>(Screen.MedicationSheetList);
+
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+
   const [medicineToDelete, setMedicineToDelete] = useState<string | null>(null);
   const [editingMedicine, setEditingMedicine] = useState<Medicine | null>(null);
 
   const medicineService = new ObjectionMedicineService();
   const { httpClient } = useContext(ApplicationContext);
-  const isLoading = useSelector((state: RootState) => state.loading.isLoading);
 
-  const { medicines, pharmacologicalNames, refetch } = useMedicines();
+  const { medicines, pharmacologicalNames, pharmacologicalForms, refetch } =
+    useMedicines();
 
   async function handleSubmit(medicine: Medicine): Promise<void> {
     setIsSubmitting(true);
@@ -88,6 +87,7 @@ export const MedicineContainer = (): ReactElement => {
               setScreen(Screen.MedicineList);
             }}
             pharmacologicalNames={pharmacologicalNames}
+            pharmacologicalForms={pharmacologicalForms}
             handleSubmit={handleSubmit}
             isSubmitting={isSubmitting}
             editingMedicine={editingMedicine}
@@ -131,10 +131,6 @@ export const MedicineContainer = (): ReactElement => {
         return <div>Unknown screen</div>;
     }
   };
-
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
 
   return (
     <div>

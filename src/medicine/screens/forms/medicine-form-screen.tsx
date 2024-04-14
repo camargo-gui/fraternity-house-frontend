@@ -4,10 +4,12 @@ import { FormInput } from '../../../common/components/form-input/form-input';
 import type { Medicine } from '../../entities/medicine';
 import type { PharmacologicalName } from '../../entities/pharmacological-name';
 import { Button, Wrapper } from '../medicine.styles';
+import { type PharmacologicalForm } from '../../entities/pharmacological-form';
 
 interface Props {
   changeScreen: () => void;
   pharmacologicalNames: PharmacologicalName[];
+  pharmacologicalForms: PharmacologicalForm[];
   handleSubmit: (medicine: Medicine) => Promise<void>;
   isSubmitting: boolean;
   editingMedicine: Medicine | null;
@@ -16,6 +18,7 @@ interface Props {
 export const MedicineFormScreen = ({
   changeScreen,
   pharmacologicalNames,
+  pharmacologicalForms,
   handleSubmit,
   isSubmitting,
   editingMedicine,
@@ -24,13 +27,13 @@ export const MedicineFormScreen = ({
     editingMedicine ?? {
       id: '',
       name: '',
-      pharmaceutical_forms: '',
+      PharmacologicalForm: { id: '', name: '' },
       PharmacologicalName: { id: '', name: '' },
     },
   );
   const [errors, setErrors] = useState({
     name: '',
-    pharmaceutical_forms: '',
+    PharmacologicalForm: '',
     PharmacologicalName: '',
   });
 
@@ -38,7 +41,7 @@ export const MedicineFormScreen = ({
     let isValid = true;
     const newErrors = {
       name: '',
-      pharmaceutical_forms: '',
+      PharmacologicalForm: '',
       PharmacologicalName: '',
     };
 
@@ -47,8 +50,8 @@ export const MedicineFormScreen = ({
       isValid = false;
     }
 
-    if (medicine.pharmaceutical_forms.length === 0) {
-      newErrors.pharmaceutical_forms = 'A forma farmacêutica é obrigatória.';
+    if (medicine.PharmacologicalForm.id.length === 0) {
+      newErrors.PharmacologicalForm = 'A forma farmacêutica é obrigatória.';
       isValid = false;
     }
 
@@ -80,15 +83,24 @@ export const MedicineFormScreen = ({
       <FormInput
         id="forma-farmaceutica"
         label="Forma farmacêutica"
-        placeholder="Forma farmacêutica"
         onChange={(e) => {
           const target = e.target as HTMLInputElement;
-          setMedicine({ ...medicine, pharmaceutical_forms: target.value });
-          setErrors({ ...errors, pharmaceutical_forms: '' });
+          setMedicine({
+            ...medicine,
+            PharmacologicalForm: { id: target.value, name: '' },
+          });
+          setErrors({
+            ...errors,
+            PharmacologicalForm: '',
+          });
         }}
-        type="text"
-        value={medicine.pharmaceutical_forms}
-        errorMessage={errors.pharmaceutical_forms}
+        type="select"
+        options={pharmacologicalForms.map((pharmaForm) => ({
+          label: pharmaForm.name,
+          value: pharmaForm.id,
+        }))}
+        value={medicine.PharmacologicalForm.id}
+        errorMessage={errors.PharmacologicalForm}
         required
       />
       <FormInput
@@ -118,7 +130,7 @@ export const MedicineFormScreen = ({
             setMedicine({
               id: '',
               name: '',
-              pharmaceutical_forms: '',
+              PharmacologicalForm: { id: '', name: '' },
               PharmacologicalName: { id: '', name: '' },
             });
             await handleSubmit(medicine);

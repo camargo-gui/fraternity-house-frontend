@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
+import { Alert } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
+import { useSelector } from 'react-redux';
+import { type RootState } from '../../../redux/store/store';
+import LoadingSpinner from '../loading-spinner/loading-spinner';
 
 interface TableColumn {
   header: string;
@@ -14,6 +18,8 @@ interface TableComponentProps {
 }
 
 const TableComponent: React.FC<TableComponentProps> = ({ columns, data }) => {
+  const isLoading = useSelector((state: RootState) => state.loading.isLoading);
+
   const resolveAccessor = (
     row: any,
     accessor: string | ((row: any) => any),
@@ -23,6 +29,14 @@ const TableComponent: React.FC<TableComponentProps> = ({ columns, data }) => {
     }
     return accessor.split('.').reduce((acc, part) => acc[part], row);
   };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (data.length === 0 && !isLoading) {
+    return <Alert variant="info">Nenhum item cadastrado</Alert>;
+  }
 
   return (
     <div className="custom-table">

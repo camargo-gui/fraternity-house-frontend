@@ -8,16 +8,23 @@ import { type Medicine } from '../entities/medicine';
 import type { PharmacologicalName } from '../entities/pharmacological-name';
 import { ObjectionMedicineService } from '../services/objection/objection-medicine-service';
 import { ObjectionPharmacologicalNameService } from '../services/objection/objection-pharmacological-name-service';
+import { type PharmacologicalForm } from '../entities/pharmacological-form';
+import { ObjectionPharmacologicalFormService } from '../services/objection/objection-pharmacological-form-service';
 
 export const useMedicines = (): {
   medicines: Medicine[];
   pharmacologicalNames: PharmacologicalName[];
+  pharmacologicalForms: PharmacologicalForm[];
   refetch: () => Promise<void>;
 } => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [pharmacologicalNames, setPharmacologicalNames] = useState<
     PharmacologicalName[]
   >([]);
+  const [pharmacologicalForms, setPharmacologicalForms] = useState<
+    PharmacologicalForm[]
+  >([]);
+
   const { httpClient } = useContext(ApplicationContext);
   const dispatch: AppDispatch = useDispatch();
 
@@ -37,9 +44,21 @@ export const useMedicines = (): {
     if (names !== undefined) setPharmacologicalNames(names);
   }, [httpClient]);
 
+  const fetchPharmacologicalForms = useCallback(async () => {
+    const names =
+      await new ObjectionPharmacologicalFormService().getPharmacologicalForms(
+        httpClient,
+      );
+
+    console.log(names);
+
+    if (names !== undefined) setPharmacologicalForms(names);
+  }, [httpClient]);
+
   async function getAllMedicinesInformation(): Promise<void> {
     dispatch(setLoading(true));
     void fetchMedicines().catch(noop);
+    void fetchPharmacologicalForms().catch(noop);
     void fetchPharmacologicalNames()
       .catch(noop)
       .finally(() => dispatch(setLoading(false)));
@@ -53,6 +72,7 @@ export const useMedicines = (): {
   return {
     medicines,
     pharmacologicalNames,
+    pharmacologicalForms,
     refetch: getAllMedicinesInformation,
   };
 };

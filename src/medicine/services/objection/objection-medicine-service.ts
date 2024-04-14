@@ -44,7 +44,7 @@ export class ObjectionMedicineService implements MedicineService {
   ): Promise<void> {
     const medicineDTO = {
       name: medicine.name,
-      pharmaceutical_forms: medicine.pharmaceutical_forms,
+      id_pharmacological_form: Number(medicine.PharmacologicalForm.id),
       id_pharmacological_name: Number(medicine.PharmacologicalName.id),
     };
 
@@ -67,7 +67,7 @@ export class ObjectionMedicineService implements MedicineService {
     const medicineDTO = {
       id: medicine.id,
       name: medicine.name,
-      pharmaceutical_forms: medicine.pharmaceutical_forms,
+      id_pharmacological_form: medicine.PharmacologicalForm.id,
       id_pharmacological_name: medicine.PharmacologicalName.id,
     };
 
