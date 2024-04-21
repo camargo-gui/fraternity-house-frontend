@@ -11,6 +11,7 @@ import { MedicationSheet } from './lists/medication-sheet-screen';
 import { MedicineList } from './lists/medicine-list-screen';
 import { GoBackButton, MedicineWrapper } from './medicine.styles';
 import { type ScreenComponentProps } from '../../common/components/base-screen/screen-enum';
+import { useResident } from '../../resident/hooks/use-resident';
 
 enum Screen {
   MedicineRegister = 'MedicineRegister',
@@ -35,6 +36,7 @@ export const MedicineContainer = ({
 
   const { medicines, pharmacologicalNames, pharmacologicalForms, refetch } =
     useMedicines();
+  const { residents } = useResident({ httpClient });
 
   useEffect(() => {
     if (setSecondaryTitle != null) {
@@ -148,6 +150,7 @@ export const MedicineContainer = ({
               setScreen(Screen.MedicineList);
             }}
             medicines={medicines}
+            residents={residents ?? []}
           />
         );
       default:

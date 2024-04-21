@@ -15,9 +15,14 @@ interface TableColumn {
 interface TableComponentProps {
   columns: TableColumn[];
   data: Array<Record<string, any>>;
+  showEmptyTable?: boolean;
 }
 
-const TableComponent: React.FC<TableComponentProps> = ({ columns, data }) => {
+const TableComponent: React.FC<TableComponentProps> = ({
+  columns,
+  data,
+  showEmptyTable,
+}) => {
   const isLoading = useSelector((state: RootState) => state.loading.isLoading);
 
   const resolveAccessor = (
@@ -34,8 +39,8 @@ const TableComponent: React.FC<TableComponentProps> = ({ columns, data }) => {
     return <LoadingSpinner />;
   }
 
-  if (data.length === 0 && !isLoading) {
-    return <Alert variant="info">Nenhum item cadastrado</Alert>;
+  if (data.length === 0 && !isLoading && !(showEmptyTable ?? false)) {
+    return <Alert variant="info">{'Nenhum item cadastrado'}</Alert>;
   }
 
   return (
@@ -49,6 +54,13 @@ const TableComponent: React.FC<TableComponentProps> = ({ columns, data }) => {
           </tr>
         </thead>
         <tbody>
+          {(showEmptyTable ?? false) && data.length === 0 && (
+            <tr>
+              <td colSpan={columns.length} className="text-center">
+                Nenhum registro adicionado
+              </td>
+            </tr>
+          )}
           {data.map((row, rowIndex) => (
             <tr key={rowIndex}>
               {columns.map((column, colIndex) => {

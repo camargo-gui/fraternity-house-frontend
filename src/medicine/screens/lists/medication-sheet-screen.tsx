@@ -1,6 +1,6 @@
 import { type ReactElement } from 'react';
 import { MedicationSheetTable } from '../../components/medication-sheet-table';
-import { Button, ButtonGroup, Wrapper } from '../medicine.styles';
+import { Button, ButtonGroup, WrapperSheet } from '../medicine.styles';
 
 interface Props {
   changeScreen: () => void;
@@ -12,16 +12,20 @@ export const MedicationSheet = ({
   goToMedicineForm,
 }: Props): ReactElement => {
   return (
-    <Wrapper>
+    <WrapperSheet>
       <MedicationSheetTable />
+
       <ButtonGroup>
-        <Button
-          text="Cadastra Nova Ficha"
-          onClick={changeScreen}
-          backgroundColor="#6c757d"
-          hoverBackgroundColor="#595f64"
-          width="auto"
-        />
+        <div>
+          <Button
+            text="Cadastra Nova Ficha"
+            onClick={changeScreen}
+            backgroundColor="#6c757d"
+            hoverBackgroundColor="#595f64"
+            width="auto"
+          />
+        </div>
+
         <div className="ms-auto">
           <Button
             text="Gerenciar Medicamento"
@@ -32,6 +36,6 @@ export const MedicationSheet = ({
           />
         </div>
       </ButtonGroup>
-    </Wrapper>
+    </WrapperSheet>
   );
 };

@@ -4,6 +4,17 @@ import { Button as BaseButton } from '../../common/components/button/button';
 
 export const Wrapper = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 70vh;
+`;
+
+export const WrapperSheet = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 82vh;
 `;
 
 export const Button = styled(BaseButton)``;
@@ -11,6 +22,7 @@ export const Button = styled(BaseButton)``;
 export const ButtonGroup = styled(BaseButtonGroup)`
   display: flex;
   flex-grow: 1;
+  align-items: flex-end;
 `;
 
 export const GoBackButton = styled(BaseButton).attrs({

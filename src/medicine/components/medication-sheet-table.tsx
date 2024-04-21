@@ -13,6 +13,14 @@ export const MedicationSheetTable = (): ReactElement => {
       accessor: 'medicine',
     },
     {
+      header: 'Forma farmacêutica',
+      accessor: 'pharmaceuticalForm',
+    },
+    {
+      header: 'Nome farmacológico',
+      accessor: 'pharmacologicalName',
+    },
+    {
       header: 'Dosagem',
       accessor: 'dosage',
     },
@@ -25,8 +33,12 @@ export const MedicationSheetTable = (): ReactElement => {
       accessor: 'frequency',
     },
     {
-      header: 'Periodo',
-      accessor: 'period',
+      header: 'Data de início',
+      accessor: 'startDate',
+    },
+    {
+      header: 'Data de término',
+      accessor: 'endDate',
     },
   ];
 
@@ -34,18 +46,24 @@ export const MedicationSheetTable = (): ReactElement => {
     {
       medicine: 'Paracetamol',
       resident: 'João',
+      pharmaceuticalForm: 'Comprimido',
+      pharmacologicalName: 'Paracetamol',
       dosage: '25mg',
       firstHour: '08:00',
       frequency: '8/8',
-      period: '7 dias',
+      startDate: '01/01/2021',
+      endDate: '07/01/2021',
     },
     {
       medicine: 'Dipirona',
       resident: 'Maria',
+      pharmaceuticalForm: 'Comprimido',
+      pharmacologicalName: 'Dipirona',
       dosage: '50mg',
       firstHour: '08:00',
       frequency: '8/8',
-      period: '7 dias',
+      startDate: '01/01/2021',
+      endDate: '07/01/2021',
     },
   ];
 
