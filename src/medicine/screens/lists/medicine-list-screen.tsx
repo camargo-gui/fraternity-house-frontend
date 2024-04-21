@@ -1,7 +1,9 @@
-import { type ReactElement } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useState, type ReactElement } from 'react';
 import { MedicineTable } from '../../components/medicine-table';
 import type { Medicine } from '../../entities/medicine';
 import { Button, Wrapper } from '../medicine.styles';
+import { MedicineFilter } from '../medicine-filter/medicine-filter';
 
 interface Props {
   changeScreen: () => void;
@@ -16,10 +18,37 @@ export const MedicineList = ({
   onEdit,
   onDelete,
 }: Props): ReactElement => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedPharmacologicalName, setSelectedPharmacologicalName] =
+    useState('');
+  const [selectedForm, setSelectedForm] = useState('');
+
+  const filteredMedicines = medicines.filter((medicine) => {
+    return (
+      (selectedPharmacologicalName !== ''
+        ? medicine.PharmacologicalName.name === selectedPharmacologicalName
+        : true) &&
+      (selectedForm !== ''
+        ? medicine.PharmacologicalForm.name === selectedForm
+        : true) &&
+      medicine.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
+
   return (
     <Wrapper>
-      <MedicineTable
+      <MedicineFilter
         medicines={medicines}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        selectedPharmacologicalName={selectedPharmacologicalName}
+        setSelectedPharmacologicalName={setSelectedPharmacologicalName}
+        selectedForm={selectedForm}
+        setSelectedForm={setSelectedForm}
+      />
+
+      <MedicineTable
+        medicines={filteredMedicines}
         onEdit={onEdit}
         onDelete={onDelete}
       />

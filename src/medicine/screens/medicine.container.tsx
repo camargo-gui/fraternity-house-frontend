@@ -1,4 +1,4 @@
-import { useContext, useState, type ReactElement } from 'react';
+import { useContext, useEffect, useState, type ReactElement } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { ApplicationContext } from '../../application-context';
 import { ConfirmationModal } from '../../common/components/confirmation-modal/confirmation-modal';
@@ -10,6 +10,7 @@ import { MedicineFormScreen } from './forms/medicine-form-screen';
 import { MedicationSheet } from './lists/medication-sheet-screen';
 import { MedicineList } from './lists/medicine-list-screen';
 import { GoBackButton, MedicineWrapper } from './medicine.styles';
+import { type ScreenComponentProps } from '../../common/components/base-screen/screen-enum';
 
 enum Screen {
   MedicineRegister = 'MedicineRegister',
@@ -18,7 +19,9 @@ enum Screen {
   MedicationSheetRegister = 'MedicationSheetRegister',
 }
 
-export const MedicineContainer = (): ReactElement => {
+export const MedicineContainer = ({
+  setSecondaryTitle,
+}: ScreenComponentProps): ReactElement => {
   const [screen, setScreen] = useState<Screen>(Screen.MedicationSheetList);
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -32,6 +35,26 @@ export const MedicineContainer = (): ReactElement => {
 
   const { medicines, pharmacologicalNames, pharmacologicalForms, refetch } =
     useMedicines();
+
+  useEffect(() => {
+    if (setSecondaryTitle != null) {
+      if (
+        screen === Screen.MedicineList ||
+        screen === Screen.MedicineRegister
+      ) {
+        setSecondaryTitle('Medicamentos');
+      } else {
+        setSecondaryTitle('Fichas de Medicamentos');
+      }
+    }
+
+    return () => {
+      if (setSecondaryTitle != null) {
+        setSecondaryTitle('');
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [screen]);
 
   async function handleSubmit(medicine: Medicine): Promise<void> {
     setIsSubmitting(true);

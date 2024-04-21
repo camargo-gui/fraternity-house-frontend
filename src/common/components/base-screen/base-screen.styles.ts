@@ -15,9 +15,9 @@ export const ContentContainer = styled.div`
 `;
 
 export const ScreenTitle = styled.h1`
-  font-size: 45px;
+  font-size: 36px;
   font-family: 'Roboto flex';
   color: #002b5e;
   font-weight: 500;
-  margin-bottom: 60px;
+  margin-bottom: 30px;
 `;

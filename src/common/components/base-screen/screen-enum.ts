@@ -18,12 +18,16 @@ export enum Screens {
   Physical = 'Physical',
 }
 
+export interface ScreenComponentProps {
+  setSecondaryTitle?: (value: string) => void;
+}
+
 export interface ScreenListItemProps {
   title: string;
   icon: FunctionComponent<
     SVGProps<SVGSVGElement> & { title?: string | undefined }
   >;
-  element: ComponentType;
+  element: ComponentType<ScreenComponentProps>;
   route?: string;
 }
 
@@ -47,7 +51,7 @@ export const screenList: ScreenListItemProps[] = [
     element: EmployeeContainer,
   },
   {
-    title: 'Fichas de Medicamentos',
+    title: 'Medicamentos',
     icon: Icon.medicines_icon,
     route: '/medicamentos',
     element: MedicineContainer,

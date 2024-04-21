@@ -1,4 +1,4 @@
-import { type ReactElement } from 'react';
+import { useState, type ReactElement } from 'react';
 import { Provider } from 'react-redux';
 import {
   Navigate,
@@ -17,6 +17,8 @@ import { LoginContainer } from './login/screens/login.container';
 import { store } from './redux/store/store';
 
 function App(): ReactElement {
+  const [secondaryTitle, setSecondaryTitle] = useState<string>('');
+
   return (
     <Provider store={store}>
       <ApplicationContext.Provider value={{ httpClient: new HttpClient() }}>
@@ -31,8 +33,10 @@ function App(): ReactElement {
                   path={screen.route}
                   element={
                     <BaseScreen>
-                      <ScreenTitle>{screen.title}</ScreenTitle>
-                      <ScreenComponent />
+                      <ScreenTitle>
+                        {secondaryTitle === '' ? screen.title : secondaryTitle}
+                      </ScreenTitle>
+                      <ScreenComponent setSecondaryTitle={setSecondaryTitle} />
                     </BaseScreen>
                   }
                 />

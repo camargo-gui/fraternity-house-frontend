@@ -1,4 +1,6 @@
 import { type ReactElement } from 'react';
+import { InputGroup } from 'react-bootstrap';
+import { FaSearch } from 'react-icons/fa';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 
@@ -68,6 +70,21 @@ export const FormInput = ({
     />
   );
 
+  const renderSearchInput = (): ReactElement => (
+    <InputGroup style={{ height: '50px' }}>
+      <Form.Control
+        type="search"
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        required={required}
+      />
+      <InputGroup.Text>
+        <FaSearch />
+      </InputGroup.Text>
+    </InputGroup>
+  );
+
   const renderSelect = (): ReactElement => (
     <Form.Select value={value} onChange={onChange} required={required}>
       <option value="">{placeholder}</option>
@@ -103,6 +120,8 @@ export const FormInput = ({
         return renderFileInput();
       case 'textarea':
         return renderTextarea();
+      case 'search':
+        return renderSearchInput();
       case 'text':
       default:
         return renderTextInput();
