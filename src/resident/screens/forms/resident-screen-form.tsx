@@ -2,6 +2,7 @@ import { useState, type ReactElement } from 'react';
 import { FormInput } from '../../../common/components/form-input/form-input';
 import { type ResidentDTO } from '../../dto/resident-dto';
 import { Button, Wrapper } from '../resident.styles';
+import { IMaskInput } from 'react-imask';
 
 interface Props {
   changeScreen: () => void;
@@ -56,6 +57,8 @@ export const ResidentScreenForm = ({
         value={resident.cpf}
         type="text"
         placeholder="CPF"
+        as={IMaskInput}
+        mask="000.000.000-00"
         disabled={isEditing}
         onChange={(e) => {
           const target = e.target as HTMLInputElement;
@@ -78,6 +81,8 @@ export const ResidentScreenForm = ({
         id="contato"
         label="Contato"
         type="text"
+        as={IMaskInput}
+        mask="(00) 00000-0000"
         value={resident.contact_phone}
         placeholder="Contato"
         onChange={(e) => {

@@ -3,6 +3,7 @@ import { type Employee } from '../../entities/employee';
 import { type HttpClient } from '../../../common/http-client/http-client';
 import { noop } from 'lodash';
 import { EmployeeResponse } from '../response/employee-response';
+import { formatSpecialCharacters } from '../../../utils/format-special-characters';
 
 export class ObjectionEmployeeService implements EmployeeService {
   private readonly apiUrl = '/employee';
@@ -19,6 +20,8 @@ export class ObjectionEmployeeService implements EmployeeService {
         data: {
           ...employeeData,
           role_id: Number(employee.Role.id),
+          document: formatSpecialCharacters(employee.document),
+          phone: formatSpecialCharacters(employee.phone),
         },
       });
       return true;
@@ -46,6 +49,7 @@ export class ObjectionEmployeeService implements EmployeeService {
     document: string,
   ): Promise<void> {
     try {
+      document = formatSpecialCharacters(document);
       await httpClient.request({
         path: `${this.apiUrl}/${document}`,
         method: 'delete',
@@ -67,6 +71,8 @@ export class ObjectionEmployeeService implements EmployeeService {
         data: {
           ...employeeData,
           role_id: Number(employee.Role.id),
+          document: formatSpecialCharacters(employee.document),
+          phone: formatSpecialCharacters(employee.phone),
         },
       });
       return true;
