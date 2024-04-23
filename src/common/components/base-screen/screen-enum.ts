@@ -7,6 +7,7 @@ import * as Icon from '../../../assets/icons-mapping';
 import { ResidentContainer } from './../../../resident/screens/resident.container';
 import { MedicineContainer } from '../../../medicine/screens/medicine.container';
 import { EmployeeContainer } from '../../../employee/screens/employee.container';
+import { StockScreenContainer } from '../../../stock/screens/stock-screen/stock-screen.container';
 
 export enum Screens {
   Files = 'Files',
@@ -42,7 +43,7 @@ export const screenList: ScreenListItemProps[] = [
     title: 'Estoque',
     icon: Icon.stock_icon,
     route: '/estoques',
-    element: ResidentContainer,
+    element: StockScreenContainer,
   },
   {
     title: 'Funcionários',
