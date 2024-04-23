@@ -10,11 +10,11 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ApplicationContext } from './application-context';
 import { BaseScreen } from './common/components/base-screen/base-screen';
-import { ScreenTitle } from './common/components/base-screen/base-screen.styles';
 import { screenList } from './common/components/base-screen/screen-enum';
 import { HttpClient } from './common/http-client/http-client';
 import { LoginContainer } from './login/screens/login.container';
 import { store } from './redux/store/store';
+import { ScreenTitle } from './common/components/base-screen/components/screen-title/screen-title';
 
 function App(): ReactElement {
   const [secondaryTitle, setSecondaryTitle] = useState<string>('');
@@ -33,9 +33,9 @@ function App(): ReactElement {
                   path={screen.route}
                   element={
                     <BaseScreen>
-                      <ScreenTitle>
-                        {secondaryTitle === '' ? screen.title : secondaryTitle}
-                      </ScreenTitle>
+                      <ScreenTitle
+                        screenTitle={screen.title ?? secondaryTitle}
+                      />
                       <ScreenComponent setSecondaryTitle={setSecondaryTitle} />
                     </BaseScreen>
                   }
