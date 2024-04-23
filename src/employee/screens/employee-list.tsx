@@ -18,12 +18,14 @@ export const EmployeeeList = ({
   onDelete,
 }: Props): ReactElement => {
   return (
-    <Wrapper>
-      <EmployeeTable
-        employees={employees}
-        onEdit={onEdit}
-        onDelete={onDelete}
-      />
+    <>
+      <Wrapper>
+        <EmployeeTable
+          employees={employees}
+          onEdit={onEdit}
+          onDelete={onDelete}
+        />
+      </Wrapper>
       <Button
         text="Novo Funcionário"
         onClick={changeScreen}
@@ -31,6 +33,6 @@ export const EmployeeeList = ({
         hoverBackgroundColor="#595f64"
         width="auto"
       />
-    </Wrapper>
+    </>
   );
 };

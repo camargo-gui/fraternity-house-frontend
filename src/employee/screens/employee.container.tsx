@@ -39,8 +39,12 @@ export const EmployeeContainer = (): ReactElement => {
   }, [httpClient]);
 
   const changeScreen = useCallback((): void => {
+    if (screen === 'EmployeeList' && isEditting) {
+      setIsEditting(false);
+      setEmployeeToEdit(undefined);
+    }
     setScreen(screen === 'EmployeeList' ? 'EmployeeRegister' : 'EmployeeList');
-  }, [screen]);
+  }, [isEditting, screen]);
 
   const fetchEmployees = useCallback(async (): Promise<void> => {
     dispatch(setLoading(true));
@@ -70,7 +74,7 @@ export const EmployeeContainer = (): ReactElement => {
     if (employee !== undefined) {
       setEmployeeToEdit(employee);
       setIsEditting(true);
-      changeScreen();
+      setScreen('EmployeeRegister');
     }
   };
 
