@@ -5,7 +5,7 @@ import { ConfirmationModal } from '../../common/components/confirmation-modal/co
 import type { Medicine } from '../entities/medicine';
 import { useMedicines } from '../hooks/use-medicine';
 import { ObjectionMedicineService } from '../services/objection/objection-medicine-service';
-import { MedicationSheetFormScreen } from './forms/medication-sheet-form-screen';
+import { MedicationSheetFormScreen } from './forms/medication-sheet-form/medication-sheet-form-screen';
 import { MedicineFormScreen } from './forms/medicine-form-screen';
 import { MedicationSheet } from './lists/medication-sheet-screen';
 import { MedicineList } from './lists/medicine-list-screen';

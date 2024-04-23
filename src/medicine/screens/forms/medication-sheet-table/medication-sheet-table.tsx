@@ -1,11 +1,12 @@
 import React, { type ReactElement } from 'react';
-import TableComponent from '../../../common/components/table/table';
-import { TransparentButton } from '../../components/medicine-table.styles';
+import TableComponent from '../../../../common/components/table/table';
+import { TransparentButton } from '../../../components/medicine-table.styles';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 export interface MedicationRecord {
-  medicine: string;
   resident: string;
+  medicineId?: string;
+  medicine: string;
   pharmaceuticalForm: string;
   pharmacologicalName: string;
   dosage: string;
@@ -13,8 +14,19 @@ export interface MedicationRecord {
   frequency: string;
   startDate: string;
   endDate: string;
-  medicalPrescription: string;
 }
+
+export const EMPTY_RECORD: MedicationRecord = {
+  resident: '',
+  medicine: '',
+  pharmaceuticalForm: '',
+  pharmacologicalName: '',
+  dosage: '',
+  firstHour: '',
+  frequency: '',
+  startDate: '',
+  endDate: '',
+};
 
 interface MedicationSheetTableProps {
   records: MedicationRecord[];

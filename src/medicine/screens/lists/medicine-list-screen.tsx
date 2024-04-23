@@ -58,7 +58,7 @@ export const MedicineList = ({
         onClick={changeScreen}
         backgroundColor="#6c757d"
         hoverBackgroundColor="#595f64"
-        width="auto"
+        width="200px"
       />
     </Wrapper>
   );

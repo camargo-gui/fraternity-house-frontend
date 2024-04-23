@@ -32,6 +32,7 @@ interface FormInputProps {
   errorMessage?: string;
   disabled?: boolean;
   onChange: (e: React.ChangeEvent<unknown>) => void;
+  height?: string;
 }
 
 export const FormInput = ({
@@ -46,6 +47,7 @@ export const FormInput = ({
   required,
   errorMessage,
   disabled,
+  height,
 }: FormInputProps): ReactElement => {
   const renderTextarea = (): ReactElement => (
     <Form.Control
@@ -54,7 +56,7 @@ export const FormInput = ({
       value={value}
       onChange={onChange}
       type="textarea"
-      style={{ height: '100px' }}
+      style={{ height: height ?? '100px' }}
       required={required}
     />
   );
