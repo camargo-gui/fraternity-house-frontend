@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Spinner } from 'react-bootstrap';
 
 interface ConfirmationModalProps {
   show: boolean;
@@ -7,6 +7,7 @@ interface ConfirmationModalProps {
   onConfirm: () => void;
   title: string;
   body: string;
+  isLoading?: boolean;
 }
 
 export const ConfirmationModal = ({
@@ -15,6 +16,7 @@ export const ConfirmationModal = ({
   onConfirm,
   title,
   body,
+  isLoading,
 }: ConfirmationModalProps): ReactElement => {
   return (
     <Modal show={show} onHide={onHide}>
@@ -24,10 +26,10 @@ export const ConfirmationModal = ({
       <Modal.Body>{body}</Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onHide}>
-          Cancelar
+          {'Cancelar'}
         </Button>
         <Button variant="danger" onClick={onConfirm}>
-          Excluir
+          {isLoading ?? false ? <Spinner /> : 'Excluir'}
         </Button>
       </Modal.Footer>
     </Modal>

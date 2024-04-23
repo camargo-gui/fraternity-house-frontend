@@ -10,11 +10,14 @@ import { ObjectionMedicineService } from '../services/objection/objection-medici
 import { ObjectionPharmacologicalNameService } from '../services/objection/objection-pharmacological-name-service';
 import { type PharmacologicalForm } from '../entities/pharmacological-form';
 import { ObjectionPharmacologicalFormService } from '../services/objection/objection-pharmacological-form-service';
+import { type MedicationSheetBody } from '../entities/medication-sheet-body';
+import { ObjectionMedicationSheetService } from '../services/objection/objection-medication-sheet-service';
 
 export const useMedicines = (): {
   medicines: Medicine[];
   pharmacologicalNames: PharmacologicalName[];
   pharmacologicalForms: PharmacologicalForm[];
+  medicationSheets: MedicationSheetBody[];
   refetch: () => Promise<void>;
 } => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
@@ -24,6 +27,9 @@ export const useMedicines = (): {
   const [pharmacologicalForms, setPharmacologicalForms] = useState<
     PharmacologicalForm[]
   >([]);
+  const [medicationSheets, setMedicineSheets] = useState<MedicationSheetBody[]>(
+    [],
+  );
 
   const { httpClient } = useContext(ApplicationContext);
   const dispatch: AppDispatch = useDispatch();
@@ -39,8 +45,6 @@ export const useMedicines = (): {
         httpClient,
       );
 
-    console.log(names);
-
     if (names !== undefined) setPharmacologicalNames(names);
   }, [httpClient]);
 
@@ -55,13 +59,24 @@ export const useMedicines = (): {
     if (names !== undefined) setPharmacologicalForms(names);
   }, [httpClient]);
 
+  const fetchPrescriptions = useCallback(async () => {
+    const medicationPrescriptions =
+      await new ObjectionMedicationSheetService().getAllPrescriptions(
+        httpClient,
+      );
+
+    if (medicationPrescriptions !== undefined)
+      setMedicineSheets(medicationPrescriptions.medicationSheets);
+  }, [httpClient]);
+
   async function getAllMedicinesInformation(): Promise<void> {
     dispatch(setLoading(true));
-    void fetchMedicines().catch(noop);
-    void fetchPharmacologicalForms().catch(noop);
-    void fetchPharmacologicalNames()
-      .catch(noop)
-      .finally(() => dispatch(setLoading(false)));
+    await Promise.all([
+      fetchMedicines().catch(noop),
+      fetchPharmacologicalForms().catch(noop),
+      fetchPrescriptions().catch(noop),
+      fetchPharmacologicalNames().catch(noop),
+    ]).finally(() => dispatch(setLoading(false)));
   }
 
   useEffect(() => {
@@ -73,6 +88,7 @@ export const useMedicines = (): {
     medicines,
     pharmacologicalNames,
     pharmacologicalForms,
+    medicationSheets,
     refetch: getAllMedicinesInformation,
   };
 };

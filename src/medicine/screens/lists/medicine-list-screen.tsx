@@ -37,28 +37,30 @@ export const MedicineList = ({
 
   return (
     <Wrapper>
-      <MedicineFilter
-        medicines={medicines}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        selectedPharmacologicalName={selectedPharmacologicalName}
-        setSelectedPharmacologicalName={setSelectedPharmacologicalName}
-        selectedForm={selectedForm}
-        setSelectedForm={setSelectedForm}
-      />
+      <div>
+        <MedicineFilter
+          medicines={medicines}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          selectedPharmacologicalName={selectedPharmacologicalName}
+          setSelectedPharmacologicalName={setSelectedPharmacologicalName}
+          selectedForm={selectedForm}
+          setSelectedForm={setSelectedForm}
+        />
 
-      <MedicineTable
-        medicines={filteredMedicines}
-        onEdit={onEdit}
-        onDelete={onDelete}
-      />
+        <MedicineTable
+          medicines={filteredMedicines}
+          onEdit={onEdit}
+          onDelete={onDelete}
+        />
+      </div>
 
       <Button
         text="Novo Medicamento"
         onClick={changeScreen}
         backgroundColor="#6c757d"
         hoverBackgroundColor="#595f64"
-        width="auto"
+        width="200px"
       />
     </Wrapper>
   );

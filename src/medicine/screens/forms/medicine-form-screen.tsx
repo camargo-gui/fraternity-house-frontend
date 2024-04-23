@@ -66,85 +66,90 @@ export const MedicineFormScreen = ({
 
   return (
     <Wrapper>
-      <FormInput
-        id="nome"
-        label="Nome"
-        placeholder="Nome"
-        onChange={(e) => {
-          const target = e.target as HTMLInputElement;
-          setMedicine({ ...medicine, name: target.value });
-          setErrors({ ...errors, name: '' });
-        }}
-        type="text"
-        value={medicine.name}
-        errorMessage={errors.name}
-        required
-      />
-      <FormInput
-        id="forma-farmaceutica"
-        label="Forma farmacêutica"
-        onChange={(e) => {
-          const target = e.target as HTMLInputElement;
-          setMedicine({
-            ...medicine,
-            PharmacologicalForm: { id: target.value, name: '' },
-          });
-          setErrors({
-            ...errors,
-            PharmacologicalForm: '',
-          });
-        }}
-        type="select"
-        options={pharmacologicalForms.map((pharmaForm) => ({
-          label: pharmaForm.name,
-          value: pharmaForm.id,
-        }))}
-        value={medicine.PharmacologicalForm.id}
-        errorMessage={errors.PharmacologicalForm}
-        required
-      />
-      <FormInput
-        label="Nome farmacológico"
-        onChange={(e) => {
-          const target = e.target as HTMLInputElement;
-          setMedicine({
-            ...medicine,
-            PharmacologicalName: { id: target.value, name: '' },
-          });
-          setErrors({ ...errors, PharmacologicalName: '' });
-        }}
-        value={medicine.PharmacologicalName.id}
-        type="select"
-        options={pharmacologicalNames.map((pharmaName) => ({
-          label: pharmaName.name,
-          value: pharmaName.id,
-        }))}
-        id="nome-farmacologico"
-        errorMessage={errors.PharmacologicalName}
-        required
-      />
-      <Button
-        text={editingMedicine !== null ? 'Atualizar' : 'Cadastrar'}
-        onClick={async () => {
-          if (validateFields()) {
+      <div>
+        <FormInput
+          id="nome"
+          label="Nome"
+          placeholder="Nome"
+          onChange={(e) => {
+            const target = e.target as HTMLInputElement;
+            setMedicine({ ...medicine, name: target.value });
+            setErrors({ ...errors, name: '' });
+          }}
+          type="text"
+          value={medicine.name}
+          errorMessage={errors.name}
+          required
+        />
+        <FormInput
+          id="forma-farmaceutica"
+          label="Forma farmacêutica"
+          onChange={(e) => {
+            const target = e.target as HTMLInputElement;
             setMedicine({
-              id: '',
-              name: '',
-              PharmacologicalForm: { id: '', name: '' },
-              PharmacologicalName: { id: '', name: '' },
+              ...medicine,
+              PharmacologicalForm: { id: target.value, name: '' },
             });
-            await handleSubmit(medicine);
-          }
-        }}
-        isLoading={isSubmitting}
-      />
-      <Button
-        text="Lista de Medicamentos"
-        onClick={changeScreen}
-        backgroundColor="#6c757d"
-        hoverBackgroundColor="#595f64"
-        width="auto"
-      />
+            setErrors({
+              ...errors,
+              PharmacologicalForm: '',
+            });
+          }}
+          type="select"
+          options={pharmacologicalForms.map((pharmaForm) => ({
+            label: pharmaForm.name,
+            value: pharmaForm.id,
+          }))}
+          value={medicine.PharmacologicalForm.id}
+          errorMessage={errors.PharmacologicalForm}
+          required
+        />
+        <FormInput
+          label="Nome farmacológico"
+          onChange={(e) => {
+            const target = e.target as HTMLInputElement;
+            setMedicine({
+              ...medicine,
+              PharmacologicalName: { id: target.value, name: '' },
+            });
+            setErrors({ ...errors, PharmacologicalName: '' });
+          }}
+          value={medicine.PharmacologicalName.id}
+          type="select"
+          options={pharmacologicalNames.map((pharmaName) => ({
+            label: pharmaName.name,
+            value: pharmaName.id,
+          }))}
+          id="nome-farmacologico"
+          errorMessage={errors.PharmacologicalName}
+          required
+        />
+      </div>
+      <div>
+        <Button
+          text={editingMedicine !== null ? 'Atualizar' : 'Cadastrar'}
+          onClick={async () => {
+            if (validateFields()) {
+              setMedicine({
+                id: '',
+                name: '',
+                PharmacologicalForm: { id: '', name: '' },
+                PharmacologicalName: { id: '', name: '' },
+              });
+              await handleSubmit(medicine);
+            }
+          }}
+          isLoading={isSubmitting}
+        />
+
+        <Button
+          text="Lista de Medicamentos"
+          onClick={changeScreen}
+          backgroundColor="#6c757d"
+          hoverBackgroundColor="#595f64"
+          width="auto"
+        />
+      </div>
     </Wrapper>
   );
 };

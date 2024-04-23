@@ -1,4 +1,4 @@
-import { type ReactElement } from 'react';
+import { type PropsWithChildren, type ReactElement } from 'react';
 import { InputGroup } from 'react-bootstrap';
 import { FaSearch } from 'react-icons/fa';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
@@ -13,7 +13,8 @@ type InputType =
   | 'search'
   | 'textarea'
   | 'password'
-  | 'file';
+  | 'file'
+  | 'number';
 
 interface Option {
   label: string;
@@ -22,7 +23,7 @@ interface Option {
 
 interface FormInputProps {
   id: string;
-  label: string;
+  label?: string;
   type: InputType;
   options?: Option[];
   placeholder?: string;
@@ -32,6 +33,7 @@ interface FormInputProps {
   errorMessage?: string;
   disabled?: boolean;
   onChange: (e: React.ChangeEvent<unknown>) => void;
+  height?: string;
 }
 
 export const FormInput = ({
@@ -46,6 +48,7 @@ export const FormInput = ({
   required,
   errorMessage,
   disabled,
+  height,
 }: FormInputProps): ReactElement => {
   const renderTextarea = (): ReactElement => (
     <Form.Control
@@ -54,7 +57,7 @@ export const FormInput = ({
       value={value}
       onChange={onChange}
       type="textarea"
-      style={{ height: '100px' }}
+      style={{ height: height ?? '100px' }}
       required={required}
     />
   );
@@ -139,9 +142,15 @@ export const FormInput = ({
     );
   }
 
-  return (
-    <FloatingLabel controlId={id} label={label} className="mb-3">
-      {renderInput()}
-    </FloatingLabel>
-  );
+  const InputContainer = ({ children }: PropsWithChildren): ReactElement => {
+    return label != null ? (
+      <FloatingLabel controlId={id} label={label} className="mb-3">
+        {children}
+      </FloatingLabel>
+    ) : (
+      <>{children}</>
+    );
+  };
+
+  return <InputContainer>{renderInput()}</InputContainer>;
 };

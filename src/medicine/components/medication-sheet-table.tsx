@@ -1,53 +1,62 @@
 import { type ReactElement } from 'react';
 import TableComponent from '../../common/components/table/table';
-import React from 'react';
+import { type MedicationSheetBody } from '../entities/medication-sheet-body';
+import { FaEye } from 'react-icons/fa';
+import { TransparentButton } from './medicine-table.styles';
 
-export const MedicationSheetTable = (): ReactElement => {
+interface Props {
+  medicationSheets: MedicationSheetBody[];
+  handleShowPrescriptions: (sheet: MedicationSheetBody) => void;
+}
+
+export const MedicationSheetTable = ({
+  medicationSheets,
+  handleShowPrescriptions,
+}: Props): ReactElement => {
   const columns = [
     {
       header: 'Morador',
-      accessor: 'resident',
+      accessor: 'Resident.name',
     },
     {
-      header: 'Medicamento',
-      accessor: 'medicine',
+      header: 'Responsável pela ficha',
+      accessor: 'Employee.name',
     },
     {
-      header: 'Dosagem',
-      accessor: 'dosage',
+      header: 'Observações',
+      accessor: 'observations',
     },
     {
-      header: 'Primeiro horário',
-      accessor: 'firstHour',
+      header: 'Prescrições',
+      accessor: 'prescriptions.length',
     },
     {
-      header: 'Frequência',
-      accessor: 'frequency',
-    },
-    {
-      header: 'Periodo',
-      accessor: 'period',
+      header: 'Ver prescrições',
+      accessor: 'actions',
+      render: (row: MedicationSheetBody) => (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+          }}
+        >
+          <TransparentButton
+            onClick={() => {
+              handleShowPrescriptions(row);
+            }}
+            leadingIcon={<FaEye color="#002b5e" />}
+          />
+        </div>
+      ),
     },
   ];
 
-  const data = [
-    {
-      medicine: 'Paracetamol',
-      resident: 'João',
-      dosage: '25mg',
-      firstHour: '08:00',
-      frequency: '8/8',
-      period: '7 dias',
-    },
-    {
-      medicine: 'Dipirona',
-      resident: 'Maria',
-      dosage: '50mg',
-      firstHour: '08:00',
-      frequency: '8/8',
-      period: '7 dias',
-    },
-  ];
-
-  return <TableComponent columns={columns} data={data} />;
+  return (
+    <TableComponent
+      columns={columns}
+      data={medicationSheets}
+      showEmptyTable={true}
+    />
+  );
 };
