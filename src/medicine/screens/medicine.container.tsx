@@ -7,11 +7,19 @@ import { useMedicines } from '../hooks/use-medicine';
 import { ObjectionMedicineService } from '../services/objection/objection-medicine-service';
 import { MedicationSheetFormScreen } from './forms/medication-sheet-form/medication-sheet-form-screen';
 import { MedicineFormScreen } from './forms/medicine-form-screen';
-import { MedicationSheet } from './lists/medication-sheet-screen';
 import { MedicineList } from './lists/medicine-list-screen';
 import { GoBackButton, MedicineWrapper } from './medicine.styles';
 import { type ScreenComponentProps } from '../../common/components/base-screen/screen-enum';
 import { useResident } from '../../resident/hooks/use-resident';
+import {
+  EMPTY_RECORD,
+  type MedicationRecord,
+} from './forms/medication-sheet-form/medication-sheet-table/medication-sheet-table';
+import { Prescription } from '../entities/prescription';
+import { ObjectionMedicationSheetService } from '../services/objection/objection-medication-sheet-service';
+import { MedicationSheet as MedicationSheetClass } from '../entities/medication-sheet';
+import { MedicationSheet } from './lists/medication-sheet-screen';
+import { type ResidentDTO } from '../../resident/dto/resident-dto';
 
 enum Screen {
   MedicineRegister = 'MedicineRegister',
@@ -25,17 +33,33 @@ export const MedicineContainer = ({
 }: ScreenComponentProps): ReactElement => {
   const [screen, setScreen] = useState<Screen>(Screen.MedicationSheetList);
 
+  const [description, setDescription] = useState<string>('');
+  const [resident, setResident] = useState<ResidentDTO | null>(null);
+
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const [medicineToDelete, setMedicineToDelete] = useState<string | null>(null);
   const [editingMedicine, setEditingMedicine] = useState<Medicine | null>(null);
 
+  const [medicationRecords, setMedicationRecords] = useState<
+    MedicationRecord[]
+  >([]);
+  const [medicationRecord, setMedicationRecord] =
+    useState<MedicationRecord>(EMPTY_RECORD);
+
   const medicineService = new ObjectionMedicineService();
+  const medicationService = new ObjectionMedicationSheetService();
   const { httpClient } = useContext(ApplicationContext);
 
-  const { medicines, pharmacologicalNames, pharmacologicalForms, refetch } =
-    useMedicines();
+  const {
+    medicines,
+    pharmacologicalNames,
+    pharmacologicalForms,
+    medicationSheets,
+    refetch,
+  } = useMedicines();
   const { residents } = useResident({ httpClient });
 
   useEffect(() => {
@@ -102,6 +126,38 @@ export const MedicineContainer = ({
     }
   }
 
+  async function handleSubmitMedication(): Promise<void> {
+    setSubmitting(true);
+    const prescriptions = medicationRecords.map((record) => {
+      return new Prescription(
+        record.medicineId ?? '',
+        record.dosage,
+        record.frequency,
+        record.startDate,
+        record.endDate,
+        record.firstHour,
+      );
+    });
+    await medicationService
+      .createMedicationSheet(
+        httpClient,
+        new MedicationSheetClass(
+          resident?.id ?? '',
+          description,
+          prescriptions,
+        ),
+      )
+      .finally(() => {
+        setMedicationRecords([]);
+        setMedicationRecord(EMPTY_RECORD);
+        setDescription('');
+        setResident(null);
+      });
+    await refetch().finally(() => {
+      setSubmitting(false);
+    });
+  }
+
   const renderScreen = (): ReactElement => {
     switch (screen) {
       case Screen.MedicineRegister:
@@ -138,6 +194,8 @@ export const MedicineContainer = ({
             goToMedicineForm={() => {
               setScreen(Screen.MedicineList);
             }}
+            medicationSheets={medicationSheets}
+            refetch={refetch}
           />
         );
       case Screen.MedicationSheetRegister:
@@ -151,6 +209,16 @@ export const MedicineContainer = ({
             }}
             medicines={medicines}
             residents={residents ?? []}
+            medicationRecords={medicationRecords}
+            setMedicationRecords={setMedicationRecords}
+            medicationRecord={medicationRecord}
+            setMedicationRecord={setMedicationRecord}
+            handleSubmit={handleSubmitMedication}
+            submitting={submitting}
+            resident={resident}
+            setResident={setResident}
+            description={description}
+            setDescription={setDescription}
           />
         );
       default:

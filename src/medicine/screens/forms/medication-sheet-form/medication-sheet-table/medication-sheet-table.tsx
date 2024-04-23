@@ -1,9 +1,10 @@
 import React, { type ReactElement } from 'react';
-import TableComponent from '../../../../common/components/table/table';
-import { TransparentButton } from '../../../components/medicine-table.styles';
+import TableComponent from '../../../../../common/components/table/table';
+import { TransparentButton } from '../../../../components/medicine-table.styles';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 export interface MedicationRecord {
+  id?: number;
   resident: string;
   medicineId?: string;
   medicine: string;
@@ -30,10 +31,14 @@ export const EMPTY_RECORD: MedicationRecord = {
 
 interface MedicationSheetTableProps {
   records: MedicationRecord[];
+  handleEdit: (index: number) => void;
+  handleDelete: (index: number) => void;
 }
 
 export const MedicationSheetTable = ({
   records,
+  handleEdit,
+  handleDelete,
 }: MedicationSheetTableProps): ReactElement => {
   const columns = [
     { header: 'Morador', accessor: 'resident' },
@@ -42,16 +47,18 @@ export const MedicationSheetTable = ({
     {
       header: 'Ações',
       accessor: 'actions',
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      render: (row: any) => (
+      render: (row: MedicationRecord) => (
         <div>
           <TransparentButton
-            onClick={() => {}}
+            onClick={() => {
+              handleEdit(Number(row.id));
+            }}
             leadingIcon={<FaEdit color="#002b5e" />}
           />
-
           <TransparentButton
-            onClick={() => {}}
+            onClick={() => {
+              handleDelete(Number(row.id));
+            }}
             leadingIcon={<FaTrash color="red" />}
           />
         </div>

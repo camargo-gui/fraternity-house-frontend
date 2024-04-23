@@ -32,6 +32,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
     if (typeof accessor === 'function') {
       return accessor(row);
     }
+
     return accessor.split('.').reduce((acc, part) => acc[part], row);
   };
 
@@ -39,7 +40,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
     return <LoadingSpinner />;
   }
 
-  if (data.length === 0 && !isLoading && !(showEmptyTable ?? false)) {
+  if (!isLoading && data.length === 0 && !(showEmptyTable ?? false)) {
     return <Alert variant="info">{'Nenhum item cadastrado'}</Alert>;
   }
 
@@ -73,7 +74,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
                   typeof cellData === 'object'
                     ? JSON.stringify(cellData)
                     : cellData;
-                return <td key={colIndex}>{displayValue}</td>;
+                return <td key={colIndex}>{displayValue ?? '—'}</td>;
               })}
             </tr>
           ))}

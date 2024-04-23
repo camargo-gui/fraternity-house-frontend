@@ -1,26 +1,32 @@
-import { useContext, useState, type ReactElement } from 'react';
+import { useState, type ReactElement } from 'react';
 import { FaPlus } from 'react-icons/fa';
-import { ApplicationContext } from '../../../../application-context';
+import { ConfirmationModal } from '../../../../common/components/confirmation-modal/confirmation-modal';
 import { FormInput } from '../../../../common/components/form-input/form-input';
 import { type ResidentDTO } from '../../../../resident/dto/resident-dto';
-import { MedicationSheet } from '../../../entities/medication-sheet';
 import type { Medicine } from '../../../entities/medicine';
-import { Prescription } from '../../../entities/prescription';
-import { ObjectionMedicationSheetService } from '../../../services/objection/objection-medication-sheet-service';
 import { Button, ButtonGroup, WrapperSheet } from '../../medicine.styles';
+import { Row } from './medication-sheet-form-screen.styles';
 import {
   EMPTY_RECORD,
   MedicationSheetTable,
   type MedicationRecord,
-} from '../medication-sheet-table/medication-sheet-table';
-import { Row } from './medication-sheet-form-screen.styles';
-import { ConfirmationModal } from '../../../../common/components/confirmation-modal/confirmation-modal';
+} from './medication-sheet-table/medication-sheet-table';
 
 interface Props {
   changeScreen: () => void;
   goToMedicineList: () => void;
   medicines: Medicine[];
   residents: ResidentDTO[];
+  handleSubmit: () => Promise<void>;
+  submitting: boolean;
+  medicationRecords: MedicationRecord[];
+  setMedicationRecords: (records: MedicationRecord[]) => void;
+  medicationRecord: MedicationRecord;
+  setMedicationRecord: (record: MedicationRecord) => void;
+  resident: ResidentDTO | null;
+  setResident: (resident: ResidentDTO | null) => void;
+  description: string;
+  setDescription: (description: string) => void;
 }
 
 export const MedicationSheetFormScreen = ({
@@ -28,23 +34,22 @@ export const MedicationSheetFormScreen = ({
   goToMedicineList,
   medicines,
   residents,
+  handleSubmit,
+  submitting,
+  medicationRecords,
+  setMedicationRecords,
+  medicationRecord,
+  setMedicationRecord,
+  resident,
+  setResident,
+  description,
+  setDescription,
 }: Props): ReactElement => {
-  const [medicationRecord, setMedicationRecord] =
-    useState<MedicationRecord>(EMPTY_RECORD);
-  const [resident, setResident] = useState<ResidentDTO | null>(null);
-  const [medicationRecords, setMedicationRecords] = useState<
-    MedicationRecord[]
-  >([]);
-
-  const [description, setDescription] = useState('');
-  const [submitting, setSubmitting] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [pendingResidentId, setPendingResidentId] = useState<string | null>(
     null,
   );
-
-  const medicationService = new ObjectionMedicationSheetService();
-  const { httpClient } = useContext(ApplicationContext);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   const handleResidentChange = (newResidentId: string): void => {
     if (medicationRecords.length > 0 && newResidentId !== resident?.id) {
@@ -83,59 +88,68 @@ export const MedicationSheetFormScreen = ({
     );
   };
 
-  const handleAddRecord = (): void => {
+  const handleEdit = (index: number): void => {
+    const record = medicationRecords.find((med) => med.id === index);
+    if (record != null) {
+      setMedicationRecord({
+        ...record,
+        medicineId: record.medicineId,
+      });
+    }
+
+    setEditingIndex(index);
+  };
+
+  const handleAddOrUpdateRecord = (): void => {
     if (isFormValid(medicationRecord)) {
-      const formattedMedicineName = `${medicationRecord.medicine} (${medicationRecord.dosage})`;
+      const formattedMedicineName = medicationRecord.medicine.includes('(')
+        ? medicationRecord.medicine
+        : `${medicationRecord.medicine} (${medicationRecord.dosage})`;
       const newRecord = {
         ...medicationRecord,
+        id: Math.floor(Math.random() * 1000),
         resident: resident?.name ?? '',
         medicine: formattedMedicineName,
       };
-      setMedicationRecords((prevRecords) => [...prevRecords, newRecord]);
+
+      if (editingIndex !== null) {
+        const updatedRecords = medicationRecords.map((record) => {
+          if (record.id === editingIndex) {
+            return newRecord;
+          }
+          return record;
+        });
+        setMedicationRecords(updatedRecords);
+        setEditingIndex(null);
+      } else {
+        setMedicationRecords([...medicationRecords, newRecord]);
+      }
+
       setMedicationRecord(EMPTY_RECORD);
     } else {
       alert('Por favor preencha todos os campos');
     }
   };
 
-  async function handleSubmit(): Promise<void> {
-    setSubmitting(true);
-    const prescriptions = medicationRecords.map((record) => {
-      return new Prescription(
-        record.medicineId ?? '',
-        record.dosage,
-        record.frequency,
-        record.startDate,
-        record.endDate,
-        record.firstHour,
-      );
-    });
-    await medicationService
-      .createMedicationSheet(
-        httpClient,
-        new MedicationSheet(resident?.id ?? '', description, prescriptions),
-      )
-      .finally(() => {
-        setSubmitting(false);
-        setMedicationRecords([]);
-        setMedicationRecord(EMPTY_RECORD);
-        setDescription('');
-        setResident(null);
-      });
-  }
+  const handleDelete = (index: number): void => {
+    const updatedRecords = medicationRecords.filter(
+      (record) => record.id !== index,
+    );
+    setMedicationRecords(updatedRecords);
+  };
 
   const handleMedicineChange = (selectedMedicineId: string): void => {
     const selectedMedicine: Medicine | undefined = medicines.find(
       (medicine) => medicine.id.toString() === selectedMedicineId,
     );
     if (selectedMedicine != null) {
-      setMedicationRecord((prevRecord) => ({
-        ...prevRecord,
+      setMedicationRecord({
+        ...medicationRecord,
         medicine: selectedMedicine.name,
         medicineId: selectedMedicine.id,
         pharmaceuticalForm: selectedMedicine.PharmacologicalForm.name,
         pharmacologicalName: selectedMedicine.PharmacologicalName.name,
-      }));
+      });
     }
   };
 
@@ -150,12 +164,14 @@ export const MedicationSheetFormScreen = ({
       >
         <div>
           <Button
-            text="Adicionar"
-            onClick={handleAddRecord}
+            text={editingIndex !== null ? 'Atualizar' : 'Adicionar'}
+            onClick={handleAddOrUpdateRecord}
             backgroundColor="#91CDA2"
             hoverBackgroundColor="#8ac39a"
             color="#000"
-            leadingIcon={<FaPlus width={12} height={12} />}
+            leadingIcon={
+              editingIndex !== null ? <></> : <FaPlus width={12} height={12} />
+            }
             width="auto"
           />
         </div>
@@ -175,9 +191,10 @@ export const MedicationSheetFormScreen = ({
             }}
             width="auto"
             isLoading={submitting}
+            isDisabled={submitting || medicationRecords.length === 0}
           />
           <Button
-            text="Listar Fichas"
+            text="Listar Prescrições"
             onClick={changeScreen}
             backgroundColor="#6c757d"
             hoverBackgroundColor="#595f64"
@@ -252,8 +269,8 @@ export const MedicationSheetFormScreen = ({
           />
           <FormInput
             id="dosage"
-            label="Dosagem"
-            placeholder="Dosagem"
+            label="Dosagem (mg, ml, etc)"
+            placeholder="Dosagem (mg, ml, etc)"
             onChange={(e) => {
               const target = e.target as HTMLInputElement;
               setMedicationRecord({
@@ -294,7 +311,7 @@ export const MedicationSheetFormScreen = ({
                 frequency: target.value,
               });
             }}
-            type="text"
+            type="number"
             value={medicationRecord.frequency}
             required
           />
@@ -330,7 +347,11 @@ export const MedicationSheetFormScreen = ({
 
         {renderAddRegisterButton()}
 
-        <MedicationSheetTable records={medicationRecords} />
+        <MedicationSheetTable
+          records={medicationRecords}
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
+        />
 
         <FormInput
           id="medical-prescription"

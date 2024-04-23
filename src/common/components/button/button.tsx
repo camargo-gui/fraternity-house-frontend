@@ -16,6 +16,7 @@ interface Props {
   width?: string;
   leadingIcon?: React.ReactNode;
   isLoading?: boolean;
+  isDisabled?: boolean;
   fontWeight?: string;
   id?: string;
 }
@@ -24,10 +25,11 @@ export const Button = ({
   text,
   leadingIcon,
   isLoading,
+  isDisabled,
   ...props
 }: Props): React.ReactElement => {
   return (
-    <StyledButton {...props} disabled={isLoading}>
+    <StyledButton {...props} disabled={(isLoading ?? false) || isDisabled}>
       {isLoading ?? false ? (
         <Spinner
           as="span"
