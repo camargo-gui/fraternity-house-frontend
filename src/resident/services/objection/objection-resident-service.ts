@@ -4,6 +4,7 @@ import { type ResidentService } from '../interfaces/resident-service';
 import { ResidentResponse } from '../response/resident-response';
 import { type HttpClient } from './../../../common/http-client/http-client';
 import { ResidentDTO } from './../../dto/resident-dto';
+import { formatSpecialCharacters } from '../../../utils/format-special-characters';
 
 export class ObjectionResidentService implements ResidentService {
   private readonly url = '/resident';
@@ -49,9 +50,9 @@ export class ObjectionResidentService implements ResidentService {
         method: 'post',
         data: {
           name: formData.name,
-          cpf: formData.cpf,
+          cpf: formatSpecialCharacters(formData.cpf),
           rg: formData.rg,
-          contact_phone: formData.contact_phone,
+          contact_phone: formatSpecialCharacters(formData.contact_phone),
           birthday: formData.birthday,
           image: imageFile,
         },
@@ -74,7 +75,10 @@ export class ObjectionResidentService implements ResidentService {
       await httpClient.request({
         path: this.url,
         method: 'put',
-        data: resident,
+        data: {
+          ...resident,
+          cpf: formatSpecialCharacters(resident.cpf),
+        },
       });
       toast.success('Residente atualizado com sucesso');
     } catch (e) {
@@ -90,7 +94,7 @@ export class ObjectionResidentService implements ResidentService {
       await httpClient.request({
         path: this.url,
         method: 'delete',
-        data: { cpf },
+        data: { cpf: formatSpecialCharacters(cpf) },
       });
       toast.success('Residente deletado com sucesso');
     } catch (e) {

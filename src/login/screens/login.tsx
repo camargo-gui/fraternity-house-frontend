@@ -3,6 +3,8 @@ import { Button, LeftSize, Logo, RightSize, Wrapper } from './login.styles';
 import ImageLogo from '../../assets/images/logo.png';
 import { FormInput } from '../../common/components/form-input/form-input';
 import { type Login } from '../entities/login';
+import { IMaskInput } from 'react-imask';
+import { formatSpecialCharacters } from '../../utils/format-special-characters';
 
 interface Props {
   onSubmit: (login: Login) => Promise<void>;
@@ -37,11 +39,13 @@ export const LoginScreen = ({
           label="CPF"
           placeholder="CPF"
           type="text"
+          as={IMaskInput}
+          mask="000.000.000-00"
           onChange={(e) => {
             const target = e.target as HTMLInputElement;
             setLogin({
               ...login,
-              cpf: target.value,
+              cpf: formatSpecialCharacters(target.value),
             });
           }}
         />
@@ -51,6 +55,7 @@ export const LoginScreen = ({
           label="Senha"
           placeholder="Senha"
           type="password"
+          as={IMaskInput}
           onChange={(e) => {
             const target = e.target as HTMLInputElement;
             setLogin({

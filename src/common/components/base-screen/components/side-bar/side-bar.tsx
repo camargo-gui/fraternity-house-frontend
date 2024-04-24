@@ -18,16 +18,19 @@ export const SideBar = (): ReactElement => {
     <Wrapper>
       <Logo src={require('../../../../../assets/images/logo.png')} />
       <ListItemWrapper>
-        {screenList.map((item) => (
-          <ListItem
-            key={item.title}
-            icon={item.icon}
-            title={item.title}
-            isActive={activeItem === item.title}
-            route={item.route ?? ''}
-            onClick={handleNavigation}
-          />
-        ))}
+        {screenList.map((item) => {
+          if (item.notShouldRender ?? false) return null;
+          return (
+            <ListItem
+              key={item.title}
+              icon={item.icon}
+              title={item.title}
+              isActive={activeItem === item.title}
+              route={item.route ?? ''}
+              onClick={handleNavigation}
+            />
+          );
+        })}
       </ListItemWrapper>
     </Wrapper>
   );

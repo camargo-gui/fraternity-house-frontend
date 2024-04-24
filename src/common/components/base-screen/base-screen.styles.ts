@@ -13,11 +13,3 @@ export const ContentContainer = styled.div`
   padding: 2%;
   width: 1000px;
 `;
-
-export const ScreenTitle = styled.h1`
-  font-size: 36px;
-  font-family: 'Roboto flex';
-  color: #002b5e;
-  font-weight: 500;
-  margin-bottom: 30px;
-`;

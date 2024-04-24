@@ -4,6 +4,7 @@ import Card from 'react-bootstrap/Card';
 import { FaPen, FaTrash } from 'react-icons/fa';
 import { type ResidentDTO } from '../dto/resident-dto';
 import { ActionButton, Div, DivCardIcons } from './card-list-item.styles';
+import { formatCpf } from '../../utils/format-special-characters';
 
 interface Props {
   residents?: ResidentDTO[];
@@ -11,10 +12,6 @@ interface Props {
   onDelete: (cpf: string) => Promise<void>;
   isLoading: boolean;
 }
-
-const formatCpf = (cpf: string): string => {
-  return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-};
 
 export const CardListItem = ({
   residents,

@@ -32,6 +32,9 @@ interface FormInputProps {
   required?: boolean;
   errorMessage?: string;
   disabled?: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  as?: any;
+  mask?: string;
   onChange: (e: React.ChangeEvent<unknown>) => void;
   height?: string;
 }
@@ -49,6 +52,8 @@ export const FormInput = ({
   errorMessage,
   disabled,
   height,
+  as,
+  mask,
 }: FormInputProps): ReactElement => {
   const renderTextarea = (): ReactElement => (
     <Form.Control
@@ -70,6 +75,8 @@ export const FormInput = ({
       onChange={onChange}
       required={required}
       disabled={disabled}
+      as={as}
+      mask={mask}
     />
   );
 

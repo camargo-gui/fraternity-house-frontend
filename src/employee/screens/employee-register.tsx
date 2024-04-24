@@ -5,6 +5,7 @@ import { type Role } from '../entities/role';
 import { Button } from '../../common/components/button/button';
 import { type Employee } from '../entities/employee';
 import { ButtonWrapper } from './employee.styles';
+import { IMaskInput } from 'react-imask';
 
 interface Props {
   roles: Role[];
@@ -70,6 +71,8 @@ export const EmployeeScreen = ({
         placeholder="CPF"
         id="document"
         disabled={isEditting}
+        as={IMaskInput}
+        mask="000.000.000-00"
         value={employee?.document}
         onChange={(e) => {
           const target = e.target as HTMLInputElement;
@@ -117,6 +120,8 @@ export const EmployeeScreen = ({
         type="text"
         placeholder="Telefone"
         id="phone"
+        as={IMaskInput}
+        mask="(00) 00000-0000"
         value={employee?.phone}
         onChange={(e) => {
           const target = e.target as HTMLInputElement;

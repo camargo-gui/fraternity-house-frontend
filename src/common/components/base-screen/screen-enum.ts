@@ -8,6 +8,7 @@ import { ResidentContainer } from './../../../resident/screens/resident.containe
 import { MedicineContainer } from '../../../medicine/screens/medicine.container';
 import { EmployeeContainer } from '../../../employee/screens/employee.container';
 import { StockScreenContainer } from '../../../stock/screens/stock-screen/stock-screen.container';
+import { StockEntryScreen } from '../../../stock/screens/stock-entry-screen/stock-entry-screen';
 
 export enum Screens {
   Files = 'Files',
@@ -30,6 +31,7 @@ export interface ScreenListItemProps {
   >;
   element: ComponentType<ScreenComponentProps>;
   route?: string;
+  notShouldRender?: boolean;
 }
 
 export const screenList: ScreenListItemProps[] = [
@@ -44,6 +46,13 @@ export const screenList: ScreenListItemProps[] = [
     icon: Icon.stock_icon,
     route: '/estoques',
     element: StockScreenContainer,
+  },
+  {
+    title: 'Nova Entrada',
+    icon: Icon.stock_icon,
+    route: '/estoque/entrada',
+    element: StockEntryScreen,
+    notShouldRender: true,
   },
   {
     title: 'Funcionários',

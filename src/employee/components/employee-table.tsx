@@ -4,6 +4,7 @@ import TableComponent from '../../common/components/table/table';
 import { type Employee } from '../entities/employee';
 import { TransparentButton } from '../screens/employee.styles';
 import { noop } from 'lodash';
+import { formatCpf, formatPhone } from '../../utils/format-special-characters';
 
 export const EmployeeTable = ({
   employees,
@@ -58,5 +59,14 @@ export const EmployeeTable = ({
     },
   ];
 
-  return <TableComponent columns={columns} data={employees} />;
+  return (
+    <TableComponent
+      columns={columns}
+      data={employees.map((employee) => ({
+        ...employee,
+        document: formatCpf(employee.document),
+        phone: formatPhone(employee.phone),
+      }))}
+    />
+  );
 };

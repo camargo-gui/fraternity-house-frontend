@@ -13,10 +13,11 @@ export const LoginContainer = (): ReactElement => {
   const onSubmit = async (data: Login): Promise<void> => {
     setIsLoading(true);
     const service = new ObjectionLoginService();
-    const token = await service.login(httpClient, data);
-    if (token !== '') {
-      localStorage.setItem('token', token);
-      httpClient.setAuthorization(token);
+    const response = await service.login(httpClient, data);
+    if (response !== undefined) {
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('name', response.name);
+      httpClient.setAuthorization(response.token);
       navigate('/fichas');
     }
     setIsLoading(false);
