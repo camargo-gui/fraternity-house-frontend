@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
 export const ContainerListProducts = styled.div`
-  height: 40%;
+  max-height: 45%;
+  overflow-y: auto;
 `;

@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactElement, useContext } from 'react';
 import { FormInput } from '../../../common/components/form-input/form-input';
+import { type Product } from '../../entities/product';
 import { FieldRenderProducts } from '../../components/field-render-product/field-render-products';
 import {
   Container,
@@ -9,7 +10,6 @@ import { ApplicationContext } from '../../../application-context';
 import { ListProducts } from '../../components/list-products/list-products';
 import { noop } from 'lodash';
 import { ObjectionProductService } from '../../services/objection/objection-product-service';
-import { type Product } from '../../entities/product';
 
 const initialStateProduct: Product = {
   name: '',
@@ -19,17 +19,13 @@ const initialStateProduct: Product = {
   updatedAt: new Date(),
 };
 
-export const StockEntryScreen = (): ReactElement => {
+export const StockExit = (): ReactElement => {
   const [product, setProduct] = useState<Product>(initialStateProduct);
+  const { httpClient } = useContext(ApplicationContext);
   const [products, setProducts] = useState<Product[]>([]);
-  const [newProduct, setNewProduct] = useState<Product | null>(null);
-
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [productsEntry, setProductsEntry] = useState<Product[]>([]);
   const [searchActive, setSearchActive] = useState(false);
-
-  const { httpClient } = useContext(ApplicationContext);
-
   useEffect(() => {
     const fetchProducts = async (): Promise<void> => {
       const response = await new ObjectionProductService().getProducts(
@@ -40,16 +36,12 @@ export const StockEntryScreen = (): ReactElement => {
     fetchProducts().catch(noop);
   }, [httpClient]);
 
-  useEffect(() => {
-    const filtered = products.filter((p) => {
-      return p.name.toLowerCase().startsWith(product.name.toLowerCase());
-    });
-    setFilteredProducts(filtered);
-    setNewProduct({ name: product.name, measurement: 'UNITY' });
-  }, [product, products]);
-
   const handleSearch = (name: string): void => {
     setProduct({ ...product, name });
+    const filtered = products.filter((product) => {
+      return product.name.toLowerCase().startsWith(name.toLowerCase());
+    });
+    setFilteredProducts(filtered);
     setSearchActive(name !== '');
   };
 
@@ -69,8 +61,6 @@ export const StockEntryScreen = (): ReactElement => {
         {searchActive && (
           <Container>
             <FieldRenderProducts
-              newProduct={newProduct}
-              setNewProduct={setNewProduct}
               products={filteredProducts}
               productsEntry={productsEntry}
               setProductsEntry={setProductsEntry}

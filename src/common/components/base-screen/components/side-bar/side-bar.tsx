@@ -1,4 +1,4 @@
-import { useState, type ReactElement } from 'react';
+import { useEffect, useState, type ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { screenList } from '../../screen-enum';
 import { ListItem } from '../list-item/list-item';
@@ -8,6 +8,14 @@ import React from 'react';
 export const SideBar = (): ReactElement => {
   const [activeItem, setActiveItem] = useState<string | null>('Fichas');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const currentPath = window.location.pathname;
+    const currentScreen = screenList.find((item) => item.route === currentPath);
+    if (currentScreen !== undefined) {
+      setActiveItem(currentScreen.title);
+    }
+  }, []);
 
   const handleNavigation = (route: string, title: string): void => {
     setActiveItem(title);

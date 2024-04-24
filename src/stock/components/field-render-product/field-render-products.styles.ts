@@ -7,7 +7,7 @@ export const StockEntryScreenContainer = styled.div`
 `;
 
 export const Container = styled.div`
-  margin-top: -2%;
+  margin-top: -1%;
   left: 0;
   width: 100%;
   background-color: #e2e2e2;

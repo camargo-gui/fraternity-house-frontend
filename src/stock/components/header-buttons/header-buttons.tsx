@@ -1,4 +1,3 @@
-import { noop } from 'lodash';
 import { type ReactElement } from 'react';
 import {
   Container,
@@ -21,9 +20,15 @@ export const HeaderButtons = (): ReactElement => {
           onClick={handleNavigate('/estoque/entrada')}
           text="Nova entrada"
         />
-        <ExitButton onClick={noop} text="Nova saída" />
+        <ExitButton
+          onClick={handleNavigate('/estoque/saida')}
+          text="Nova saída"
+        />
       </div>
-      <ListButton onClick={noop} text="Histórico" />
+      <ListButton
+        onClick={handleNavigate('/estoque/historico')}
+        text="Histórico"
+      />
     </Container>
   );
 };

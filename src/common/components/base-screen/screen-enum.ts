@@ -9,6 +9,8 @@ import { MedicineContainer } from '../../../medicine/screens/medicine.container'
 import { EmployeeContainer } from '../../../employee/screens/employee.container';
 import { StockScreenContainer } from '../../../stock/screens/stock-screen/stock-screen.container';
 import { StockEntryScreen } from '../../../stock/screens/stock-entry-screen/stock-entry-screen';
+import { StockExit } from '../../../stock/screens/stock-exit/stock-exit';
+import { HistoricScreen } from '../../../stock/screens/historic/historic';
 
 export enum Screens {
   Files = 'Files',
@@ -52,6 +54,20 @@ export const screenList: ScreenListItemProps[] = [
     icon: Icon.stock_icon,
     route: '/estoque/entrada',
     element: StockEntryScreen,
+    notShouldRender: true,
+  },
+  {
+    title: 'Nova Saída',
+    icon: Icon.stock_icon,
+    route: '/estoque/saida',
+    element: StockExit,
+    notShouldRender: true,
+  },
+  {
+    title: 'Histórico',
+    icon: Icon.stock_icon,
+    route: '/estoque/historico',
+    element: HistoricScreen,
     notShouldRender: true,
   },
   {
