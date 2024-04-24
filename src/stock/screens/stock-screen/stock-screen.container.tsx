@@ -11,9 +11,7 @@ export const StockScreenContainer = (): ReactElement => {
   const { httpClient } = useContext(ApplicationContext);
   useEffect(() => {
     const fetchProducts = async (): Promise<void> => {
-      const response = await new ObjectionProductService().getProducts(
-        httpClient,
-      );
+      const response = await new ObjectionProductService().getStock(httpClient);
       setProducts(response);
     };
     fetchProducts().catch(noop);
