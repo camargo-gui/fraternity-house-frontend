@@ -1,4 +1,4 @@
-import { type PropsWithChildren, type ReactElement } from 'react';
+import { type ReactElement } from 'react';
 import { InputGroup } from 'react-bootstrap';
 import { FaSearch } from 'react-icons/fa';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
@@ -37,6 +37,13 @@ interface FormInputProps {
   mask?: string;
   onChange: (e: React.ChangeEvent<unknown>) => void;
   height?: string;
+  style?: {
+    backgroundColor?: string;
+    marginLeft?: string;
+    height?: string;
+    border?: string;
+    width?: string;
+  };
 }
 
 export const FormInput = ({
@@ -54,6 +61,7 @@ export const FormInput = ({
   height,
   as,
   mask,
+  style,
 }: FormInputProps): ReactElement => {
   const renderTextarea = (): ReactElement => (
     <Form.Control
@@ -96,7 +104,12 @@ export const FormInput = ({
   );
 
   const renderSelect = (): ReactElement => (
-    <Form.Select value={value} onChange={onChange} required={required}>
+    <Form.Select
+      value={value}
+      onChange={onChange}
+      required={required}
+      style={style}
+    >
       <option value="">{placeholder}</option>
       {options?.map((option, index) => (
         <option key={index} value={option.value}>
@@ -137,27 +150,29 @@ export const FormInput = ({
         return renderTextInput();
     }
   };
-
-  if (errorMessage !== null && errorMessage !== '') {
+  if (!label) {
     return (
-      <>
-        <FloatingLabel controlId={id} label={label} className="mb-3">
-          {renderInput()}
-        </FloatingLabel>
-        <div className="text-danger mb-3">{errorMessage}</div>
-      </>
+      <div>
+        {renderInput()}
+        {errorMessage && errorMessage !== '' && (
+          <div className="text-danger mb-3">{errorMessage}</div>
+        )}
+      </div>
     );
   }
 
-  const InputContainer = ({ children }: PropsWithChildren): ReactElement => {
-    return label != null ? (
-      <FloatingLabel controlId={id} label={label} className="mb-3">
-        {children}
+  return (
+    <>
+      <FloatingLabel
+        controlId={id}
+        label={label}
+        className="mb-3 custom-floating-label"
+      >
+        {renderInput()}
       </FloatingLabel>
-    ) : (
-      <>{children}</>
-    );
-  };
-
-  return <InputContainer>{renderInput()}</InputContainer>;
+      {errorMessage && errorMessage !== '' && (
+        <div className="text-danger mb-3">{errorMessage}</div>
+      )}
+    </>
+  );
 };

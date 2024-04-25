@@ -1,3 +1,4 @@
+import { noop } from 'lodash';
 import { type HttpClient } from '../../../common/http-client/http-client';
 import { Movimentation } from '../../entities/historic';
 import { Product } from '../../entities/product';
@@ -44,6 +45,25 @@ export class ObjectionProductService implements ProductService {
       return response?.getArrayData(Movimentation) ?? [];
     } catch (e) {
       return [];
+    }
+  }
+
+  public async postProduct(
+    httpClient: HttpClient,
+    product: Product,
+  ): Promise<Product | undefined> {
+    try {
+      const response = await httpClient.request({
+        path: this.apiUrl,
+        method: 'post',
+        data: {
+          name: product.name,
+          measurement: product.measurement,
+        },
+      });
+      return response?.getData(Product) ?? undefined;
+    } catch (e) {
+      noop();
     }
   }
 }

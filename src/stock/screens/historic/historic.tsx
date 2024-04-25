@@ -71,6 +71,7 @@ export const HistoricScreen = (): ReactElement => {
           }}
           title="Movimentação detalhada"
           children={<MovimentationTable movimentation={detailedHistoric} />}
+          size={'lg'}
         />
       )}
       <TableComponent columns={columns} data={historic} showEmptyTable={true} />

@@ -3,3 +3,9 @@ export enum MeasurementType {
   KG = 'kg',
   L = 'L',
 }
+
+export enum MeasurementEnum {
+  UNITY = 'UNITY',
+  KG = 'KG',
+  L = 'L',
+}

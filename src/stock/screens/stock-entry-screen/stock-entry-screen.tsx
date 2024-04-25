@@ -10,11 +10,13 @@ import { ListProducts } from '../../components/list-products/list-products';
 import { noop } from 'lodash';
 import { ObjectionProductService } from '../../services/objection/objection-product-service';
 import { type Product } from '../../entities/product';
+import { ObjectionMovimentationService } from '../../services/objection/objection-movimentation-service';
+import { MeasurementEnum } from '../../entities/measurement-type';
 
 const initialStateProduct: Product = {
   name: '',
   quantity: 0,
-  measurement: 'UNITY',
+  measurement: MeasurementEnum.UNITY,
   createdAt: new Date(),
   updatedAt: new Date(),
 };
@@ -23,11 +25,9 @@ export const StockEntryScreen = (): ReactElement => {
   const [product, setProduct] = useState<Product>(initialStateProduct);
   const [products, setProducts] = useState<Product[]>([]);
   const [newProduct, setNewProduct] = useState<Product | null>(null);
-
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [productsEntry, setProductsEntry] = useState<Product[]>([]);
   const [searchActive, setSearchActive] = useState(false);
-
   const { httpClient } = useContext(ApplicationContext);
 
   useEffect(() => {
@@ -45,12 +45,21 @@ export const StockEntryScreen = (): ReactElement => {
       return p.name.toLowerCase().startsWith(product.name.toLowerCase());
     });
     setFilteredProducts(filtered);
-    setNewProduct({ name: product.name, measurement: 'UNITY' });
+    setNewProduct({ name: product.name, measurement: MeasurementEnum.UNITY });
   }, [product, products]);
 
   const handleSearch = (name: string): void => {
     setProduct({ ...product, name });
     setSearchActive(name !== '');
+  };
+
+  const onSubmit = async (): Promise<void> => {
+    console.log('tela de entrada');
+    await new ObjectionMovimentationService().postInputMovimentation(
+      httpClient,
+      productsEntry,
+    );
+    setProductsEntry([]);
   };
 
   return (
@@ -74,12 +83,17 @@ export const StockEntryScreen = (): ReactElement => {
               products={filteredProducts}
               productsEntry={productsEntry}
               setProductsEntry={setProductsEntry}
+              httpClient={httpClient}
             />
           </Container>
         )}
       </StockEntryScreenContainer>
 
-      <ListProducts productsEntry={productsEntry} onSubmit={noop} />
+      <ListProducts
+        productsEntry={productsEntry}
+        onSubmit={onSubmit}
+        setProductsEntry={setProductsEntry}
+      />
     </>
   );
 };

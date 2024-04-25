@@ -7,7 +7,6 @@ export const StockEntryScreenContainer = styled.div`
 `;
 
 export const Container = styled.div`
-  margin-top: -1%;
   left: 0;
   width: 100%;
   background-color: #e2e2e2;
@@ -28,10 +27,22 @@ export const TextProduct = styled.div`
   font-family: 'Roboto flex';
   color: black;
   padding: 10px;
+  width: 20%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export const Button = styled.button`
   margin-right: 10px;
   border: none;
   background-color: #e2e2e2;
+`;
+
+export const ContentButtonForm = styled.div`
+  width: 20%;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
 `;

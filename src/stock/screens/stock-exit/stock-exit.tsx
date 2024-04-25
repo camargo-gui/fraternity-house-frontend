@@ -10,11 +10,13 @@ import { ApplicationContext } from '../../../application-context';
 import { ListProducts } from '../../components/list-products/list-products';
 import { noop } from 'lodash';
 import { ObjectionProductService } from '../../services/objection/objection-product-service';
+import { ObjectionMovimentationService } from '../../services/objection/objection-movimentation-service';
+import { MeasurementEnum } from '../../entities/measurement-type';
 
 const initialStateProduct: Product = {
   name: '',
   quantity: 0,
-  measurement: 'UNITY',
+  measurement: MeasurementEnum.UNITY,
   createdAt: new Date(),
   updatedAt: new Date(),
 };
@@ -45,6 +47,14 @@ export const StockExit = (): ReactElement => {
     setSearchActive(name !== '');
   };
 
+  const onSubmit = async (): Promise<void> => {
+    console.log('tela de saida');
+    await new ObjectionMovimentationService().postOutputMovimentation(
+      httpClient,
+      productsEntry,
+    );
+  };
+
   return (
     <>
       <StockEntryScreenContainer>
@@ -64,12 +74,18 @@ export const StockExit = (): ReactElement => {
               products={filteredProducts}
               productsEntry={productsEntry}
               setProductsEntry={setProductsEntry}
+              httpClient={httpClient}
+              setNewProduct={noop}
             />
           </Container>
         )}
       </StockEntryScreenContainer>
 
-      <ListProducts productsEntry={productsEntry} onSubmit={noop} />
+      <ListProducts
+        productsEntry={productsEntry}
+        onSubmit={onSubmit}
+        setProductsEntry={setProductsEntry}
+      />
     </>
   );
 };
