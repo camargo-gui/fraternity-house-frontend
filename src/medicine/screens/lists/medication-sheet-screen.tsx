@@ -7,6 +7,7 @@ import {
 } from '../../entities/medication-sheet-body';
 import { ViewModal } from '../../../common/components/view-modal/view-modal';
 import { PrescriptionsTable } from '../../components/prescriptions-table';
+import { MedicationFilter } from '../medication-filter/medication-filter';
 
 interface Props {
   changeScreen: () => void;
@@ -25,6 +26,11 @@ export const MedicationSheet = ({
     [],
   );
   const [showPrescriptionsModal, setShowPrescriptionsModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredMedicines = medicationSheets.filter((med) => {
+    return med.Resident.name.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   const handleShowPrescriptions = (
     medicationSheetBody: MedicationSheetBody,
@@ -46,10 +52,16 @@ export const MedicationSheet = ({
 
   return (
     <WrapperSheet>
-      <MedicationSheetTable
-        medicationSheets={medicationSheets}
-        handleShowPrescriptions={handleShowPrescriptions}
-      />
+      <div>
+        <MedicationFilter
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+        />
+        <MedicationSheetTable
+          medicationSheets={filteredMedicines}
+          handleShowPrescriptions={handleShowPrescriptions}
+        />
+      </div>
 
       <ButtonGroup>
         <Button

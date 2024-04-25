@@ -20,7 +20,8 @@ export class ObjectionMedicationSheetService implements MedicationSheetService {
     };
 
     try {
-      await httpClient.request({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const response: any = await httpClient.request({
         path: this.apiUrl,
         method: 'post',
         data: {
@@ -28,7 +29,12 @@ export class ObjectionMedicationSheetService implements MedicationSheetService {
           prescriptions: medicationSheet.prescriptions,
         },
       });
-      toast.success('Ficha de medicação cadastrada com sucesso');
+
+      toast.success(
+        response.data.medicationSheet.medicationWasCreated === false
+          ? 'Prescrições adicionadas a ficha já existe'
+          : 'Ficha de medicação cadastrada com sucesso',
+      );
     } catch (e) {
       noop();
     }

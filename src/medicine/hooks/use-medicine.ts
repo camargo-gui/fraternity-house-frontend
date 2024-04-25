@@ -54,8 +54,6 @@ export const useMedicines = (): {
         httpClient,
       );
 
-    console.log(names);
-
     if (names !== undefined) setPharmacologicalForms(names);
   }, [httpClient]);
 

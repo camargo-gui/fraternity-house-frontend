@@ -52,11 +52,10 @@ export const MedicationSheetTable = ({
     },
   ];
 
-  return (
-    <TableComponent
-      columns={columns}
-      data={medicationSheets}
-      showEmptyTable={true}
-    />
-  );
+  const data = medicationSheets.map((sheet) => ({
+    ...sheet,
+    observations: sheet.observations === '' ? '—' : sheet.observations,
+  }));
+
+  return <TableComponent columns={columns} data={data} />;
 };

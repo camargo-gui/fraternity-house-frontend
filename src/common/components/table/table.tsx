@@ -36,7 +36,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
     return accessor.split('.').reduce((acc, part) => acc[part], row);
   };
 
-  if (isLoading) {
+  if (isLoading && !showEmptyTable) {
     return <LoadingSpinner />;
   }
 

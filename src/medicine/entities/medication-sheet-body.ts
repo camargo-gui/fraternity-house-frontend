@@ -7,6 +7,7 @@ export class MedicationSheetBody {
     public Resident: ResidentDTO,
     public Employee: Employee,
     public prescriptions: PrescriptionsInterface[],
+    public observations: string,
   ) {}
 }
 

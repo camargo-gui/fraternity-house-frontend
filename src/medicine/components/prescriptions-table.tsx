@@ -231,7 +231,14 @@ export const PrescriptionsTable = ({
       render: (row: PrescriptionsInterface) => {
         if (editIndex === row.id) {
           return (
-            <div>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingTop: '15px',
+              }}
+            >
               <TransparentButton
                 // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 onClick={handleSave}
@@ -275,7 +282,7 @@ export const PrescriptionsTable = ({
         show={showConfirmModal}
         onHide={handleCancelDelete}
         title="Deletar Prescrição"
-        body="Tem certerio que deseja deletar essa prescrição?"
+        body="Tem certeza que deseja deletar essa prescrição?"
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onConfirm={handleDelete}
         isLoading={deleting}

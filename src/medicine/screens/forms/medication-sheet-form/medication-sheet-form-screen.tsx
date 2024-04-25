@@ -194,7 +194,7 @@ export const MedicationSheetFormScreen = ({
             isDisabled={submitting || medicationRecords.length === 0}
           />
           <Button
-            text="Listar Prescrições"
+            text="Listar Fichas"
             onClick={changeScreen}
             backgroundColor="#6c757d"
             hoverBackgroundColor="#595f64"

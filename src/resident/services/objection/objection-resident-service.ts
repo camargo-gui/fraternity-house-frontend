@@ -44,7 +44,6 @@ export class ObjectionResidentService implements ResidentService {
     imageFile: File | null,
   ): Promise<void> {
     try {
-      console.log('formData', formData);
       await httpClient.request({
         path: this.url,
         method: 'post',

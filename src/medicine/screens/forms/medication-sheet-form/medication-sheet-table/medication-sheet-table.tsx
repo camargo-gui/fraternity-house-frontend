@@ -66,9 +66,18 @@ export const MedicationSheetTable = ({
     },
   ];
 
+  const rec = records.map((record, index) => {
+    return {
+      ...records,
+      medicine: record.medicine,
+      resident: record.resident,
+      frequency: `de ${record.frequency} em ${record.frequency}h`,
+    };
+  });
+
   return (
     <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
-      <TableComponent columns={columns} data={records} showEmptyTable={true} />
+      <TableComponent columns={columns} data={rec} showEmptyTable={true} />
     </div>
   );
 };
