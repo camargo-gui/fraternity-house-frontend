@@ -3,7 +3,7 @@ import { QuantityButton } from '../quantity-button/quantity-button';
 import TableComponent from '../../../common/components/table/table';
 import { ContainerListProducts } from './list-products.styles';
 import { Button } from '../../../common/components/button/button';
-import { type ReactElement } from 'react';
+import { useState, type ReactElement } from 'react';
 
 interface Props {
   productsEntry: Product[];
@@ -33,6 +33,13 @@ export const ListProducts = ({
       ),
     },
   ];
+
+  const [isLoading, setIsLoading] = useState(false);
+  const handleSubmit = async (): Promise<void> => {
+    setIsLoading(true);
+    await onSubmit();
+    setIsLoading(false);
+  };
   return (
     <>
       <ContainerListProducts>
@@ -43,9 +50,10 @@ export const ListProducts = ({
         />
       </ContainerListProducts>
       <Button
-        onClick={() => {
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          onSubmit();
+        isLoading={isLoading}
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        onClick={async () => {
+          await handleSubmit();
         }}
         text="Finalizar"
       />

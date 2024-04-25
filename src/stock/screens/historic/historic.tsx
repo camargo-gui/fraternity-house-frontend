@@ -9,6 +9,7 @@ import { TransparentButton } from '../../../employee/screens/employee.styles';
 import { FaEye } from 'react-icons/fa';
 import { ViewModal } from '../../../common/components/view-modal/view-modal';
 import { MovimentationTable } from './movimentation-table';
+import LoadingSpinner from '../../../common/components/loading-spinner/loading-spinner';
 
 export const HistoricScreen = (): ReactElement => {
   const columns = [
@@ -46,6 +47,8 @@ export const HistoricScreen = (): ReactElement => {
     },
   ];
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [historic, setHistoric] = useState<Movimentation[]>([]);
   const [detailedHistoric, setDetailedHistoric] =
     useState<Movimentation | null>(null);
@@ -53,13 +56,19 @@ export const HistoricScreen = (): ReactElement => {
 
   useEffect(() => {
     const fetchHistoric = async (): Promise<void> => {
+      setIsLoading(true);
       const response = await new ObjectionProductService().getMovimentations(
         httpClient,
       );
       setHistoric(response.map((res) => res.toDomain()));
+      setIsLoading(false);
     };
     fetchHistoric().catch(noop);
   }, [httpClient]);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>
