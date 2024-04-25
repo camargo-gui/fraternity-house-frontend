@@ -236,7 +236,6 @@ export const PrescriptionsTable = ({
                 display: 'flex',
                 flexDirection: 'row',
                 alignItems: 'center',
-                paddingTop: '15px',
               }}
             >
               <TransparentButton
