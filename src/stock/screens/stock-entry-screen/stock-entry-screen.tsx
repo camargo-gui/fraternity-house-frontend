@@ -12,6 +12,7 @@ import { ObjectionProductService } from '../../services/objection/objection-prod
 import { type Product } from '../../entities/product';
 import { ObjectionMovimentationService } from '../../services/objection/objection-movimentation-service';
 import { MeasurementEnum } from '../../entities/measurement-type';
+import LoadingSpinner from '../../../common/components/loading-spinner/loading-spinner';
 
 const initialStateProduct: Product = {
   name: '',
@@ -29,13 +30,16 @@ export const StockEntryScreen = (): ReactElement => {
   const [productsEntry, setProductsEntry] = useState<Product[]>([]);
   const [searchActive, setSearchActive] = useState(false);
   const { httpClient } = useContext(ApplicationContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async (): Promise<void> => {
+      setIsLoading(true);
       const response = await new ObjectionProductService().getProducts(
         httpClient,
       );
       setProducts(response);
+      setIsLoading(false);
     };
     fetchProducts().catch(noop);
   }, [httpClient]);
@@ -47,6 +51,10 @@ export const StockEntryScreen = (): ReactElement => {
     setFilteredProducts(filtered);
     setNewProduct({ name: product.name, measurement: MeasurementEnum.UNITY });
   }, [product, products]);
+
+  useEffect(() => {
+    if (!searchActive) setProduct(initialStateProduct);
+  }, [searchActive]);
 
   const handleSearch = (name: string): void => {
     setProduct({ ...product, name });
@@ -61,6 +69,10 @@ export const StockEntryScreen = (): ReactElement => {
     );
     setProductsEntry([]);
   };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>
@@ -84,6 +96,7 @@ export const StockEntryScreen = (): ReactElement => {
               productsEntry={productsEntry}
               setProductsEntry={setProductsEntry}
               httpClient={httpClient}
+              setSearchActive={setSearchActive}
             />
           </Container>
         )}

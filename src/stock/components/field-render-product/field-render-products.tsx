@@ -12,6 +12,7 @@ import { ObjectionProductService } from '../../services/objection/objection-prod
 import { type HttpClient } from '../../../common/http-client/http-client';
 import { FormInput } from '../../../common/components/form-input/form-input';
 import { MeasurementEnum } from '../../entities/measurement-type';
+import LoadingSpinner from '../../../common/components/loading-spinner/loading-spinner';
 
 interface Props {
   products: Product[];
@@ -20,6 +21,7 @@ interface Props {
   setNewProduct: (product: Product | null) => void;
   setProductsEntry: (products: Product[]) => void;
   httpClient: HttpClient;
+  setSearchActive: (searchActive: boolean) => void;
 }
 
 export const FieldRenderProducts = ({
@@ -29,11 +31,14 @@ export const FieldRenderProducts = ({
   setNewProduct,
   setProductsEntry,
   httpClient,
+  setSearchActive,
 }: Props): ReactElement => {
   const [selectedMeasurement, setSelectedMeasurement] = useState({
     label: 'UNITY',
     value: MeasurementEnum.UNITY,
   });
+
+  const [isLoading, setIsLoading] = useState(false);
   const handleSubmit = (product: Product): void => {
     const alreadyExists = productsEntry.find(
       (productEntry) => productEntry.name === product.name,
@@ -60,10 +65,14 @@ export const FieldRenderProducts = ({
 
   const handleRegisterProduct = async (): Promise<void> => {
     if (newProduct) {
+      setIsLoading(true);
       const response = await new ObjectionProductService().postProduct(
         httpClient,
         newProduct,
       );
+      setNewProduct(null);
+      setSearchActive(false);
+      setIsLoading(false);
       if (response) {
         setProductsEntry([...productsEntry, response]);
       }
@@ -106,7 +115,19 @@ export const FieldRenderProducts = ({
             );
           }}
         />
-        <Button onClick={handleRegisterProduct}>Cadastrar</Button>
+        <div
+          style={{
+            width: '30%',
+            display: 'flex',
+            justifyContent: 'right',
+          }}
+        >
+          {isLoading ? (
+            <LoadingSpinner />
+          ) : (
+            <Button onClick={handleRegisterProduct}>Cadastrar</Button>
+          )}
+        </div>
       </DivTextProduct>
     );
   };

@@ -76,6 +76,7 @@ export const StockExit = (): ReactElement => {
               setProductsEntry={setProductsEntry}
               httpClient={httpClient}
               setNewProduct={noop}
+              setSearchActive={setSearchActive}
             />
           </Container>
         )}
