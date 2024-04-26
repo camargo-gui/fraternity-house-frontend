@@ -94,7 +94,7 @@ export class ObjectionResidentService implements ResidentService {
       await httpClient.request({
         path: this.url,
         method: 'delete',
-        data: { cpf: formatSpecialCharacters(cpf) },
+        data: { cpf },
       });
       toast.success('Residente deletado com sucesso');
     } catch (e) {

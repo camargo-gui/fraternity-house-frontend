@@ -1,12 +1,11 @@
 import { useContext, useEffect, useState, type ReactElement } from 'react';
-import { useSelector } from 'react-redux';
 import { ApplicationContext } from '../../application-context';
-import { type RootState } from '../../redux/store/store';
 import { type ResidentDTO } from '../dto/resident-dto';
 import { useResident } from '../hooks/use-resident';
 import { ObjectionResidentService } from '../services/objection/objection-resident-service';
 import { ResidentScreenForm } from './forms/resident-screen-form';
 import { ResidentList } from './lists/resident-list-screen';
+import LoadingSpinner from '../../common/components/loading-spinner/loading-spinner';
 
 enum Screen {
   Register = 'Register',
@@ -23,9 +22,8 @@ export const ResidentContainer = (): ReactElement => {
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [screen, setScreen] = useState<Screen>(Screen.List);
-  const { residents, refetch } = useResident({ httpClient });
+  const { residents, refetch, isLoading } = useResident({ httpClient });
   const residentService = new ObjectionResidentService();
-  const isLoading = useSelector((state: RootState) => state.loading.isLoading);
 
   async function handleSubmit(resident: ResidentDTO): Promise<void> {
     setIsSubmitting(true);
@@ -57,7 +55,6 @@ export const ResidentContainer = (): ReactElement => {
     const selectedResident = residents?.find(
       (resident) => resident.cpf === cpf,
     );
-
     if (selectedResident !== undefined) {
       await residentService.deleteResident(httpClient, selectedResident.cpf);
       void refetch();
@@ -74,7 +71,9 @@ export const ResidentContainer = (): ReactElement => {
     setIsEditing(false);
     setEditingResident(null);
   };
-
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
   return screen === Screen.Register ? (
     <ResidentScreenForm
       changeScreen={changeScreen}
@@ -90,7 +89,6 @@ export const ResidentContainer = (): ReactElement => {
       residents={residents}
       onEdit={onEdit}
       onDelete={onDelete}
-      isLoading={isLoading}
     />
   );
 };

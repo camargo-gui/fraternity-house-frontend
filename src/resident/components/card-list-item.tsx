@@ -1,29 +1,52 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { type ReactElement } from 'react';
+import { useState, type ReactElement } from 'react';
 import Card from 'react-bootstrap/Card';
 import { FaPen, FaTrash } from 'react-icons/fa';
 import { type ResidentDTO } from '../dto/resident-dto';
 import { ActionButton, Div, DivCardIcons } from './card-list-item.styles';
 import { formatCpf } from '../../utils/format-special-characters';
+import { ConfirmationModal } from '../../common/components/confirmation-modal/confirmation-modal';
 
 interface Props {
   residents?: ResidentDTO[];
   onEdit: (cpf: string) => void;
   onDelete: (cpf: string) => Promise<void>;
-  isLoading: boolean;
 }
 
 export const CardListItem = ({
   residents,
   onEdit,
   onDelete,
-  isLoading,
 }: Props): ReactElement => {
-  if (residents == null) return <div>Carregando...</div>;
+  const [showConfirmationModal, setShowConfirmationModal] =
+    useState<boolean>(false);
+
+  const [document, setDocument] = useState<string>('');
+  const openModal = (cpf: string): void => {
+    setDocument(cpf);
+    setShowConfirmationModal(true);
+  };
+
+  const renderDeleteModal = (): ReactElement => {
+    return (
+      <ConfirmationModal
+        show={showConfirmationModal}
+        onHide={() => {
+          setShowConfirmationModal(false);
+        }}
+        onConfirm={async () => {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          await onDelete(document);
+        }}
+        title="Confirmar Exclusão"
+        body="Tem certeza de que deseja excluir este morador?"
+      />
+    );
+  };
 
   return (
     <Div>
-      {residents.map((resident) => (
+      {residents?.map((resident) => (
         <Card
           key={resident.cpf}
           style={{
@@ -60,8 +83,8 @@ export const CardListItem = ({
             </div>
             <DivCardIcons>
               <ActionButton
-                onClick={async () => {
-                  await onDelete(resident.cpf);
+                onClick={() => {
+                  openModal(resident.cpf);
                 }}
                 leadingIcon={<FaTrash color="red" />}
               />
@@ -73,6 +96,7 @@ export const CardListItem = ({
               />
             </DivCardIcons>
           </Card.Body>
+          {renderDeleteModal()}
         </Card>
       ))}
     </Div>
