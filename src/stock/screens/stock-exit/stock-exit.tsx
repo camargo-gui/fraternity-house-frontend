@@ -12,6 +12,7 @@ import { noop } from 'lodash';
 import { ObjectionProductService } from '../../services/objection/objection-product-service';
 import { ObjectionMovimentationService } from '../../services/objection/objection-movimentation-service';
 import { MeasurementEnum } from '../../entities/measurement-type';
+import { useNavigate } from 'react-router-dom';
 
 const initialStateProduct: Product = {
   name: '',
@@ -28,15 +29,19 @@ export const StockExit = (): ReactElement => {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [productsEntry, setProductsEntry] = useState<Product[]>([]);
   const [searchActive, setSearchActive] = useState(false);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchProducts = async (): Promise<void> => {
-      const response = await new ObjectionProductService().getProducts(
-        httpClient,
-      );
+      const response = await new ObjectionProductService().getStock(httpClient);
       setProducts(response);
     };
     fetchProducts().catch(noop);
   }, [httpClient]);
+
+  useEffect(() => {
+    if (!searchActive) setProduct(initialStateProduct);
+  }, [searchActive]);
 
   const handleSearch = (name: string): void => {
     setProduct({ ...product, name });
@@ -48,11 +53,12 @@ export const StockExit = (): ReactElement => {
   };
 
   const onSubmit = async (): Promise<void> => {
-    console.log('tela de saida');
     await new ObjectionMovimentationService().postOutputMovimentation(
       httpClient,
       productsEntry,
     );
+    setProductsEntry([]);
+    navigate('/estoques');
   };
 
   return (
