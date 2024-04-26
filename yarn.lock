@@ -8623,13 +8623,6 @@ react-app-polyfill@^3.0.0:
     regenerator-runtime "^0.13.9"
     whatwg-fetch "^3.6.2"
 
-react-bootstrap-confirmation@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/react-bootstrap-confirmation/-/react-bootstrap-confirmation-1.0.4.tgz#82cf6038121c9264fdf2387a0ba6f9e1a643d8b5"
-  integrity sha512-4Nd8gkMTAxxym7ZvEysPbJqi3cTpxF/Xz82zsINpd6bG3lpWGgxlimuDNZnLYWwi79DcUUPYD+COeijhzM0Xtw==
-  dependencies:
-    react-confirm "^0.1.18"
-
 react-bootstrap@^2.10.2:
   version "2.10.2"
   resolved "https://registry.yarnpkg.com/react-bootstrap/-/react-bootstrap-2.10.2.tgz#3b609eb0170e31b3d9ace297d3a016c202a42642"
@@ -8647,11 +8640,6 @@ react-bootstrap@^2.10.2:
     react-transition-group "^4.4.5"
     uncontrollable "^7.2.1"
     warning "^4.0.3"
-
-react-confirm@^0.1.18:
-  version "0.1.27"
-  resolved "https://registry.yarnpkg.com/react-confirm/-/react-confirm-0.1.27.tgz#d8da5d62fa4d52fbe2ffe9d91cf5ba4bfc3dc8b4"
-  integrity sha512-CWrPjCXqYXIRnnmDbGezN+4Umz+yZnaxFQWqjhz8fJQLTgNC47stON8NK5NjXioXfcfVawCrLj757ztBBNBZFQ==
 
 react-dev-utils@^12.0.1:
   version "12.0.1"
