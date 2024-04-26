@@ -46,7 +46,14 @@ const TableComponent: React.FC<TableComponentProps> = ({
 
   return (
     <div className="custom-table">
-      <Table striped bordered hover responsive className="table">
+      <Table
+        striped
+        bordered
+        hover
+        responsive
+        className="table"
+        style={{ fontSize: '15px' }}
+      >
         <thead>
           <tr>
             {columns.map((column, index) => (
