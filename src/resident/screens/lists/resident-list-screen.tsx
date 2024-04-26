@@ -8,7 +8,6 @@ interface Props {
   residents?: ResidentDTO[];
   onEdit: (cpf: string) => void;
   onDelete: (cpf: string) => Promise<void>;
-  isLoading: boolean;
 }
 
 export const ResidentList = ({
@@ -16,7 +15,6 @@ export const ResidentList = ({
   residents,
   onEdit,
   onDelete,
-  isLoading,
 }: Props): ReactElement => {
   return (
     <>
@@ -25,7 +23,6 @@ export const ResidentList = ({
           residents={residents}
           onEdit={onEdit}
           onDelete={onDelete}
-          isLoading={isLoading}
         />
       </Wrapper>
       <Button

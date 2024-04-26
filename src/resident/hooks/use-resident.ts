@@ -12,12 +12,15 @@ export const useResident = ({
 }: Props): {
   residents: ResidentDTO[] | undefined;
   refetch: () => Promise<void>;
+  isLoading: boolean;
 } => {
   const [residents, setResidents] = useState<ResidentDTO[] | undefined>([]);
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const fetchResidents = useCallback(async (): Promise<void> => {
     const service = new ObjectionResidentService();
+    setIsLoading(true);
     const residents = await service.getAllResidents(httpClient);
+    setIsLoading(false);
     setResidents(residents);
   }, [httpClient]);
 
@@ -27,6 +30,7 @@ export const useResident = ({
 
   return {
     residents,
+    isLoading,
     refetch: fetchResidents,
   };
 };
