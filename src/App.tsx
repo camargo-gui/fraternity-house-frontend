@@ -34,7 +34,9 @@ function App(): ReactElement {
                   element={
                     <BaseScreen>
                       <ScreenTitle
-                        screenTitle={secondaryTitle ?? screen.title}
+                        screenTitle={
+                          secondaryTitle === '' ? screen.title : secondaryTitle
+                        }
                       />
                       <ScreenComponent setSecondaryTitle={setSecondaryTitle} />
                     </BaseScreen>
