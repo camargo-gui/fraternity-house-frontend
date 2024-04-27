@@ -52,6 +52,15 @@ export const MedicationSheetFormScreen = ({
     null,
   );
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [errors, setErrors] = useState({
+    resident: '',
+    medicine: '',
+    dosage: '',
+    firstTime: '',
+    frequency: '',
+    startDate: '',
+    endDate: '',
+  });
 
   useEffect(() => {
     if (selectedResidentId) {
@@ -91,16 +100,49 @@ export const MedicationSheetFormScreen = ({
     }
   };
 
-  const isFormValid = (record: MedicationRecord): boolean => {
-    return (
-      resident !== null &&
-      record.medicine !== '' &&
-      record.dosage !== '' &&
-      record.firstHour !== '' &&
-      record.frequency !== '' &&
-      record.startDate !== '' &&
-      record.endDate !== ''
-    );
+  const isFormValid = (): boolean => {
+    const newErrors = {
+      resident: '',
+      medicine: '',
+      dosage: '',
+      firstTime: '',
+      frequency: '',
+      startDate: '',
+      endDate: '',
+    };
+
+    let isValid = true;
+    if (!resident) {
+      newErrors.resident = 'Morador é obrigatório';
+      isValid = false;
+    }
+    if (!medicationRecord.medicine) {
+      newErrors.medicine = 'Medicamento é obrigatório';
+      isValid = false;
+    }
+    if (!medicationRecord.dosage) {
+      newErrors.dosage = 'Dosagem é obrigatória';
+      isValid = false;
+    }
+    if (!medicationRecord.firstHour) {
+      newErrors.firstTime = 'Primeiro horário é obrigatório';
+      isValid = false;
+    }
+    if (!medicationRecord.frequency) {
+      newErrors.frequency = 'Frequência é obrigatória';
+      isValid = false;
+    }
+    if (!medicationRecord.startDate) {
+      newErrors.startDate = 'Data de início é obrigatória';
+      isValid = false;
+    }
+    if (!medicationRecord.endDate) {
+      newErrors.endDate = 'Data de término é obrigatória';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
   };
 
   const handleEdit = (index: number): void => {
@@ -116,16 +158,26 @@ export const MedicationSheetFormScreen = ({
   };
 
   const handleAddOrUpdateRecord = (): void => {
-    if (isFormValid(medicationRecord)) {
+    if (isFormValid()) {
       const formattedMedicineName = medicationRecord.medicine.includes('(')
         ? medicationRecord.medicine
         : `${medicationRecord.medicine} (${medicationRecord.dosage})`;
+
       const newRecord = {
-        ...medicationRecord,
         id: Math.floor(Math.random() * 1000),
         resident: resident?.name ?? '',
         medicine: formattedMedicineName,
+        dosage: medicationRecord.dosage,
+        firstHour: medicationRecord.firstHour,
+        frequency: medicationRecord.frequency,
+        startDate: medicationRecord.startDate,
+        endDate: medicationRecord.endDate,
+        pharmaceuticalForm: medicationRecord.pharmaceuticalForm,
+        pharmacologicalName: medicationRecord.pharmacologicalName,
+        medicineId: medicationRecord.medicineId,
       };
+
+      console.log(newRecord);
 
       if (editingIndex !== null) {
         const updatedRecords = medicationRecords.map((record) => {
@@ -141,8 +193,6 @@ export const MedicationSheetFormScreen = ({
       }
 
       setMedicationRecord(EMPTY_RECORD);
-    } else {
-      alert('Por favor preencha todos os campos');
     }
   };
 
@@ -239,6 +289,7 @@ export const MedicationSheetFormScreen = ({
           onChange={(e) => {
             const target = e.target as HTMLInputElement;
             handleResidentChange(target.value);
+            setErrors({ ...errors, resident: '' });
           }}
           type="select"
           options={residents?.map((resident) => ({
@@ -246,10 +297,8 @@ export const MedicationSheetFormScreen = ({
             value: resident.id ?? '',
           }))}
           value={resident?.id ?? ''}
-          style={{
-            margin: '0 0 20px 0',
-          }}
           disabled={selectedResidentId !== null}
+          errorMessage={errors.resident}
           required
         />
         <Row>
@@ -260,6 +309,7 @@ export const MedicationSheetFormScreen = ({
               onChange={(e) => {
                 const target = e.target as HTMLInputElement;
                 handleMedicineChange(target.value);
+                setErrors({ ...errors, medicine: '' });
               }}
               type="select"
               options={medicines.map((medicine) => ({
@@ -268,6 +318,7 @@ export const MedicationSheetFormScreen = ({
               }))}
               value={medicationRecord.medicineId ?? ''}
               required
+              errorMessage={errors.medicine}
             />
           </div>
 
@@ -304,10 +355,12 @@ export const MedicationSheetFormScreen = ({
                 ...medicationRecord,
                 dosage: target.value,
               });
+              setErrors({ ...errors, dosage: '' });
             }}
             type="text"
             value={medicationRecord.dosage}
             required
+            errorMessage={errors.dosage}
           />
         </Row>
 
@@ -324,9 +377,11 @@ export const MedicationSheetFormScreen = ({
                   ...medicationRecord,
                   firstHour: target.value,
                 });
+                setErrors({ ...errors, firstTime: '' });
               }}
               value={medicationRecord.firstHour}
               required
+              errorMessage={errors.firstTime}
             />
           </div>
           <div style={{ margin: '0 20px 0 0' }}>
@@ -335,6 +390,7 @@ export const MedicationSheetFormScreen = ({
               label="Frequência (8/8h, 12/12h, 24/24h)"
               placeholder="Frequência (8/8h, 12/12h, 24/24h)"
               onChange={(e) => {
+                setErrors({ ...errors, frequency: '' });
                 const target = e.target as HTMLInputElement;
                 setMedicationRecord({
                   ...medicationRecord,
@@ -344,6 +400,7 @@ export const MedicationSheetFormScreen = ({
               type="number"
               value={medicationRecord.frequency}
               required
+              errorMessage={errors.frequency}
             />
           </div>
           <div style={{ margin: '0 20px 0 0' }}>
@@ -357,9 +414,11 @@ export const MedicationSheetFormScreen = ({
                   ...medicationRecord,
                   startDate: target.value,
                 });
+                setErrors({ ...errors, startDate: '' });
               }}
               value={medicationRecord.startDate}
               required
+              errorMessage={errors.startDate}
             />
           </div>
           <FormInput
@@ -367,6 +426,7 @@ export const MedicationSheetFormScreen = ({
             label="Data de término"
             type="date"
             onChange={(e) => {
+              setErrors({ ...errors, endDate: '' });
               const target = e.target as HTMLInputElement;
               setMedicationRecord({
                 ...medicationRecord,
@@ -375,6 +435,7 @@ export const MedicationSheetFormScreen = ({
             }}
             value={medicationRecord.endDate}
             required
+            errorMessage={errors.endDate}
           />
         </Row>
 

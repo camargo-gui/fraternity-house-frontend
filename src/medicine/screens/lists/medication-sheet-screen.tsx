@@ -71,8 +71,8 @@ export const MedicationSheet = ({
         <Button
           text="Cadastrar Nova Ficha"
           onClick={changeScreen}
-          backgroundColor="#6c757d"
-          hoverBackgroundColor="#595f64"
+          backgroundColor="#45a049"
+          hoverBackgroundColor="#3e8f42"
           width="auto"
         />
         <Button

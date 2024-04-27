@@ -166,7 +166,7 @@ export const FormInput = ({
   }
 
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
       <FloatingLabel
         controlId={id}
         label={label}
@@ -177,6 +177,6 @@ export const FormInput = ({
       {errorMessage && errorMessage !== '' && (
         <div className="text-danger mb-3">{errorMessage}</div>
       )}
-    </>
+    </div>
   );
 };

@@ -51,13 +51,14 @@ export const MedicationSheetTable = ({
         <div>
           <TransparentButton
             onClick={() => {
-              handleEdit(Number(row.id));
+              console.log(row, 'row');
+              handleEdit(row.id ?? 0);
             }}
             leadingIcon={<FaEdit color="#002b5e" />}
           />
           <TransparentButton
             onClick={() => {
-              handleDelete(Number(row.id));
+              handleDelete(row.id ?? 0);
             }}
             leadingIcon={<FaTrash color="red" />}
           />
@@ -68,10 +69,17 @@ export const MedicationSheetTable = ({
 
   const rec = records.map((record, index) => {
     return {
-      ...records,
+      id: record.id,
       medicine: record.medicine,
       resident: record.resident,
       frequency: `de ${record.frequency} em ${record.frequency}h`,
+      startDate: record.startDate,
+      endDate: record.endDate,
+      dosage: record.dosage,
+      firstHour: record.firstHour,
+      pharmaceuticalForm: record.pharmaceuticalForm,
+      pharmacologicalName: record.pharmacologicalName,
+      medicineId: record.medicineId,
     };
   });
 
