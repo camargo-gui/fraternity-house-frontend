@@ -43,6 +43,8 @@ interface FormInputProps {
     height?: string;
     border?: string;
     width?: string;
+    padding?: string;
+    margin?: string;
   };
 }
 
@@ -89,13 +91,14 @@ export const FormInput = ({
   );
 
   const renderSearchInput = (): ReactElement => (
-    <InputGroup style={{ height: '50px' }}>
+    <InputGroup style={{ height: '50px', marginBottom: '30px' }}>
       <Form.Control
         type="search"
         placeholder={placeholder}
         value={value}
         onChange={onChange}
         required={required}
+        disabled={disabled}
       />
       <InputGroup.Text>
         <FaSearch />
@@ -109,6 +112,7 @@ export const FormInput = ({
       onChange={onChange}
       required={required}
       style={style}
+      disabled={disabled}
     >
       <option value="">{placeholder}</option>
       {options?.map((option, index) => (

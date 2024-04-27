@@ -1,18 +1,56 @@
-import { type ReactElement } from 'react';
+import { useContext, useState, type ReactElement } from 'react';
+import { FaCheck, FaEdit, FaEye, FaPlusCircle, FaTimes } from 'react-icons/fa';
 import TableComponent from '../../common/components/table/table';
 import { type MedicationSheetBody } from '../entities/medication-sheet-body';
-import { FaEye } from 'react-icons/fa';
 import { TransparentButton } from './medicine-table.styles';
+import { FormInput } from '../../common/components/form-input/form-input';
+import { ApplicationContext } from '../../application-context';
+import { ObjectionMedicationSheetService } from '../services/objection/objection-medication-sheet-service';
 
 interface Props {
   medicationSheets: MedicationSheetBody[];
   handleShowPrescriptions: (sheet: MedicationSheetBody) => void;
+  refetch: () => Promise<void>;
+  goToMedicationSheetForm: (residentId: number) => void;
 }
 
 export const MedicationSheetTable = ({
   medicationSheets,
   handleShowPrescriptions,
+  refetch,
+  goToMedicationSheetForm,
 }: Props): ReactElement => {
+  const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [editedObservation, setEditedObservation] = useState<string>('');
+  const { httpClient } = useContext(ApplicationContext);
+  const medicationSheetService = new ObjectionMedicationSheetService();
+
+  const handleEdit = (index: number, observations: string): void => {
+    setEditIndex(index);
+    setEditedObservation(observations);
+  };
+
+  const handleCancel = (): void => {
+    setEditIndex(null);
+    setEditedObservation('');
+  };
+
+  const handleSave = async (index: number): Promise<void> => {
+    await medicationSheetService.updateMedicationSheet(httpClient, {
+      id: index,
+      observations: editedObservation,
+    });
+    await refetch();
+
+    setEditIndex(null);
+    setEditedObservation('');
+    handleCancel();
+  };
+
+  const handleAddPrescription = (residentId: number): void => {
+    goToMedicationSheetForm(residentId);
+  };
+
   const columns = [
     {
       header: 'Morador',
@@ -25,19 +63,33 @@ export const MedicationSheetTable = ({
     {
       header: 'Observações',
       accessor: 'observations',
+      render: (row: MedicationSheetBody) =>
+        editIndex === row.id ? (
+          <FormInput
+            value={editedObservation}
+            onChange={(e) => {
+              const target = e.target as HTMLInputElement;
+              setEditedObservation(target.value);
+            }}
+            id="editedObservation"
+            type="text"
+          />
+        ) : (
+          row.observations ?? '—'
+        ),
     },
     {
       header: 'Prescrições',
       accessor: 'prescriptions.length',
     },
     {
-      header: 'Ver prescrições',
+      header: 'Visualizar/Adicionar',
       accessor: 'actions',
       render: (row: MedicationSheetBody) => (
         <div
           style={{
             display: 'flex',
-            justifyContent: 'space-around',
+            justifyContent: 'center',
             alignItems: 'center',
           }}
         >
@@ -47,8 +99,41 @@ export const MedicationSheetTable = ({
             }}
             leadingIcon={<FaEye color="#002b5e" />}
           />
+          <TransparentButton
+            onClick={() => {
+              handleAddPrescription(Number(row.Resident.id ?? ''));
+            }}
+            leadingIcon={<FaPlusCircle color="#58a836" />}
+          />
         </div>
       ),
+    },
+    {
+      header: 'Editar Ficha',
+      accessor: 'actions',
+      render: (row: MedicationSheetBody) =>
+        row.id === editIndex ? (
+          <div>
+            <TransparentButton
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
+              onClick={async () => {
+                await handleSave(row.id);
+              }}
+              leadingIcon={<FaCheck color="green" />}
+            />
+            <TransparentButton
+              onClick={handleCancel}
+              leadingIcon={<FaTimes color="red" />}
+            />
+          </div>
+        ) : (
+          <TransparentButton
+            onClick={() => {
+              handleEdit(row.id, row.observations);
+            }}
+            leadingIcon={<FaEdit color="#55533a" />}
+          />
+        ),
     },
   ];
 

@@ -22,6 +22,7 @@ export const MedicationFilter = ({
           const target = e.target as HTMLInputElement;
           setSearchTerm(target.value);
         }}
+        style={{ padding: '20px' }}
       />
     </div>
   );

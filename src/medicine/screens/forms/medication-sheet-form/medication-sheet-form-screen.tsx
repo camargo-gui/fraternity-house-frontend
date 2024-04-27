@@ -1,4 +1,4 @@
-import { useState, type ReactElement } from 'react';
+import { useEffect, useState, type ReactElement } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { ConfirmationModal } from '../../../../common/components/confirmation-modal/confirmation-modal';
 import { FormInput } from '../../../../common/components/form-input/form-input';
@@ -27,6 +27,7 @@ interface Props {
   setResident: (resident: ResidentDTO | null) => void;
   description: string;
   setDescription: (description: string) => void;
+  selectedResidentId: number | null;
 }
 
 export const MedicationSheetFormScreen = ({
@@ -44,12 +45,26 @@ export const MedicationSheetFormScreen = ({
   setResident,
   description,
   setDescription,
+  selectedResidentId,
 }: Props): ReactElement => {
   const [showModal, setShowModal] = useState(false);
   const [pendingResidentId, setPendingResidentId] = useState<string | null>(
     null,
   );
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (selectedResidentId) {
+      const foundResident = residents.find(
+        (r) => Number(r.id) === selectedResidentId,
+      );
+      if (foundResident) {
+        setResident(foundResident);
+      }
+    } else {
+      setResident(null);
+    }
+  }, [residents, selectedResidentId, setResident]);
 
   const handleResidentChange = (newResidentId: string): void => {
     if (medicationRecords.length > 0 && newResidentId !== resident?.id) {
@@ -184,7 +199,7 @@ export const MedicationSheetFormScreen = ({
       <ButtonGroup>
         <div>
           <Button
-            text="Cadastrar Ficha"
+            text={selectedResidentId ? 'Atualizar Ficha' : 'Cadastrar Ficha'}
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
             onClick={async () => {
               await handleSubmit();
@@ -231,42 +246,54 @@ export const MedicationSheetFormScreen = ({
             value: resident.id ?? '',
           }))}
           value={resident?.id ?? ''}
+          style={{
+            margin: '0 0 20px 0',
+          }}
+          disabled={selectedResidentId !== null}
           required
         />
         <Row>
-          <FormInput
-            id="medicine"
-            label="Medicamento"
-            onChange={(e) => {
-              const target = e.target as HTMLInputElement;
-              handleMedicineChange(target.value);
-            }}
-            type="select"
-            options={medicines.map((medicine) => ({
-              label: medicine.name,
-              value: medicine.id,
-            }))}
-            value={medicationRecord.medicineId ?? ''}
-            required
-          />
-          <FormInput
-            id="pharmaceutical-form"
-            label="Forma farmacêutica"
-            placeholder="Forma farmacêutica"
-            value={medicationRecord.pharmaceuticalForm}
-            disabled={true}
-            type="text"
-            onChange={() => {}}
-          />
-          <FormInput
-            id="pharmacological-name"
-            label="Nome farmacológico"
-            placeholder="Nome farmacológico"
-            value={medicationRecord.pharmacologicalName}
-            disabled={true}
-            type="text"
-            onChange={() => {}}
-          />
+          <div style={{ margin: '0 20px 0 0' }}>
+            <FormInput
+              id="medicine"
+              label="Medicamento"
+              onChange={(e) => {
+                const target = e.target as HTMLInputElement;
+                handleMedicineChange(target.value);
+              }}
+              type="select"
+              options={medicines.map((medicine) => ({
+                label: medicine.name,
+                value: medicine.id,
+              }))}
+              value={medicationRecord.medicineId ?? ''}
+              required
+            />
+          </div>
+
+          <div style={{ margin: '0 20px 0 0' }}>
+            <FormInput
+              id="pharmaceutical-form"
+              label="Forma farmacêutica"
+              placeholder="Forma farmacêutica"
+              value={medicationRecord.pharmaceuticalForm}
+              disabled={true}
+              type="text"
+              onChange={() => {}}
+            />
+          </div>
+          <div style={{ margin: '0 20px 0 0' }}>
+            <FormInput
+              id="pharmacological-name"
+              label="Nome farmacológico"
+              placeholder="Nome farmacológico"
+              value={medicationRecord.pharmacologicalName}
+              disabled={true}
+              type="text"
+              onChange={() => {}}
+            />
+          </div>
+
           <FormInput
             id="dosage"
             label="Dosagem (mg, ml, etc)"
@@ -285,50 +312,56 @@ export const MedicationSheetFormScreen = ({
         </Row>
 
         <Row>
-          <FormInput
-            id="first-hour"
-            label="Primeiro horário"
-            type="time"
-            placeholder="Primeiro horário"
-            onChange={(e) => {
-              const target = e.target as HTMLInputElement;
-              setMedicationRecord({
-                ...medicationRecord,
-                firstHour: target.value,
-              });
-            }}
-            value={medicationRecord.firstHour}
-            required
-          />
-          <FormInput
-            id="frequency"
-            label="Frequência (8/8h, 12/12h, 24/24h)"
-            placeholder="Frequência (8/8h, 12/12h, 24/24h)"
-            onChange={(e) => {
-              const target = e.target as HTMLInputElement;
-              setMedicationRecord({
-                ...medicationRecord,
-                frequency: target.value,
-              });
-            }}
-            type="number"
-            value={medicationRecord.frequency}
-            required
-          />
-          <FormInput
-            id="start-date"
-            label="Data de início"
-            type="date"
-            onChange={(e) => {
-              const target = e.target as HTMLInputElement;
-              setMedicationRecord({
-                ...medicationRecord,
-                startDate: target.value,
-              });
-            }}
-            value={medicationRecord.startDate}
-            required
-          />
+          <div style={{ margin: '0 20px 0 0' }}>
+            <FormInput
+              id="first-hour"
+              label="Primeiro horário"
+              type="time"
+              placeholder="Primeiro horário"
+              onChange={(e) => {
+                const target = e.target as HTMLInputElement;
+                setMedicationRecord({
+                  ...medicationRecord,
+                  firstHour: target.value,
+                });
+              }}
+              value={medicationRecord.firstHour}
+              required
+            />
+          </div>
+          <div style={{ margin: '0 20px 0 0' }}>
+            <FormInput
+              id="frequency"
+              label="Frequência (8/8h, 12/12h, 24/24h)"
+              placeholder="Frequência (8/8h, 12/12h, 24/24h)"
+              onChange={(e) => {
+                const target = e.target as HTMLInputElement;
+                setMedicationRecord({
+                  ...medicationRecord,
+                  frequency: target.value,
+                });
+              }}
+              type="number"
+              value={medicationRecord.frequency}
+              required
+            />
+          </div>
+          <div style={{ margin: '0 20px 0 0' }}>
+            <FormInput
+              id="start-date"
+              label="Data de início"
+              type="date"
+              onChange={(e) => {
+                const target = e.target as HTMLInputElement;
+                setMedicationRecord({
+                  ...medicationRecord,
+                  startDate: target.value,
+                });
+              }}
+              value={medicationRecord.startDate}
+              required
+            />
+          </div>
           <FormInput
             id="end-date"
             label="Data de término"
@@ -353,18 +386,20 @@ export const MedicationSheetFormScreen = ({
           handleDelete={handleDelete}
         />
 
-        <FormInput
-          id="medical-prescription"
-          label="Informações adicionais para ficha (opcional)"
-          placeholder="Informações adicionais para ficha (opcional)"
-          onChange={(e) => {
-            const target = e.target as HTMLInputElement;
-            setDescription(target.value);
-          }}
-          value={description}
-          type="textarea"
-          height="50px"
-        />
+        {selectedResidentId === null && (
+          <FormInput
+            id="medical-prescription"
+            label="Informações adicionais para ficha (opcional)"
+            placeholder="Informações adicionais para ficha (opcional)"
+            onChange={(e) => {
+              const target = e.target as HTMLInputElement;
+              setDescription(target.value);
+            }}
+            value={description}
+            type="textarea"
+            height="50px"
+          />
+        )}
       </div>
 
       {renderSubmitButtonGroup()}

@@ -40,6 +40,26 @@ export class ObjectionMedicationSheetService implements MedicationSheetService {
     }
   }
 
+  public async updateMedicationSheet(
+    httpClient: HttpClient,
+    medicationSheet: { id: number; observations: string },
+  ): Promise<void> {
+    try {
+      await httpClient.request({
+        path: `${this.apiUrl}`,
+        method: 'put',
+        data: {
+          id: medicationSheet.id,
+          observations: medicationSheet.observations,
+        },
+      });
+      toast.success('Ficha de medicação atualizada com sucesso');
+    } catch (e) {
+      toast.error('Falha ao atualizar ficha de medicação');
+      noop();
+    }
+  }
+
   public async getAllPrescriptions(
     httpClient: HttpClient,
   ): Promise<MedicationSheetsResponse | undefined> {

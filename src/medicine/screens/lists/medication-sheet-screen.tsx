@@ -14,6 +14,7 @@ interface Props {
   goToMedicineForm: () => void;
   medicationSheets: MedicationSheetBody[];
   refetch: () => Promise<void>;
+  goToMedicationSheetForm: (id: number) => void;
 }
 
 export const MedicationSheet = ({
@@ -21,6 +22,7 @@ export const MedicationSheet = ({
   goToMedicineForm,
   medicationSheets,
   refetch,
+  goToMedicationSheetForm,
 }: Props): ReactElement => {
   const [prescriptions, setPrescriptions] = useState<PrescriptionsInterface[]>(
     [],
@@ -60,6 +62,8 @@ export const MedicationSheet = ({
         <MedicationSheetTable
           medicationSheets={filteredMedicines}
           handleShowPrescriptions={handleShowPrescriptions}
+          refetch={refetch}
+          goToMedicationSheetForm={goToMedicationSheetForm}
         />
       </div>
 
