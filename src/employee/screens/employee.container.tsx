@@ -15,6 +15,8 @@ import { EmployeeeList } from './employee-list';
 import { noop } from 'lodash';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '../../redux/slices/loadingSlice';
+import { cpf } from 'cpf-cnpj-validator';
+import { toast } from 'react-toastify';
 
 type Screen = 'EmployeeRegister' | 'EmployeeList';
 
@@ -61,12 +63,17 @@ export const EmployeeContainer = (): ReactElement => {
 
   const onSubmit = async (employee: Employee): Promise<void> => {
     setIsSubmitting(true);
-    const response = await new ObjectionEmployeeService().registerEmployee(
-      httpClient,
-      employee,
-    );
+
+    if (cpf.isValid(employee.document)) {
+      const response = await new ObjectionEmployeeService().registerEmployee(
+        httpClient,
+        employee,
+      );
+      if (response) changeScreen();
+    } else {
+      toast.error('CPF inválido');
+    }
     setIsSubmitting(false);
-    if (response) changeScreen();
   };
 
   const onEditPress = (document: string): void => {

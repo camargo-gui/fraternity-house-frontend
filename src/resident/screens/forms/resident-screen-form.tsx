@@ -11,6 +11,7 @@ interface Props {
   editingResident: ResidentDTO | null;
   isEditing: boolean;
   setSelectedFile: (file: File | null) => void;
+  cpfValid: boolean;
 }
 
 const initialResidentState: ResidentDTO = {
@@ -29,6 +30,7 @@ export const ResidentScreenForm = ({
   editingResident,
   isEditing,
   setSelectedFile,
+  cpfValid,
 }: Props): ReactElement => {
   const [resident, setResident] = useState<ResidentDTO>(
     editingResident ?? initialResidentState,
@@ -119,9 +121,9 @@ export const ResidentScreenForm = ({
       <Button
         text={isEditing ? 'Editar Morador' : 'Cadastrar Morador'}
         onClick={() => {
+          cpfValid ? clearFields() : setResident({ ...resident, cpf: '' });
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           handleSubmit(resident);
-          clearFields();
         }}
         isLoading={isSubmitting}
         width="200px"
