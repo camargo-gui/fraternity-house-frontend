@@ -32,6 +32,10 @@ export const ListProducts = ({
         />
       ),
     },
+    {
+      header: 'Medida',
+      accessor: 'measurement',
+    },
   ];
 
   const [isLoading, setIsLoading] = useState(false);

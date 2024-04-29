@@ -13,6 +13,7 @@ import { type Product } from '../../entities/product';
 import { ObjectionMovimentationService } from '../../services/objection/objection-movimentation-service';
 import { MeasurementEnum } from '../../entities/measurement-type';
 import LoadingSpinner from '../../../common/components/loading-spinner/loading-spinner';
+import { useNavigate } from 'react-router-dom';
 
 const initialStateProduct: Product = {
   name: '',
@@ -31,6 +32,7 @@ export const StockEntryScreen = (): ReactElement => {
   const [searchActive, setSearchActive] = useState(false);
   const { httpClient } = useContext(ApplicationContext);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async (): Promise<void> => {
@@ -62,12 +64,12 @@ export const StockEntryScreen = (): ReactElement => {
   };
 
   const onSubmit = async (): Promise<void> => {
-    console.log('tela de entrada');
     await new ObjectionMovimentationService().postInputMovimentation(
       httpClient,
       productsEntry,
     );
     setProductsEntry([]);
+    navigate('/estoques');
   };
 
   if (isLoading) {

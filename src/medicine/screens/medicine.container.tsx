@@ -35,6 +35,9 @@ export const MedicineContainer = ({
 
   const [description, setDescription] = useState<string>('');
   const [resident, setResident] = useState<ResidentDTO | null>(null);
+  const [selectedResidentId, setSelectedResidentId] = useState<number | null>(
+    null,
+  );
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -87,12 +90,11 @@ export const MedicineContainer = ({
 
     if (medicine.id !== '') {
       await medicineService.updateMedicine(httpClient, medicine);
-      void refetch();
     } else {
       await medicineService.createMedicine(httpClient, medicine);
-      void refetch();
     }
 
+    void refetch();
     setIsSubmitting(false);
   }
 
@@ -138,6 +140,7 @@ export const MedicineContainer = ({
         record.firstHour,
       );
     });
+
     await medicationService
       .createMedicationSheet(
         httpClient,
@@ -152,7 +155,12 @@ export const MedicineContainer = ({
         setMedicationRecord(EMPTY_RECORD);
         setDescription('');
         setResident(null);
+        if (selectedResidentId !== null) {
+          setScreen(Screen.MedicationSheetList);
+          setSelectedResidentId(null);
+        }
       });
+
     await refetch().finally(() => {
       setSubmitting(false);
     });
@@ -196,12 +204,17 @@ export const MedicineContainer = ({
             }}
             medicationSheets={medicationSheets}
             refetch={refetch}
+            goToMedicationSheetForm={(residentId: number) => {
+              setSelectedResidentId(residentId);
+              setScreen(Screen.MedicationSheetRegister);
+            }}
           />
         );
       case Screen.MedicationSheetRegister:
         return (
           <MedicationSheetFormScreen
             changeScreen={() => {
+              setSelectedResidentId(null);
               setScreen(Screen.MedicationSheetList);
             }}
             goToMedicineList={() => {
@@ -219,6 +232,7 @@ export const MedicineContainer = ({
             setResident={setResident}
             description={description}
             setDescription={setDescription}
+            selectedResidentId={selectedResidentId}
           />
         );
       default:
