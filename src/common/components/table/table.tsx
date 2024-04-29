@@ -5,6 +5,7 @@ import Table from 'react-bootstrap/Table';
 import { useSelector } from 'react-redux';
 import { type RootState } from '../../../redux/store/store';
 import LoadingSpinner from '../loading-spinner/loading-spinner';
+import { MeasurementType } from '../../../stock/entities/measurement-type';
 
 interface TableColumn {
   header: string;
@@ -29,6 +30,9 @@ const TableComponent: React.FC<TableComponentProps> = ({
     row: any,
     accessor: string | ((row: any) => any),
   ): any => {
+    if (accessor === 'measurement') {
+      return MeasurementType[row.measurement as keyof typeof MeasurementType];
+    }
     if (typeof accessor === 'function') {
       return accessor(row);
     }

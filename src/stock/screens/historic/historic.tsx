@@ -64,7 +64,7 @@ export const HistoricScreen = (): ReactElement => {
       setIsLoading(false);
     };
     fetchHistoric().catch(noop);
-  }, [httpClient]);
+  }, []);
 
   if (isLoading) {
     return <LoadingSpinner />;

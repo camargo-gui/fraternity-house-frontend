@@ -17,6 +17,7 @@ import { useDispatch } from 'react-redux';
 import { setLoading } from '../../redux/slices/loadingSlice';
 import { cpf } from 'cpf-cnpj-validator';
 import { toast } from 'react-toastify';
+import { formatSpecialCharacters } from '../../utils/format-special-characters';
 
 type Screen = 'EmployeeRegister' | 'EmployeeList';
 
@@ -77,7 +78,10 @@ export const EmployeeContainer = (): ReactElement => {
   };
 
   const onEditPress = (document: string): void => {
-    const employee = employees.find((emp) => emp.document === document);
+    console.log(document);
+    const employee = employees.find(
+      (emp) => emp.document === formatSpecialCharacters(document),
+    );
     if (employee !== undefined) {
       setEmployeeToEdit(employee);
       setIsEditting(true);
@@ -96,8 +100,14 @@ export const EmployeeContainer = (): ReactElement => {
   };
 
   const onDelete = async (document: string): Promise<void> => {
-    await new ObjectionEmployeeService().deleteEmployee(httpClient, document);
-    setEmployees(employees.filter((employee) => employee.id !== document));
+    const formattedDocument = formatSpecialCharacters(document);
+    await new ObjectionEmployeeService().deleteEmployee(
+      httpClient,
+      formattedDocument,
+    );
+    setEmployees(
+      employees.filter((employee) => employee.id !== formattedDocument),
+    );
     fetchEmployees().catch(noop);
   };
 

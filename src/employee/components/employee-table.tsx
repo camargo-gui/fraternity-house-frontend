@@ -1,10 +1,10 @@
-import { type ReactElement } from 'react';
+import { useState, type ReactElement } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import TableComponent from '../../common/components/table/table';
 import { type Employee } from '../entities/employee';
 import { TransparentButton } from '../screens/employee.styles';
-import { noop } from 'lodash';
 import { formatCpf, formatPhone } from '../../utils/format-special-characters';
+import { ConfirmationModal } from '../../common/components/confirmation-modal/confirmation-modal';
 
 export const EmployeeTable = ({
   employees,
@@ -50,7 +50,7 @@ export const EmployeeTable = ({
 
           <TransparentButton
             onClick={() => {
-              onDelete(row.document).catch(noop);
+              showDeleteModal(row.document);
             }}
             leadingIcon={<FaTrash color="red" />}
           />
@@ -59,14 +59,43 @@ export const EmployeeTable = ({
     },
   ];
 
+  const [documentToDelete, setDocumentToDelete] = useState<string>('');
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+
+  const showDeleteModal = (document: string): void => {
+    setDocumentToDelete(document);
+    setShowConfirmationModal(true);
+  };
+
+  const renderDeleteModal = (): ReactElement => {
+    return (
+      <ConfirmationModal
+        show={showConfirmationModal}
+        onHide={() => {
+          setShowConfirmationModal(false);
+        }}
+        // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression, @typescript-eslint/no-misused-promises
+        onConfirm={async () => {
+          await onDelete(documentToDelete);
+          setShowConfirmationModal(false);
+        }}
+        title="Confirmar Exclusão"
+        body="Tem certeza de que deseja excluir este funcionário?"
+      />
+    );
+  };
+
   return (
-    <TableComponent
-      columns={columns}
-      data={employees.map((employee) => ({
-        ...employee,
-        document: formatCpf(employee.document),
-        phone: formatPhone(employee.phone),
-      }))}
-    />
+    <>
+      <TableComponent
+        columns={columns}
+        data={employees.map((employee) => ({
+          ...employee,
+          document: formatCpf(employee.document),
+          phone: formatPhone(employee.phone),
+        }))}
+      />
+      {renderDeleteModal()}
+    </>
   );
 };

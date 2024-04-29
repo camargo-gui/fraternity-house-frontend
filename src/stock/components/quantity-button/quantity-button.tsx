@@ -1,4 +1,4 @@
-import { type ReactElement, useState } from 'react';
+import { type ReactElement, useState, useEffect } from 'react';
 import {
   ContainerQuantity,
   GreenCircle,
@@ -19,20 +19,30 @@ export const QuantityButton = ({
 }: Props): ReactElement => {
   const [quantity, setQuantity] = useState(0);
 
+  useEffect(() => {
+    handleIncrement();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleIncrement = (): void => {
-    const productList = productsEntry.filter((p) => p.name !== product.name);
-    productList.push({ ...product, quantity: quantity + 1 });
-    setProductsEntry(productList);
-    setQuantity(quantity + 1);
+    updateQuantity(quantity + 1);
   };
 
   const handleDecrement = (): void => {
-    if (quantity > 0) {
-      const productList = productsEntry.filter((p) => p.name !== product.name);
-      productList.push({ ...product, quantity: quantity - 1 });
-      setProductsEntry(productList);
-      setQuantity(quantity - 1);
+    if (quantity > 1) {
+      updateQuantity(quantity - 1);
     }
+  };
+
+  const updateQuantity = (newQuantity: number): void => {
+    const updatedProducts = productsEntry.map((p) => {
+      if (p.id === product.id) {
+        return { ...p, quantity: newQuantity };
+      }
+      return p;
+    });
+    setProductsEntry(updatedProducts);
+    setQuantity(newQuantity);
   };
 
   return (

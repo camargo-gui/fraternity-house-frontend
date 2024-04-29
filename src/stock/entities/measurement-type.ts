@@ -1,6 +1,6 @@
 export enum MeasurementType {
-  UNITY = 'unidade(s)',
-  KG = 'kg',
+  UNITY = 'Unidade(s)',
+  KG = 'Kg',
   L = 'L',
 }
 
