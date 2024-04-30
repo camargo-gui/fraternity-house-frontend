@@ -164,7 +164,7 @@ export const PrescriptionsTable = ({
               const target = e.target as HTMLInputElement;
               handleChange('firstTime', target.value);
             }}
-            type="text"
+            type="time"
             id="firstTime"
           />
         ) : (
@@ -180,9 +180,11 @@ export const PrescriptionsTable = ({
             value={editedPrescription?.frequency ?? ''}
             onChange={(e) => {
               const target = e.target as HTMLInputElement;
-              handleChange('frequency', target.value);
+              if (/^\d*$/.test(target.value)) {
+                handleChange('frequency', target.value);
+              }
             }}
-            type="text"
+            type="number"
             id="frequency"
           />
         ) : (
@@ -202,6 +204,7 @@ export const PrescriptionsTable = ({
             }}
             type="date"
             id="startDate"
+            minDate={new Date().toISOString().split('T')[0]}
           />
         ) : (
           <>{row.startDate.toString()}</>
@@ -220,6 +223,7 @@ export const PrescriptionsTable = ({
             }}
             type="date"
             id="endDate"
+            minDate={new Date().toISOString().split('T')[0]}
           />
         ) : (
           <>{row.endDate.toString()}</>

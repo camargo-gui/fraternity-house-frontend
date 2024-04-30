@@ -75,6 +75,25 @@ export const MedicationSheetFormScreen = ({
     }
   }, [residents, selectedResidentId, setResident]);
 
+  useEffect(() => {
+    if (medicationRecord.startDate) {
+      if (
+        new Date(medicationRecord.endDate) <
+        new Date(medicationRecord.startDate)
+      ) {
+        setErrors({
+          ...errors,
+          endDate: 'Data fim não pode ser menor que a data inicial',
+        });
+      } else {
+        setErrors({
+          ...errors,
+          endDate: '',
+        });
+      }
+    }
+  }, [medicationRecord]);
+
   const handleResidentChange = (newResidentId: string): void => {
     if (medicationRecords.length > 0 && newResidentId !== resident?.id) {
       setShowModal(true);
@@ -237,6 +256,7 @@ export const MedicationSheetFormScreen = ({
             leadingIcon={
               editingIndex !== null ? <></> : <FaPlus width={12} height={12} />
             }
+            isDisabled={errors.endDate !== ''}
             width="auto"
           />
         </div>
@@ -419,6 +439,7 @@ export const MedicationSheetFormScreen = ({
               value={medicationRecord.startDate}
               required
               errorMessage={errors.startDate}
+              minDate={new Date().toISOString().split('T')[0]}
             />
           </div>
           <FormInput
@@ -436,6 +457,7 @@ export const MedicationSheetFormScreen = ({
             value={medicationRecord.endDate}
             required
             errorMessage={errors.endDate}
+            minDate={new Date().toISOString().split('T')[0]}
           />
         </Row>
 

@@ -46,6 +46,7 @@ interface FormInputProps {
     padding?: string;
     margin?: string;
   };
+  minDate?: string;
 }
 
 export const FormInput = ({
@@ -64,6 +65,7 @@ export const FormInput = ({
   as,
   mask,
   style,
+  minDate,
 }: FormInputProps): ReactElement => {
   const renderTextarea = (): ReactElement => (
     <Form.Control
@@ -87,6 +89,7 @@ export const FormInput = ({
       disabled={disabled}
       as={as}
       mask={mask}
+      min={minDate}
     />
   );
 
