@@ -3,6 +3,7 @@ import { FormInput } from '../../../common/components/form-input/form-input';
 import { type ResidentDTO } from '../../dto/resident-dto';
 import { Button, Wrapper } from '../resident.styles';
 import { IMaskInput } from 'react-imask';
+import { cpf } from 'cpf-cnpj-validator';
 
 interface Props {
   changeScreen: () => void;
@@ -11,7 +12,6 @@ interface Props {
   editingResident: ResidentDTO | null;
   isEditing: boolean;
   setSelectedFile: (file: File | null) => void;
-  cpfValid: boolean;
 }
 
 const initialResidentState: ResidentDTO = {
@@ -30,15 +30,25 @@ export const ResidentScreenForm = ({
   editingResident,
   isEditing,
   setSelectedFile,
-  cpfValid,
 }: Props): ReactElement => {
   const [resident, setResident] = useState<ResidentDTO>(
     editingResident ?? initialResidentState,
   );
+  const [cpfError, setCpfError] = useState<string | undefined>(undefined);
 
   function clearFields(): void {
     setResident(initialResidentState);
   }
+
+  const onClick = async (): Promise<void> => {
+    if (cpf.isValid(resident.cpf)) {
+      await handleSubmit(resident);
+      clearFields();
+      return;
+    }
+
+    setCpfError('CPF inválido');
+  };
 
   return (
     <Wrapper>
@@ -57,6 +67,7 @@ export const ResidentScreenForm = ({
         id="cpf"
         label="CPF"
         value={resident.cpf}
+        errorMessage={cpfError}
         type="text"
         placeholder="CPF"
         as={IMaskInput}
@@ -65,6 +76,7 @@ export const ResidentScreenForm = ({
         onChange={(e) => {
           const target = e.target as HTMLInputElement;
           setResident({ ...resident, cpf: target.value });
+          setCpfError(undefined);
         }}
       />
       <FormInput
@@ -120,10 +132,9 @@ export const ResidentScreenForm = ({
       />
       <Button
         text={isEditing ? 'Editar Morador' : 'Cadastrar Morador'}
-        onClick={() => {
-          cpfValid ? clearFields() : setResident({ ...resident, cpf: '' });
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          handleSubmit(resident);
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        onClick={async () => {
+          await onClick();
         }}
         isLoading={isSubmitting}
         width="200px"

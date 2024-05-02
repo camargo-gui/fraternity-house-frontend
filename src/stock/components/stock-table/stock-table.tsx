@@ -8,7 +8,7 @@ export const StockTable = ({
 }: {
   products: Product[];
 }): ReactElement => {
-  const HandleProducts = (): Array<{
+  const handleProducts = (): Array<{
     name: string;
     quantity: string;
   }> => {
@@ -28,5 +28,5 @@ export const StockTable = ({
     },
   ];
 
-  return <TableComponent columns={colums} data={HandleProducts()} />;
+  return <TableComponent columns={colums} data={handleProducts()} />;
 };

@@ -6,8 +6,6 @@ import { ObjectionResidentService } from '../services/objection/objection-reside
 import { ResidentScreenForm } from './forms/resident-screen-form';
 import { ResidentList } from './lists/resident-list-screen';
 import LoadingSpinner from '../../common/components/loading-spinner/loading-spinner';
-import { cpf } from 'cpf-cnpj-validator';
-import { toast } from 'react-toastify';
 
 enum Screen {
   Register = 'Register',
@@ -26,23 +24,15 @@ export const ResidentContainer = (): ReactElement => {
   const [screen, setScreen] = useState<Screen>(Screen.List);
   const { residents, refetch, isLoading } = useResident({ httpClient });
   const residentService = new ObjectionResidentService();
-  const [cpfValid, setCpfValid] = useState<boolean>(false);
 
   async function handleSubmit(resident: ResidentDTO): Promise<void> {
     setIsSubmitting(true);
-
-    if (cpf.isValid(resident.cpf)) {
-      setCpfValid(true);
-      if (isEditing && editingResident !== null) {
-        await residentService.updateResident(httpClient, resident);
-        void refetch();
-      } else {
-        await residentService.postResident(httpClient, resident, selectedFile);
-        void refetch();
-      }
+    if (isEditing && editingResident !== null) {
+      await residentService.updateResident(httpClient, resident);
+      void refetch();
     } else {
-      toast.error('CPF inválido');
-      setCpfValid(false);
+      await residentService.postResident(httpClient, resident, selectedFile);
+      void refetch();
     }
     setIsSubmitting(false);
   }
@@ -92,7 +82,6 @@ export const ResidentContainer = (): ReactElement => {
       editingResident={editingResident}
       isEditing={isEditing}
       setSelectedFile={setSelectedFile}
-      cpfValid={cpfValid}
     />
   ) : (
     <ResidentList
