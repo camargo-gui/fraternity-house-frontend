@@ -45,6 +45,7 @@ interface FormInputProps {
     width?: string;
     padding?: string;
     margin?: string;
+    marginBottom?: string;
   };
   minDate?: string;
 }
@@ -94,7 +95,13 @@ export const FormInput = ({
   );
 
   const renderSearchInput = (): ReactElement => (
-    <InputGroup style={{ height: '50px', marginBottom: '30px' }}>
+    <InputGroup
+      style={{
+        height: '50px',
+        marginBottom: style?.marginBottom ?? '30px',
+        width: style?.width,
+      }}
+    >
       <Form.Control
         type="search"
         placeholder={placeholder}

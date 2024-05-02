@@ -5,6 +5,7 @@ export const Container = styled.div`
   display: flex;
   margin-bottom: 16px;
   justify-content: space-between;
+  align-items: center;
 `;
 
 export const EntryButton = styled(Button).attrs({
@@ -19,6 +20,8 @@ export const EntryButton = styled(Button).attrs({
 export const ExitButton = styled(Button).attrs({
   hoverBackgroundColor: 'transparent',
 })`
+  margin-left: 16px;
+  margin-right: 16px;
   background-color: white;
   color: #b51414;
   border-color: #b51414;

@@ -10,6 +10,8 @@ import { setLoading } from '../../../redux/slices/loadingSlice';
 
 export const StockScreenContainer = (): ReactElement => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [filterText, setFilterText] = useState<string>('');
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const dispatch = useDispatch();
   const { httpClient } = useContext(ApplicationContext);
   useEffect(() => {
@@ -17,15 +19,27 @@ export const StockScreenContainer = (): ReactElement => {
       dispatch(setLoading(true));
       const response = await new ObjectionProductService().getStock(httpClient);
       setProducts(response);
+      setFilteredProducts(response);
       dispatch(setLoading(false));
     };
     fetchProducts().catch(noop);
   }, [dispatch, httpClient]);
 
+  useEffect(() => {
+    if (filterText === '') {
+      setFilteredProducts(products);
+      return;
+    }
+    const filtered = products.filter((product) =>
+      product.name.toLowerCase().startsWith(filterText.toLowerCase()),
+    );
+    setFilteredProducts(filtered);
+  }, [filterText, products]);
+
   return (
     <>
-      <HeaderButtons />
-      <StockTable products={products} />
+      <HeaderButtons setText={setFilterText} />
+      <StockTable products={filteredProducts} />
     </>
   );
 };
