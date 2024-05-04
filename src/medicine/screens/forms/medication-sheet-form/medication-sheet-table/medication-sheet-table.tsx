@@ -51,7 +51,6 @@ export const MedicationSheetTable = ({
         <div>
           <TransparentButton
             onClick={() => {
-              console.log(row, 'row');
               handleEdit(row.id ?? 0);
             }}
             leadingIcon={<FaEdit color="#002b5e" />}

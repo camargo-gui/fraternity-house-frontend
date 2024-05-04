@@ -12,9 +12,10 @@ import { ApplicationContext } from './application-context';
 import { BaseScreen } from './common/components/base-screen/base-screen';
 import { screenList } from './common/components/base-screen/screen-enum';
 import { HttpClient } from './common/http-client/http-client';
-import { LoginContainer } from './login/screens/login.container';
+import { LoginContainer } from './login/screens/login/login.container';
 import { store } from './redux/store/store';
 import { ScreenTitle } from './common/components/base-screen/components/screen-title/screen-title';
+import { ResetPasswordContainer } from './login/screens/reset-password/reset-password.container';
 
 function App(): ReactElement {
   const [secondaryTitle, setSecondaryTitle] = useState<string>('');
@@ -45,6 +46,10 @@ function App(): ReactElement {
               );
             })}
             <Route path="/login" element={<LoginContainer />} />
+            <Route
+              path="/reset-password"
+              element={<ResetPasswordContainer />}
+            />
             <Route path="/" element={<Navigate to="/login" replace />} />
           </Routes>
         </Router>

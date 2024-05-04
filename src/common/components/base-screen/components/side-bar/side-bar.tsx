@@ -1,12 +1,14 @@
 import { useEffect, useState, type ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { screenList } from '../../screen-enum';
+import { type ScreenListItemProps, screenList } from '../../screen-enum';
 import { ListItem } from '../list-item/list-item';
 import { ListItemWrapper, Logo, Wrapper } from './side-bar.styles';
 import React from 'react';
+import { type RoleEnum } from '../../../../../login/services/interfaces/role';
 
 export const SideBar = (): ReactElement => {
   const [activeItem, setActiveItem] = useState<string | null>('Fichas');
+  const [userRole, setUserRole] = useState<RoleEnum | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,11 +17,27 @@ export const SideBar = (): ReactElement => {
     if (currentScreen !== undefined) {
       setActiveItem(currentScreen.title);
     }
+    const role = localStorage.getItem('role');
+    if (role !== null) {
+      setUserRole(role as RoleEnum);
+    }
   }, []);
 
   const handleNavigation = (route: string, title: string): void => {
+    if (route === '/logout') {
+      localStorage.clear();
+      navigate('/login');
+      return;
+    }
     setActiveItem(title);
     navigate(route);
+  };
+  const shouldNotRenderItem = (item: ScreenListItemProps): boolean => {
+    return (
+      (item.notShouldRender ?? false) ||
+      !userRole ||
+      !item.allowedRoles?.includes(userRole)
+    );
   };
 
   return (
@@ -27,7 +45,7 @@ export const SideBar = (): ReactElement => {
       <Logo src={require('../../../../../assets/images/logo.png')} />
       <ListItemWrapper>
         {screenList.map((item) => {
-          if (item.notShouldRender ?? false) return null;
+          if (shouldNotRenderItem(item)) return null;
           return (
             <ListItem
               key={item.title}

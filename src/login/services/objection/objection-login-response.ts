@@ -3,6 +3,7 @@ import { type HttpClient } from '../../../common/http-client/http-client';
 import { type Login } from '../../entities/login';
 import { type LoginService } from '../interfaces/login-service';
 import { LoginResponse } from '../response/login-response';
+import { formatSpecialCharacters } from '../../../utils/format-special-characters';
 
 export class ObjectionLoginService implements LoginService {
   private readonly apiUrl = '/login';
@@ -15,7 +16,10 @@ export class ObjectionLoginService implements LoginService {
       const response = await httpClient.request({
         path: this.apiUrl,
         method: 'post',
-        data,
+        data: {
+          cpf: formatSpecialCharacters(data.cpf),
+          password: data.password,
+        },
       });
 
       return response?.getData(LoginResponse);

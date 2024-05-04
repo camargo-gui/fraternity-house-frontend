@@ -78,7 +78,6 @@ export const EmployeeContainer = (): ReactElement => {
   };
 
   const onEditPress = (document: string): void => {
-    console.log(document);
     const employee = employees.find(
       (emp) => emp.document === formatSpecialCharacters(document),
     );

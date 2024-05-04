@@ -21,7 +21,7 @@ export const ListItemWrapper = styled.div`
   flex-direction: column;
   width: 100%;
   align-items: center;
-  justify-content: space-between;
   margin-top: 10%;
-  height: 50%;
+  height: 100%;
+  gap: 35px;
 `;

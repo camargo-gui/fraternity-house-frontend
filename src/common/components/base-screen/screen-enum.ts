@@ -11,6 +11,7 @@ import { StockScreenContainer } from '../../../stock/screens/stock-screen/stock-
 import { StockEntryScreen } from '../../../stock/screens/stock-entry-screen/stock-entry-screen';
 import { StockExit } from '../../../stock/screens/stock-exit/stock-exit';
 import { HistoricScreen } from '../../../stock/screens/historic/historic';
+import { RoleEnum } from '../../../login/services/interfaces/role';
 
 export enum Screens {
   Files = 'Files',
@@ -34,6 +35,7 @@ export interface ScreenListItemProps {
   element: ComponentType<ScreenComponentProps>;
   route?: string;
   notShouldRender?: boolean;
+  allowedRoles?: RoleEnum[];
 }
 
 export const screenList: ScreenListItemProps[] = [
@@ -42,12 +44,20 @@ export const screenList: ScreenListItemProps[] = [
     icon: Icon.files_icon,
     route: '/fichas',
     element: ResidentContainer,
+    allowedRoles: [
+      RoleEnum.Administrador,
+      RoleEnum.Funcionario,
+      RoleEnum.Nutricionista,
+      RoleEnum.Psicologo,
+      RoleEnum.EducadorFisico,
+    ],
   },
   {
     title: 'Estoque',
     icon: Icon.stock_icon,
     route: '/estoques',
     element: StockScreenContainer,
+    allowedRoles: [RoleEnum.Administrador, RoleEnum.Funcionario],
   },
   {
     title: 'Nova Entrada',
@@ -75,29 +85,53 @@ export const screenList: ScreenListItemProps[] = [
     icon: Icon.employees_icon,
     route: '/funcionarios',
     element: EmployeeContainer,
+    allowedRoles: [RoleEnum.Funcionario, RoleEnum.Administrador],
   },
   {
     title: 'Medicamentos',
     icon: Icon.medicines_icon,
     route: '/medicamentos',
     element: MedicineContainer,
+    allowedRoles: [
+      RoleEnum.Administrador,
+      RoleEnum.Funcionario,
+      RoleEnum.Nutricionista,
+      RoleEnum.Psicologo,
+      RoleEnum.EducadorFisico,
+    ],
   },
   {
     title: 'Psicólogo',
     icon: Icon.psychologist_icon,
     route: '/psicologico',
     element: ResidentContainer,
+    allowedRoles: [RoleEnum.Psicologo],
   },
   {
     title: 'Nutricionista',
     icon: Icon.nutritionist_icon,
     route: '/nutricionista',
     element: ResidentContainer,
+    allowedRoles: [RoleEnum.Nutricionista, RoleEnum.Administrador],
   },
   {
     title: 'Avaliação Física',
     icon: Icon.physical_icon,
     route: '/avaliacao-fisica',
     element: ResidentContainer,
+    allowedRoles: [RoleEnum.EducadorFisico, RoleEnum.Administrador],
+  },
+  {
+    title: 'Logout',
+    icon: Icon.logout_icon,
+    route: '/logout',
+    element: () => null,
+    allowedRoles: [
+      RoleEnum.Administrador,
+      RoleEnum.Funcionario,
+      RoleEnum.Nutricionista,
+      RoleEnum.Psicologo,
+      RoleEnum.EducadorFisico,
+    ],
   },
 ];

@@ -196,8 +196,6 @@ export const MedicationSheetFormScreen = ({
         medicineId: medicationRecord.medicineId,
       };
 
-      console.log(newRecord);
-
       if (editingIndex !== null) {
         const updatedRecords = medicationRecords.map((record) => {
           if (record.id === editingIndex) {
