@@ -33,7 +33,6 @@ export const FormLogin = ({
 
       <FormInput
         id="password"
-        label="Senha"
         placeholder="Senha"
         type="password"
         as={IMaskInput}

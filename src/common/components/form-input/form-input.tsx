@@ -1,6 +1,6 @@
-import { type ReactElement } from 'react';
+import { useState, type ReactElement } from 'react';
 import { InputGroup } from 'react-bootstrap';
-import { FaSearch } from 'react-icons/fa';
+import { FaEye, FaEyeSlash, FaSearch } from 'react-icons/fa';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 
@@ -68,6 +68,11 @@ export const FormInput = ({
   style,
   minDate,
 }: FormInputProps): ReactElement => {
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = (): void => {
+    setShowPassword(!showPassword);
+  };
+
   const renderTextarea = (): ReactElement => (
     <Form.Control
       as="textarea"
@@ -80,19 +85,44 @@ export const FormInput = ({
     />
   );
 
-  const renderTextInput = (): ReactElement => (
-    <Form.Control
-      type={type}
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-      required={required}
-      disabled={disabled}
-      as={as}
-      mask={mask}
-      min={minDate}
-    />
-  );
+  const renderTextInput = (): ReactElement => {
+    if (type === 'password') {
+      return (
+        <InputGroup className="mb-2">
+          <Form.Control
+            type={showPassword ? 'text' : 'password'}
+            placeholder={placeholder}
+            value={value}
+            onChange={onChange}
+            required={required}
+            disabled={disabled}
+            as={as}
+            mask={mask}
+            min={minDate}
+            style={{ height: '55px', ...style }}
+          />
+          <InputGroup.Text onClick={togglePasswordVisibility}>
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </InputGroup.Text>
+        </InputGroup>
+      );
+    } else {
+      return (
+        <Form.Control
+          type={type}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          required={required}
+          disabled={disabled}
+          as={as}
+          mask={mask}
+          min={minDate}
+          style={style}
+        />
+      );
+    }
+  };
 
   const renderSearchInput = (): ReactElement => (
     <InputGroup

@@ -77,7 +77,6 @@ export const ResetPasswordForm = ({
           checkRequirements(target.value);
         }}
         type="password"
-        label="Crie sua nova senha"
         placeholder={'Crie sua nova senha'}
       />
 
@@ -88,7 +87,6 @@ export const ResetPasswordForm = ({
           const target = value.target as HTMLInputElement;
           setValues({ ...values, confirmNewPassword: target.value });
         }}
-        label="Confirme sua nova senha"
         placeholder={'Confirme sua nova senha'}
         type="password"
         errorMessage={showError()}
