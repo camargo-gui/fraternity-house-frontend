@@ -65,6 +65,7 @@ export const LoginScreen = ({
         <Button
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
           onClick={async () => {
+            setEmployeeDocument('');
             await getSubmitFunction();
           }}
           isLoading={isSubmitting}

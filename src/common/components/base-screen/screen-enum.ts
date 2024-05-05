@@ -122,7 +122,7 @@ export const screenList: ScreenListItemProps[] = [
     allowedRoles: [RoleEnum.EducadorFisico, RoleEnum.Administrador],
   },
   {
-    title: 'Logout',
+    title: 'Sair',
     icon: Icon.logout_icon,
     route: '/logout',
     element: () => null,
