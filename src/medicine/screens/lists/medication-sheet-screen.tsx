@@ -39,11 +39,16 @@ export const MedicationSheet = ({
   ): void => {
     const formattedPrescriptions = medicationSheetBody.prescriptions.map(
       (prescription) => {
+        const endDate = new Date(prescription.endDate);
+        const startDate = new Date(prescription.startDate);
+
+        startDate.setDate(startDate.getDate() + 1);
+
         return {
           ...prescription,
           medicationSheetId: medicationSheetBody.id,
-          endDate: new Date(prescription.endDate).toLocaleDateString(),
-          startDate: new Date(prescription.startDate).toLocaleDateString(),
+          endDate: endDate.toLocaleDateString(),
+          startDate: startDate.toLocaleDateString(),
         };
       },
     );
