@@ -1,5 +1,5 @@
 import { useState, type ReactElement } from 'react';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaUserLock } from 'react-icons/fa';
 import TableComponent from '../../common/components/table/table';
 import { type Employee } from '../entities/employee';
 import { TransparentButton } from '../screens/employee.styles';
@@ -10,10 +10,12 @@ export const EmployeeTable = ({
   employees,
   onEdit,
   onDelete,
+  shouldCanSeeButton,
 }: {
   employees: Employee[];
   onEdit: (id: string) => void;
   onDelete: (id: string) => Promise<void>;
+  shouldCanSeeButton: boolean;
 }): ReactElement => {
   const columns = [
     {
@@ -39,23 +41,28 @@ export const EmployeeTable = ({
     {
       header: 'Ações',
       accessor: 'actions',
-      render: (row: Employee) => (
-        <div>
-          <TransparentButton
-            onClick={() => {
-              onEdit(row.document);
-            }}
-            leadingIcon={<FaEdit color="#002b5e" />}
-          />
+      render: (row: Employee) =>
+        shouldCanSeeButton ? (
+          <div>
+            <TransparentButton
+              onClick={() => {
+                onEdit(row.document);
+              }}
+              leadingIcon={<FaEdit color="#002b5e" />}
+            />
 
-          <TransparentButton
-            onClick={() => {
-              showDeleteModal(row.document);
-            }}
-            leadingIcon={<FaTrash color="red" />}
-          />
-        </div>
-      ),
+            <TransparentButton
+              onClick={() => {
+                showDeleteModal(row.document);
+              }}
+              leadingIcon={<FaTrash color="red" />}
+            />
+          </div>
+        ) : (
+          <div>
+            <FaUserLock color="gray" />
+          </div>
+        ),
     },
   ];
 

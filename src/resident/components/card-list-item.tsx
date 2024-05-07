@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { useState, type ReactElement } from 'react';
+import { useMemo, useState, type ReactElement } from 'react';
 import Card from 'react-bootstrap/Card';
 import { FaPen, FaTrash } from 'react-icons/fa';
 import { type ResidentDTO } from '../dto/resident-dto';
@@ -26,6 +26,14 @@ export const CardListItem = ({
     setDocument(cpf);
     setShowConfirmationModal(true);
   };
+
+  const role = useMemo(() => {
+    return localStorage.getItem('role');
+  }, []);
+
+  const shouldCanDelete = useMemo(() => {
+    return role === 'Administrador';
+  }, [role]);
 
   const renderDeleteModal = (): ReactElement => {
     return (
@@ -82,12 +90,14 @@ export const CardListItem = ({
               <Card.Text>CPF: {formatCpf(resident.cpf)}</Card.Text>
             </div>
             <DivCardIcons>
-              <ActionButton
-                onClick={() => {
-                  openModal(resident.cpf);
-                }}
-                leadingIcon={<FaTrash color="red" />}
-              />
+              {shouldCanDelete && (
+                <ActionButton
+                  onClick={() => {
+                    openModal(resident.cpf);
+                  }}
+                  leadingIcon={<FaTrash color="red" />}
+                />
+              )}
               <ActionButton
                 onClick={() => {
                   onEdit(resident.cpf);

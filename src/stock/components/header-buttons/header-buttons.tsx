@@ -1,4 +1,4 @@
-import { type ReactElement } from 'react';
+import { useMemo, type ReactElement } from 'react';
 import {
   Container,
   EntryButton,
@@ -7,6 +7,7 @@ import {
 } from './header-buttons.styles';
 import { useNavigate } from 'react-router-dom';
 import { FormInput } from '../../../common/components/form-input/form-input';
+import { RoleEnum } from '../../../login/services/interfaces/role';
 
 export const HeaderButtons = ({
   setText,
@@ -18,6 +19,15 @@ export const HeaderButtons = ({
   const handleNavigate = (route: string) => (): void => {
     navigate(route);
   };
+
+  const role = useMemo(() => {
+    return localStorage.getItem('role');
+  }, []);
+
+  const shouldCanSeeButtons = useMemo(() => {
+    return role === RoleEnum.Administrador || role === RoleEnum.Funcionario;
+  }, [role]);
+
   return (
     <Container>
       <div
@@ -26,14 +36,18 @@ export const HeaderButtons = ({
           alignItems: 'center',
         }}
       >
-        <EntryButton
-          onClick={handleNavigate('/estoque/entrada')}
-          text="Nova entrada"
-        />
-        <ExitButton
-          onClick={handleNavigate('/estoque/saida')}
-          text="Nova saída"
-        />
+        {shouldCanSeeButtons && (
+          <>
+            <EntryButton
+              onClick={handleNavigate('/estoque/entrada')}
+              text="Nova entrada"
+            />
+            <ExitButton
+              onClick={handleNavigate('/estoque/saida')}
+              text="Nova saída"
+            />
+          </>
+        )}
         <FormInput
           style={{ marginBottom: '0', width: '500px' }}
           type="search"

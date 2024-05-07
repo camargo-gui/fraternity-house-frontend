@@ -1,4 +1,4 @@
-import { type ReactElement } from 'react';
+import { useMemo, type ReactElement } from 'react';
 import { type Employee } from '../entities/employee';
 import { EmployeeTable } from '../components/employee-table';
 import { Wrapper } from './employee.styles';
@@ -18,7 +18,14 @@ export const EmployeeeList = ({
   onEdit,
   onDelete,
 }: Props): ReactElement => {
-  const role = localStorage.getItem('role');
+  const role = useMemo(() => {
+    return localStorage.getItem('role');
+  }, []);
+
+  const shouldCanSeeButton = useMemo(() => {
+    return role === RoleEnum.Administrador;
+  }, [role]);
+
   return (
     <>
       <Wrapper>
@@ -26,9 +33,10 @@ export const EmployeeeList = ({
           employees={employees}
           onEdit={onEdit}
           onDelete={onDelete}
+          shouldCanSeeButton={shouldCanSeeButton}
         />
       </Wrapper>
-      {role === RoleEnum.Administrador && (
+      {shouldCanSeeButton && (
         <Button
           text="Novo Funcionário"
           onClick={changeScreen}
