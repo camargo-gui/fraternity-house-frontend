@@ -1,6 +1,6 @@
 import { type HttpClient } from '../../common/http-client/http-client';
 import { ObjectionResidentService } from '../services/objection/objection-resident-service';
-import { type ResidentDTO } from './../dto/resident-dto';
+import { type Resident } from '../entities/resident';
 import { useState, useEffect, useCallback } from 'react';
 
 interface Props {
@@ -10,11 +10,11 @@ interface Props {
 export const useResident = ({
   httpClient,
 }: Props): {
-  residents: ResidentDTO[] | undefined;
+  residents: Resident[] | undefined;
   refetch: () => Promise<void>;
   isLoading: boolean;
 } => {
-  const [residents, setResidents] = useState<ResidentDTO[] | undefined>([]);
+  const [residents, setResidents] = useState<Resident[] | undefined>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const fetchResidents = useCallback(async (): Promise<void> => {
     const service = new ObjectionResidentService();

@@ -1,22 +1,17 @@
 import { type HttpClient } from '../../../common/http-client/http-client';
-import { type ResidentDTO } from '../../dto/resident-dto';
+import { type Resident } from '../../entities/resident';
 
 export interface ResidentService {
-  getAllResidents: (
-    httpCliente: HttpClient,
-  ) => Promise<ResidentDTO[] | undefined>;
+  getAllResidents: (httpCliente: HttpClient) => Promise<Resident[] | undefined>;
   getResidents: (
     httpClient: HttpClient,
     cpf: string,
-  ) => Promise<ResidentDTO | undefined>;
+  ) => Promise<Resident | undefined>;
   postResident: (
     httpCliente: HttpClient,
-    resident: ResidentDTO,
+    resident: Resident,
     imageFile: File | null,
   ) => Promise<void>;
-  updateResident: (
-    httpClient: HttpClient,
-    resident: ResidentDTO,
-  ) => Promise<void>;
+  updateResident: (httpClient: HttpClient, resident: Resident) => Promise<void>;
   deleteResident: (httpClient: HttpClient, cpf: string) => Promise<void>;
 }

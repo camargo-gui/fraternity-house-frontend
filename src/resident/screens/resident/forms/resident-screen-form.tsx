@@ -1,20 +1,20 @@
 import { useState, type ReactElement } from 'react';
-import { FormInput } from '../../../common/components/form-input/form-input';
-import { type ResidentDTO } from '../../dto/resident-dto';
+import { FormInput } from '../../../../common/components/form-input/form-input';
+import { type Resident } from '../../../entities/resident';
 import { Button, Wrapper } from '../resident.styles';
 import { IMaskInput } from 'react-imask';
 import { cpf } from 'cpf-cnpj-validator';
 
 interface Props {
   changeScreen: () => void;
-  handleSubmit: (resident: ResidentDTO) => Promise<void>;
+  handleSubmit: (resident: Resident) => Promise<void>;
   isSubmitting: boolean;
-  editingResident: ResidentDTO | null;
+  editingResident: Resident | null;
   isEditing: boolean;
   setSelectedFile: (file: File | null) => void;
 }
 
-const initialResidentState: ResidentDTO = {
+const initialResidentState: Resident = {
   cpf: '',
   rg: '',
   name: '',
@@ -31,7 +31,7 @@ export const ResidentScreenForm = ({
   isEditing,
   setSelectedFile,
 }: Props): ReactElement => {
-  const [resident, setResident] = useState<ResidentDTO>(
+  const [resident, setResident] = useState<Resident>(
     editingResident ?? initialResidentState,
   );
   const [cpfError, setCpfError] = useState<string | undefined>(undefined);

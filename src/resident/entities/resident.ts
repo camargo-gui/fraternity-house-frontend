@@ -1,4 +1,4 @@
-export class ResidentDTO {
+export class Resident {
   public constructor(
     public cpf: string,
     public rg: string,

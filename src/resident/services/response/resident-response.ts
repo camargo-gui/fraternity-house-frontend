@@ -1,5 +1,5 @@
-import { type ResidentDTO } from '../../dto/resident-dto';
+import { type Resident } from '../../entities/resident';
 
 export class ResidentResponse {
-  public constructor(public residents: ResidentDTO[]) {}
+  public constructor(public residents: Resident[]) {}
 }

@@ -1,6 +1,6 @@
 import { useState, type ReactElement } from 'react';
 import { FormInput } from '../../common/components/form-input/form-input';
-import { Wrapper } from '../../resident/screens/resident.styles';
+import { Wrapper } from '../../resident/screens/resident/resident.styles';
 import { type Role } from '../entities/role';
 import { Button } from '../../common/components/button/button';
 import { type Employee } from '../entities/employee';

@@ -1,12 +1,13 @@
 import React, { type ReactElement } from 'react';
 import { Wrapper, Button } from '../resident.styles';
-import { CardListItem } from '../../components/card-list-item';
-import { type ResidentDTO } from '../../dto/resident-dto';
+import { CardListItem } from '../../../components/card-list-item';
+import { type Resident } from '../../../entities/resident';
 
 interface Props {
   changeScreen: () => void;
-  residents?: ResidentDTO[];
+  residents?: Resident[];
   onEdit: (cpf: string) => void;
+  onScreening: (id: string) => void;
   onDelete: (cpf: string) => Promise<void>;
 }
 
@@ -15,6 +16,7 @@ export const ResidentList = ({
   residents,
   onEdit,
   onDelete,
+  onScreening,
 }: Props): ReactElement => {
   return (
     <>
@@ -22,6 +24,7 @@ export const ResidentList = ({
         <CardListItem
           residents={residents}
           onEdit={onEdit}
+          onScreening={onScreening}
           onDelete={onDelete}
         />
       </Wrapper>

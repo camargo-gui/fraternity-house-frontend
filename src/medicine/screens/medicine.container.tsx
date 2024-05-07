@@ -19,7 +19,7 @@ import { Prescription } from '../entities/prescription';
 import { ObjectionMedicationSheetService } from '../services/objection/objection-medication-sheet-service';
 import { MedicationSheet as MedicationSheetClass } from '../entities/medication-sheet';
 import { MedicationSheet } from './lists/medication-sheet-screen';
-import { type ResidentDTO } from '../../resident/dto/resident-dto';
+import { type Resident } from '../../resident/entities/resident';
 
 enum Screen {
   MedicineRegister = 'MedicineRegister',
@@ -34,7 +34,7 @@ export const MedicineContainer = ({
   const [screen, setScreen] = useState<Screen>(Screen.MedicationSheetList);
 
   const [description, setDescription] = useState<string>('');
-  const [resident, setResident] = useState<ResidentDTO | null>(null);
+  const [resident, setResident] = useState<Resident | null>(null);
   const [selectedResidentId, setSelectedResidentId] = useState<number | null>(
     null,
   );

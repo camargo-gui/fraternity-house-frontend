@@ -1,10 +1,10 @@
 import { type Employee } from '../../employee/entities/employee';
-import { type ResidentDTO } from '../../resident/dto/resident-dto';
+import { type Resident } from '../../resident/entities/resident';
 
 export class MedicationSheetBody {
   public constructor(
     public id: number,
-    public Resident: ResidentDTO,
+    public Resident: Resident,
     public Employee: Employee,
     public prescriptions: PrescriptionsInterface[],
     public observations: string,

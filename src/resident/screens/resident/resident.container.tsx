@@ -1,31 +1,32 @@
 import { useContext, useEffect, useState, type ReactElement } from 'react';
-import { ApplicationContext } from '../../application-context';
-import { type ResidentDTO } from '../dto/resident-dto';
-import { useResident } from '../hooks/use-resident';
-import { ObjectionResidentService } from '../services/objection/objection-resident-service';
+import { ApplicationContext } from '../../../application-context';
+import { type Resident } from '../../entities/resident';
+import { useResident } from '../../hooks/use-resident';
+import { ObjectionResidentService } from '../../services/objection/objection-resident-service';
 import { ResidentScreenForm } from './forms/resident-screen-form';
 import { ResidentList } from './lists/resident-list-screen';
-import LoadingSpinner from '../../common/components/loading-spinner/loading-spinner';
+import LoadingSpinner from '../../../common/components/loading-spinner/loading-spinner';
+import { useNavigate } from 'react-router-dom';
 
 enum Screen {
   Register = 'Register',
   List = 'List',
+  Screening = 'Screening',
 }
 
 export const ResidentContainer = (): ReactElement => {
   const { httpClient } = useContext(ApplicationContext);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [editingResident, setEditingResident] = useState<ResidentDTO | null>(
-    null,
-  );
+  const [editingResident, setEditingResident] = useState<Resident | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [screen, setScreen] = useState<Screen>(Screen.List);
   const { residents, refetch, isLoading } = useResident({ httpClient });
   const residentService = new ObjectionResidentService();
 
-  async function handleSubmit(resident: ResidentDTO): Promise<void> {
+  async function handleSubmit(resident: Resident): Promise<void> {
     setIsSubmitting(true);
     if (isEditing && editingResident !== null) {
       await residentService.updateResident(httpClient, resident);
@@ -59,6 +60,10 @@ export const ResidentContainer = (): ReactElement => {
     }
   }
 
+  const onScreening = (id: string): void => {
+    navigate(`/fichas/triagem/${id}`);
+  };
+
   useEffect(() => {
     void refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -89,6 +94,7 @@ export const ResidentContainer = (): ReactElement => {
       residents={residents}
       onEdit={onEdit}
       onDelete={onDelete}
+      onScreening={onScreening}
     />
   );
 };

@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { type ResidentService } from '../interfaces/resident-service';
 import { ResidentResponse } from '../response/resident-response';
 import { type HttpClient } from './../../../common/http-client/http-client';
-import { ResidentDTO } from './../../dto/resident-dto';
+import { Resident } from '../../entities/resident';
 import { formatSpecialCharacters } from '../../../utils/format-special-characters';
 
 export class ObjectionResidentService implements ResidentService {
@@ -11,7 +11,7 @@ export class ObjectionResidentService implements ResidentService {
 
   public async getAllResidents(
     httpClient: HttpClient,
-  ): Promise<ResidentDTO[] | undefined> {
+  ): Promise<Resident[] | undefined> {
     try {
       const response = await httpClient.request({
         path: this.url,
@@ -26,13 +26,13 @@ export class ObjectionResidentService implements ResidentService {
   public async getResidents(
     httpClient: HttpClient,
     cpf: string,
-  ): Promise<ResidentDTO | undefined> {
+  ): Promise<Resident | undefined> {
     try {
       const response = await httpClient.request({
         path: `${this.url}/${cpf}`,
         method: 'get',
       });
-      return response?.getData<ResidentDTO>(ResidentDTO);
+      return response?.getData<Resident>(Resident);
     } catch (e) {
       return undefined;
     }
@@ -40,7 +40,7 @@ export class ObjectionResidentService implements ResidentService {
 
   public async postResident(
     httpClient: HttpClient,
-    formData: ResidentDTO,
+    formData: Resident,
     imageFile: File | null,
   ): Promise<void> {
     try {
@@ -68,7 +68,7 @@ export class ObjectionResidentService implements ResidentService {
 
   public async updateResident(
     httpClient: HttpClient,
-    resident: ResidentDTO,
+    resident: Resident,
   ): Promise<void> {
     try {
       await httpClient.request({

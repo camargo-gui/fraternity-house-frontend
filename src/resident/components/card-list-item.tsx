@@ -1,22 +1,24 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useMemo, useState, type ReactElement } from 'react';
 import Card from 'react-bootstrap/Card';
-import { FaPen, FaTrash } from 'react-icons/fa';
-import { type ResidentDTO } from '../dto/resident-dto';
+import { FaBookOpen, FaPen, FaTrash } from 'react-icons/fa';
+import { type Resident } from '../entities/resident';
 import { ActionButton, Div, DivCardIcons } from './card-list-item.styles';
 import { formatCpf } from '../../utils/format-special-characters';
 import { ConfirmationModal } from '../../common/components/confirmation-modal/confirmation-modal';
 
 interface Props {
-  residents?: ResidentDTO[];
+  residents?: Resident[];
   onEdit: (cpf: string) => void;
   onDelete: (cpf: string) => Promise<void>;
+  onScreening: (id: string) => void;
 }
 
 export const CardListItem = ({
   residents,
   onEdit,
   onDelete,
+  onScreening,
 }: Props): ReactElement => {
   const [showConfirmationModal, setShowConfirmationModal] =
     useState<boolean>(false);
@@ -103,6 +105,12 @@ export const CardListItem = ({
                   onEdit(resident.cpf);
                 }}
                 leadingIcon={<FaPen color="#2a1aa5" />}
+              />
+              <ActionButton
+                onClick={() => {
+                  onScreening(resident.id ?? '');
+                }}
+                leadingIcon={<FaBookOpen color="orange" />}
               />
             </DivCardIcons>
           </Card.Body>

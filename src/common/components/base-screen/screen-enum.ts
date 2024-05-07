@@ -4,7 +4,7 @@ import {
   type SVGProps,
 } from 'react';
 import * as Icon from '../../../assets/icons-mapping';
-import { ResidentContainer } from './../../../resident/screens/resident.container';
+import { ResidentContainer } from '../../../resident/screens/resident/resident.container';
 import { MedicineContainer } from '../../../medicine/screens/medicine.container';
 import { EmployeeContainer } from '../../../employee/screens/employee.container';
 import { StockScreenContainer } from '../../../stock/screens/stock-screen/stock-screen.container';
@@ -12,6 +12,7 @@ import { StockEntryScreen } from '../../../stock/screens/stock-entry-screen/stoc
 import { StockExit } from '../../../stock/screens/stock-exit/stock-exit';
 import { HistoricScreen } from '../../../stock/screens/historic/historic';
 import { RoleEnum } from '../../../login/services/interfaces/role';
+import { ResidentScreeniing } from '../../../resident/screens/resident-screening/resident-screening';
 
 export enum Screens {
   Files = 'Files',
@@ -44,6 +45,20 @@ export const screenList: ScreenListItemProps[] = [
     icon: Icon.files_icon,
     route: '/fichas',
     element: ResidentContainer,
+    allowedRoles: [
+      RoleEnum.Administrador,
+      RoleEnum.Funcionario,
+      RoleEnum.Nutricionista,
+      RoleEnum.Psicologo,
+      RoleEnum.EducadorFisico,
+    ],
+  },
+  {
+    title: 'Triagem',
+    icon: Icon.files_icon,
+    route: '/fichas/triagem/:id',
+    element: ResidentScreeniing,
+    notShouldRender: true,
     allowedRoles: [
       RoleEnum.Administrador,
       RoleEnum.Funcionario,
