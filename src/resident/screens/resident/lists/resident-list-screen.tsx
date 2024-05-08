@@ -1,6 +1,6 @@
 import React, { type ReactElement } from 'react';
 import { Wrapper, Button } from '../resident.styles';
-import { CardListItem } from '../../../components/card-list-item';
+import { CardListItem } from '../../../components/card-list-item/card-list-item';
 import { type Resident } from '../../../entities/resident';
 
 interface Props {

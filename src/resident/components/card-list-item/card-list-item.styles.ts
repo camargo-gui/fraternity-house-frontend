@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button } from '../../common/components/button/button';
+import { Button } from '../../../common/components/button/button';
 
 export const ActionButton = styled(Button).attrs({
   backgroundColor: 'transparent',

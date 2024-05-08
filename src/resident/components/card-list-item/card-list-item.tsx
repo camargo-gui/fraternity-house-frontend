@@ -2,10 +2,10 @@
 import { useMemo, useState, type ReactElement } from 'react';
 import Card from 'react-bootstrap/Card';
 import { FaBookOpen, FaPen, FaTrash } from 'react-icons/fa';
-import { type Resident } from '../entities/resident';
+import { type Resident } from '../../entities/resident';
 import { ActionButton, Div, DivCardIcons } from './card-list-item.styles';
-import { formatCpf } from '../../utils/format-special-characters';
-import { ConfirmationModal } from '../../common/components/confirmation-modal/confirmation-modal';
+import { formatCpf } from '../../../utils/format-special-characters';
+import { ConfirmationModal } from '../../../common/components/confirmation-modal/confirmation-modal';
 
 interface Props {
   residents?: Resident[];
@@ -73,7 +73,7 @@ export const CardListItem = ({
             src={
               resident.url_image != null && resident.url_image !== ''
                 ? resident.url_image
-                : require('../../assets/images/profile.jpg')
+                : require('../../../assets/images/profile.jpg')
             }
             height="225px"
           />

@@ -107,7 +107,12 @@ export const ResidentScreeniing = (): ReactElement => {
           }}
         />
       )}
-      {tabs === ResidentScreeningTabs.Illnesses && <IllnessesTab />}
+      {tabs === ResidentScreeningTabs.Illnesses && (
+        <IllnessesTab
+          screening={currentScreening}
+          setScreening={setCurrentScreening}
+        />
+      )}
     </>
   );
 };
