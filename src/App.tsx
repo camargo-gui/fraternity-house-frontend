@@ -7,7 +7,7 @@ import {
   Routes,
   useLocation,
 } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ApplicationContext } from './application-context';
 import { BaseScreen } from './common/components/base-screen/base-screen';
@@ -19,11 +19,15 @@ import { ResetPasswordContainer } from './login/screens/reset-password/reset-pas
 import { store } from './redux/store/store';
 
 import { type RoleEnum } from './login/services/interfaces/role';
+import { debounce } from 'lodash';
 
-function logout(): void {
+const HALF_SECOND = 100;
+
+const logout = debounce(() => {
   localStorage.removeItem('token');
   localStorage.removeItem('role');
-}
+  toast.error('Acesso não autorizado. Faça login novamente.');
+}, HALF_SECOND);
 
 function PrivateRoute({
   children,
@@ -89,6 +93,7 @@ function App(): ReactElement {
               element={<ResetPasswordContainer />}
             />
             <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </Router>
       </ApplicationContext.Provider>
