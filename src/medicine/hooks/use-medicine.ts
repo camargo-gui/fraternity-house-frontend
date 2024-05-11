@@ -69,12 +69,15 @@ export const useMedicines = (): {
 
   async function getAllMedicinesInformation(): Promise<void> {
     dispatch(setLoading(true));
+
     await Promise.all([
       fetchMedicines().catch(noop),
       fetchPharmacologicalForms().catch(noop),
       fetchPrescriptions().catch(noop),
       fetchPharmacologicalNames().catch(noop),
-    ]).finally(() => dispatch(setLoading(false)));
+    ]);
+
+    dispatch(setLoading(false));
   }
 
   useEffect(() => {
