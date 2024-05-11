@@ -26,6 +26,7 @@ export class ObjectionMedicationSheetService implements MedicationSheetService {
         method: 'post',
         data: {
           ...medicationSheetDTO,
+          residentId: Number(medicationSheet.residentId),
           prescriptions: medicationSheet.prescriptions,
         },
       });

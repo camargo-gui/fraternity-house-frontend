@@ -86,6 +86,7 @@ export const screenList: ScreenListItemProps[] = [
     route: '/estoque/entrada',
     element: StockEntryScreen,
     notShouldRender: true,
+    allowedRoles: [RoleEnum.Administrador, RoleEnum.Funcionario],
   },
   {
     title: 'Nova Saída',
@@ -93,6 +94,7 @@ export const screenList: ScreenListItemProps[] = [
     route: '/estoque/saida',
     element: StockExit,
     notShouldRender: true,
+    allowedRoles: [RoleEnum.Administrador, RoleEnum.Funcionario],
   },
   {
     title: 'Histórico',
