@@ -48,7 +48,7 @@ export const MedicationSheetFormScreen = ({
   selectedResidentId,
 }: Props): ReactElement => {
   const [showModal, setShowModal] = useState(false);
-  const [pendingResidentId, setPendingResidentId] = useState<string | null>(
+  const [pendingResidentId, setPendingResidentId] = useState<number | null>(
     null,
   );
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -94,7 +94,7 @@ export const MedicationSheetFormScreen = ({
     }
   }, [medicationRecord]);
 
-  const handleResidentChange = (newResidentId: string): void => {
+  const handleResidentChange = (newResidentId: number): void => {
     if (medicationRecords.length > 0 && newResidentId !== resident?.id) {
       setShowModal(true);
       setPendingResidentId(newResidentId);
@@ -103,8 +103,8 @@ export const MedicationSheetFormScreen = ({
     }
   };
 
-  const updateResident = (residentId: string): void => {
-    const newResident = residents.find((r) => r.id?.toString() === residentId);
+  const updateResident = (residentId: number): void => {
+    const newResident = residents.find((r) => r.id === residentId);
     setResident(newResident ?? null);
     setShowModal(false);
     setPendingResidentId(null);
@@ -306,15 +306,15 @@ export const MedicationSheetFormScreen = ({
           placeholder={'Selecione o morador'}
           onChange={(e) => {
             const target = e.target as HTMLInputElement;
-            handleResidentChange(target.value);
+            handleResidentChange(Number(target.value));
             setErrors({ ...errors, resident: '' });
           }}
           type="select"
           options={residents?.map((resident) => ({
             label: resident.name ?? '',
-            value: resident.id ?? '',
+            value: String(resident.id) ?? '',
           }))}
-          value={resident?.id ?? ''}
+          value={String(resident?.id) ?? ''}
           disabled={selectedResidentId !== null}
           errorMessage={errors.resident}
           required

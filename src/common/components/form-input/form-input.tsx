@@ -79,6 +79,7 @@ export const FormInput = ({
       placeholder={placeholder}
       value={value}
       onChange={onChange}
+      disabled={disabled}
       type="textarea"
       style={{ height: height ?? '100px' }}
       required={required}

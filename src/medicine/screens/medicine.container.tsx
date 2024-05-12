@@ -145,7 +145,7 @@ export const MedicineContainer = ({
       .createMedicationSheet(
         httpClient,
         new MedicationSheetClass(
-          resident?.id ?? '',
+          String(resident?.id) ?? 0,
           description,
           prescriptions,
         ),
