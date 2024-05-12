@@ -161,6 +161,7 @@ export const PersonalDataTab = ({
           <FormInput
             label="Quantidade de filhos"
             id="number_of_children"
+            value={currentScreening.number_of_children.toString()}
             onChange={(e) => {
               const target = e.target as HTMLInputElement;
               setCurrentScreening({
