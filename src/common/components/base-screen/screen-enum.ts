@@ -13,6 +13,9 @@ import { StockExit } from '../../../stock/screens/stock-exit/stock-exit';
 import { HistoricScreen } from '../../../stock/screens/historic/historic';
 import { RoleEnum } from '../../../login/services/interfaces/role';
 import { ResidentScreeniing } from '../../../resident/screens/resident-screening/resident-screening';
+import { PhysicologicalContainer } from '../../../accompaniment/screens/physicological/physicological-container';
+import { NutritionistContainer } from '../../../accompaniment/screens/nutritionist/nutritionist-container';
+import { PhysiotherapistContainer } from '../../../accompaniment/screens/physiotherapist/physiotherapist-container';
 
 export enum Screens {
   Files = 'Files',
@@ -138,14 +141,14 @@ export const screenList: ScreenListItemProps[] = [
     title: 'Psicólogo',
     icon: Icon.psychologist_icon,
     route: '/psicologico',
-    element: ResidentContainer,
+    element: PhysicologicalContainer,
     allowedRoles: [RoleEnum.Psicologo],
   },
   {
     title: 'Nutricionista',
     icon: Icon.nutritionist_icon,
     route: '/nutricionista',
-    element: ResidentContainer,
+    element: NutritionistContainer,
     allowedRoles: [
       RoleEnum.Administrador,
       RoleEnum.Funcionario,
@@ -158,7 +161,7 @@ export const screenList: ScreenListItemProps[] = [
     title: 'Avaliação Física',
     icon: Icon.physical_icon,
     route: '/avaliacao-fisica',
-    element: ResidentContainer,
+    element: PhysiotherapistContainer,
     allowedRoles: [
       RoleEnum.Administrador,
       RoleEnum.Funcionario,

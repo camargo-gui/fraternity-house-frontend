@@ -12,6 +12,7 @@ export const TransparentButton = styled(Button).attrs({
   width: '48px',
   heeight: '48px',
   padding: '0px 10px',
+  spinnerVariant: 'dark',
 })``;
 
 export const ButtonWrapper = styled.div`

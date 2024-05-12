@@ -108,7 +108,7 @@ export const CardListItem = ({
               />
               <ActionButton
                 onClick={() => {
-                  onScreening(resident.id ?? '');
+                  onScreening(String(resident.id) ?? 0);
                 }}
                 leadingIcon={<FaBookOpen color="orange" />}
               />

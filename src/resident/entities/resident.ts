@@ -5,7 +5,7 @@ export class Resident {
     public name: string,
     public contact_phone: string,
     public birthday: Date,
-    public id?: string,
+    public id?: number,
     public url_image?: string,
   ) {}
 }

@@ -1,6 +1,7 @@
 import { Modal, Button } from 'react-bootstrap';
 import type { ReactNode, ReactElement } from 'react';
 import './view-modal.css';
+import LoadingSpinner from '../loading-spinner/loading-spinner';
 
 interface ViewModalProps {
   show: boolean;
@@ -8,6 +9,7 @@ interface ViewModalProps {
   title: string;
   children: ReactNode;
   size?: 'sm' | 'lg' | 'xl';
+  isLoading?: boolean;
 }
 
 export const ViewModal = ({
@@ -16,6 +18,7 @@ export const ViewModal = ({
   title,
   children,
   size,
+  isLoading,
 }: ViewModalProps): ReactElement => {
   return (
     <Modal
@@ -27,7 +30,7 @@ export const ViewModal = ({
       <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>{children}</Modal.Body>
+      <Modal.Body>{isLoading ? <LoadingSpinner /> : children}</Modal.Body>
       <Modal.Footer>
         <Button onClick={onHide}>Fechar</Button>
       </Modal.Footer>
