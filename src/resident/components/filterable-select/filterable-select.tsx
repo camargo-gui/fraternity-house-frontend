@@ -47,7 +47,7 @@ const FilterableSelect: React.FC<FilterableSelectProps> = ({
   };
 
   return (
-    <div ref={ref} style={{ position: 'relative', ...style }}>
+    <div ref={ref} style={{ position: 'relative', ...style, width: '80%' }}>
       <Form.Control
         type="text"
         value={inputValue}

@@ -1,24 +1,21 @@
 import { FormInput } from '../../../../common/components/form-input/form-input';
 import { Wrapper } from '../../resident/resident.styles';
 import {
-  ButtonRow,
   FullColumn,
   HalfColum,
   MinorColumn,
   Row,
 } from '../resident-screening-form.styles';
 import { useCallback, useEffect, type ReactElement } from 'react';
-import { Button } from '../../../../common/components/button/button';
 import { type ScreeningProps } from './types';
 import { noop } from 'lodash';
 import { getCEP } from '../../../api/get-cep';
 import { IMaskInput } from 'react-imask';
 
 export const ResponsibleTab = ({
-  onNext,
-  onPrevious,
   currentScreening,
   setCurrentScreening,
+  enableEdit,
 }: ScreeningProps): ReactElement => {
   const onZipCodeFullfiled = useCallback(
     async (zipCode: string): Promise<void> => {
@@ -61,6 +58,7 @@ export const ResponsibleTab = ({
               });
             }}
             type="text"
+            disabled={!enableEdit}
           />
         </FullColumn>
       </Row>
@@ -83,6 +81,7 @@ export const ResponsibleTab = ({
               });
             }}
             type="text"
+            disabled={!enableEdit}
           />
         </MinorColumn>
 
@@ -120,6 +119,7 @@ export const ResponsibleTab = ({
               },
             ]}
             type="select"
+            disabled={!enableEdit}
           />
         </MinorColumn>
         <MinorColumn>
@@ -138,6 +138,7 @@ export const ResponsibleTab = ({
               });
             }}
             type="text"
+            disabled={!enableEdit}
           />
         </MinorColumn>
       </Row>
@@ -158,6 +159,7 @@ export const ResponsibleTab = ({
               });
             }}
             type="text"
+            disabled={!enableEdit}
           />
         </HalfColum>
         <HalfColum>
@@ -178,6 +180,7 @@ export const ResponsibleTab = ({
               });
             }}
             type="text"
+            disabled={!enableEdit}
           />
         </HalfColum>
       </Row>
@@ -198,6 +201,7 @@ export const ResponsibleTab = ({
               });
             }}
             type="text"
+            disabled={!enableEdit}
           />
         </HalfColum>
         <HalfColum>
@@ -216,6 +220,7 @@ export const ResponsibleTab = ({
               });
             }}
             type="text"
+            disabled={!enableEdit}
           />
         </HalfColum>
       </Row>
@@ -236,6 +241,7 @@ export const ResponsibleTab = ({
               });
             }}
             type="text"
+            disabled={!enableEdit}
           />
         </MinorColumn>
         <MinorColumn>
@@ -254,6 +260,7 @@ export const ResponsibleTab = ({
               });
             }}
             type="text"
+            disabled={!enableEdit}
           />
         </MinorColumn>
         <MinorColumn>
@@ -272,18 +279,10 @@ export const ResponsibleTab = ({
               });
             }}
             type="text"
+            disabled={!enableEdit}
           />
         </MinorColumn>
       </Row>
-      <Row></Row>
-      <ButtonRow>
-        <Button
-          onClick={onPrevious ?? noop}
-          backgroundColor="#c1c1c1"
-          text="Anterior"
-        />
-        <Button onClick={onNext} backgroundColor="#91CDA2" text="Próximo" />
-      </ButtonRow>
     </Wrapper>
   );
 };

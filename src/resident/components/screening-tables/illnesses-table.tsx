@@ -1,19 +1,15 @@
 import { type ReactElement } from 'react';
 import { TransparentButton } from '../../../employee/screens/employee.styles';
 import { type Illnesses } from '../../entities/illnesses';
-import { type Screening } from '../../entities/screening';
 import TableComponent from '../../../common/components/table/table';
 import { FaTrash } from 'react-icons/fa';
-
-interface Props {
-  screening: Screening;
-  setScreening: (screening: Screening) => void;
-}
+import { type ScreeningProps } from '../../screens/resident-screening/tabs/types';
 
 export const IlnessesTable = ({
-  screening,
-  setScreening,
-}: Props): ReactElement => {
+  enableEdit,
+  currentScreening,
+  setCurrentScreening,
+}: ScreeningProps): ReactElement => {
   const columns = [
     {
       header: 'Enfermidade',
@@ -26,12 +22,15 @@ export const IlnessesTable = ({
         <div>
           <TransparentButton
             onClick={() => {
-              setScreening({
-                ...screening,
-                Illnesses: screening.Illnesses.filter((i) => i.id !== row.id),
+              setCurrentScreening({
+                ...currentScreening,
+                Illnesses: currentScreening.Illnesses.filter(
+                  (i) => i.id !== row.id,
+                ),
               });
             }}
-            leadingIcon={<FaTrash color="red" />}
+            isDisabled={!enableEdit}
+            leadingIcon={<FaTrash color={enableEdit ? 'red' : '#FFCCCC'} />}
           />
         </div>
       ),
@@ -41,7 +40,7 @@ export const IlnessesTable = ({
   return (
     <TableComponent
       columns={columns}
-      data={screening.Illnesses}
+      data={currentScreening.Illnesses}
       showEmptyTable={false}
     />
   );

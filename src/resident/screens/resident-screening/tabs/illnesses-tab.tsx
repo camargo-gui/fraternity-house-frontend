@@ -8,27 +8,24 @@ import {
 import { ObjectionIllnessesService } from '../../../services/objection/objection-illnesses-service';
 import { ApplicationContext } from '../../../../application-context';
 import { noop } from 'lodash';
-// import { FormInput } from '../../../../common/components/form-input/form-input';
 import FilterableSelect, {
   type Option,
 } from '../../../components/filterable-select/filterable-select';
-// import TableComponent from '../../../../common/components/table/table';
-import { type Screening } from '../../../entities/screening';
-import { IlnessesTable } from '../../../components/illnesses-table/illnesses-table';
-import { HalfRow, SimpleButton } from '../resident-screening-form.styles';
+import { IlnessesTable } from '../../../components/screening-tables/illnesses-table';
+import {
+  CenterRow,
+  SimpleButton,
+  TabWrapper,
+} from '../resident-screening-form.styles';
 import { Button } from '../../../../common/components/button/button';
 import { Illnesses } from '../../../entities/illnesses';
-// import { type Illnesses } from '../../../entities/illnesses';
-
-interface Props {
-  screening: Screening;
-  setScreening: (screening: Screening) => void;
-}
+import { type ScreeningProps } from './types';
 
 export const IllnessesTab = ({
-  screening,
-  setScreening,
-}: Props): ReactElement => {
+  currentScreening,
+  setCurrentScreening,
+  enableEdit,
+}: ScreeningProps): ReactElement => {
   const { httpClient } = useContext(ApplicationContext);
 
   const [showSelect, setShowSelect] = useState(false);
@@ -60,29 +57,33 @@ export const IllnessesTab = ({
   const handleRegisterIllness = (): void => {
     if (
       selectedIllness !== undefined &&
-      screening.Illnesses.filter(
+      currentScreening.Illnesses.filter(
         (illness) => illness.id === Number(selectedIllness?.value),
       ).length > 0
     ) {
       return;
     }
 
-    setScreening({
-      ...screening,
+    setCurrentScreening({
+      ...currentScreening,
       Illnesses: [
-        ...screening.Illnesses,
+        ...currentScreening.Illnesses,
         new Illnesses(
           selectedIllness?.label ?? '',
           Number(selectedIllness?.value),
         ),
       ],
     });
+
+    setShowSelect(false);
   };
 
-  return (
-    <>
-      {showSelect ? (
-        <HalfRow>
+  const renderRegister = (): ReactElement => {
+    if (!enableEdit) return <></>;
+
+    if (showSelect) {
+      return (
+        <CenterRow>
           <FilterableSelect
             options={illnesses}
             placeholder={'Selecione'}
@@ -97,22 +98,33 @@ export const IllnessesTab = ({
               text="Registrar"
             />
           )}
-        </HalfRow>
-      ) : (
-        <SimpleButton
-          onClick={() => {
-            setShowSelect(true);
-          }}
-        >
-          + Registrar nova enfermidade
-        </SimpleButton>
-      )}
+        </CenterRow>
+      );
+    }
 
-      {screening.Illnesses.length !== 0 && (
-        <div style={{ width: '50%' }}>
-          <IlnessesTable screening={screening} setScreening={setScreening} />
+    return (
+      <SimpleButton
+        onClick={() => {
+          setShowSelect(true);
+        }}
+      >
+        + Registrar nova enfermidade
+      </SimpleButton>
+    );
+  };
+
+  return (
+    <TabWrapper>
+      {renderRegister()}
+      {currentScreening.Illnesses.length !== 0 && (
+        <div style={{ width: '100%', paddingBottom: '2%' }}>
+          <IlnessesTable
+            enableEdit={enableEdit}
+            currentScreening={currentScreening}
+            setCurrentScreening={setCurrentScreening}
+          />
         </div>
       )}
-    </>
+    </TabWrapper>
   );
 };

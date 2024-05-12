@@ -24,8 +24,8 @@ export class Screening {
     public id?: number,
   ) {}
 
-  public static fromDTO(screening?: Screening): Screening {
-    if (!screening) return initialScreeningState;
+  public static fromDTO(screening?: Screening, idResident?: number): Screening {
+    if (!screening) return initialScreeningState(idResident);
     return new Screening(
       screening.religion,
       screening.smoking,

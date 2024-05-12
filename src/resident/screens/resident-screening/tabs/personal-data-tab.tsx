@@ -1,19 +1,13 @@
 import { FormInput } from '../../../../common/components/form-input/form-input';
 import { Wrapper } from '../../resident/resident.styles';
-import {
-  ButtonRow,
-  HalfColum,
-  MinorColumn,
-  Row,
-} from '../resident-screening-form.styles';
+import { HalfColum, MinorColumn, Row } from '../resident-screening-form.styles';
 import { type ReactElement } from 'react';
-import { Button } from '../../../../common/components/button/button';
 import { type ScreeningProps } from './types';
 
 export const PersonalDataTab = ({
-  onNext,
   currentScreening,
   setCurrentScreening,
+  enableEdit,
 }: ScreeningProps): ReactElement => {
   return (
     <Wrapper>
@@ -31,6 +25,7 @@ export const PersonalDataTab = ({
               });
             }}
             type="text"
+            disabled={!enableEdit}
           />
         </HalfColum>
         <HalfColum>
@@ -46,6 +41,7 @@ export const PersonalDataTab = ({
               });
             }}
             type="text"
+            disabled={!enableEdit}
           />
         </HalfColum>
       </Row>
@@ -63,6 +59,7 @@ export const PersonalDataTab = ({
               });
             }}
             type="text"
+            disabled={!enableEdit}
           />
         </MinorColumn>
 
@@ -89,6 +86,7 @@ export const PersonalDataTab = ({
               },
             ]}
             type="select"
+            disabled={!enableEdit}
           />
         </MinorColumn>
         <MinorColumn>
@@ -104,6 +102,7 @@ export const PersonalDataTab = ({
               });
             }}
             type="date"
+            disabled={!enableEdit}
           />
         </MinorColumn>
       </Row>
@@ -121,6 +120,7 @@ export const PersonalDataTab = ({
               });
             }}
             type="text"
+            disabled={!enableEdit}
           />
         </HalfColum>
         <HalfColum>
@@ -136,6 +136,7 @@ export const PersonalDataTab = ({
               });
             }}
             type="text"
+            disabled={!enableEdit}
           />
         </HalfColum>
       </Row>
@@ -153,6 +154,7 @@ export const PersonalDataTab = ({
               });
             }}
             type="number"
+            disabled={!enableEdit}
           />
         </MinorColumn>
         <MinorColumn>
@@ -167,6 +169,7 @@ export const PersonalDataTab = ({
               });
             }}
             type="number"
+            disabled={!enableEdit}
           />
         </MinorColumn>
         <MinorColumn>
@@ -182,6 +185,7 @@ export const PersonalDataTab = ({
               });
             }}
             type="number"
+            disabled={!enableEdit}
           />
         </MinorColumn>
       </Row>
@@ -199,6 +203,7 @@ export const PersonalDataTab = ({
               });
             }}
             type="text"
+            disabled={!enableEdit}
           />
         </HalfColum>
         <HalfColum>
@@ -214,12 +219,10 @@ export const PersonalDataTab = ({
               });
             }}
             type="number"
+            disabled={!enableEdit}
           />
         </HalfColum>
       </Row>
-      <ButtonRow>
-        <Button onClick={onNext} backgroundColor="#91CDA2" text="Próximo" />
-      </ButtonRow>
     </Wrapper>
   );
 };

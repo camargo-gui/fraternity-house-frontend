@@ -1,13 +1,12 @@
 import { type Screening } from '../../../entities/screening';
 
 export interface ScreeningProps {
-  onNext: () => void;
-  onPrevious?: () => void;
   currentScreening: Screening;
+  enableEdit: boolean;
   setCurrentScreening: (screening: Screening) => void;
 }
 
-export const initialScreeningState: Screening = {
+export const initialScreeningState = (id?: number): Screening => ({
   father_name: '',
   mother_name: '',
   religion: '',
@@ -20,7 +19,7 @@ export const initialScreeningState: Screening = {
   number_of_sibling: 0,
   number_of_children: 0,
   number_of_grandchildren: 0,
-  id_resident: 0,
+  id_resident: id ?? 0,
   Responsible: {
     name: '',
     kinship: '',
@@ -36,4 +35,4 @@ export const initialScreeningState: Screening = {
   },
   Illnesses: [],
   SpecialNeeds: [],
-};
+});

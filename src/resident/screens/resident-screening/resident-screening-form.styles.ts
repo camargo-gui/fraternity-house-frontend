@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Button } from '../../../common/components/button/button';
 
 export const Row = styled.div`
   width: 100%;
@@ -8,18 +9,18 @@ export const Row = styled.div`
   padding-bottom: 2%;
 `;
 
-export const HalfRow = styled.div`
-  width: 70%;
+export const CenterRow = styled.div`
+  width: 100%;
   display: flex;
   align-items: center;
   flex-direction: row;
   padding-bottom: 2%;
+  width: 70%;
 `;
 
 export const ButtonRow = styled.div`
-  width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   flex-direction: row;
   padding-bottom: 2%;
 `;
@@ -36,8 +37,6 @@ export const MajorColumn = styled.div`
 
 export const HalfColum = styled.div`
   width: 45%;
-  display: flex;
-  align-items: center;
 `;
 
 export const MinorColumn = styled.div`
@@ -65,3 +64,16 @@ export const SimpleButton = styled.button`
   border: none;
   padding-bottom: 2%;
 `;
+
+export const TabWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const CancelButton = styled(Button).attrs({
+  backgroundColor: '#b51414',
+  hoverBackgroundColor: '#b51414',
+  text: 'Cancelar',
+})``;
