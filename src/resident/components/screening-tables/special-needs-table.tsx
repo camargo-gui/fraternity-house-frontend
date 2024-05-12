@@ -3,7 +3,7 @@ import { TransparentButton } from '../../../employee/screens/employee.styles';
 import TableComponent from '../../../common/components/table/table';
 import { FaTrash } from 'react-icons/fa';
 import { type SpecialNeeds } from '../../entities/special-needs';
-import { type ScreeningProps } from '../../screens/resident-screening/tabs/types';
+import { type ScreeningProps } from '../../screens/screening/tabs/types';
 
 export const SpecialNeedsTable = ({
   enableEdit,

@@ -1,7 +1,7 @@
 import { type Responsible } from './responsible';
 import { type SpecialNeeds } from './special-needs';
 import { type Illnesses } from './illnesses';
-import { initialScreeningState } from '../screens/resident-screening/tabs/types';
+import { initialScreeningState } from '../screens/screening/tabs/types';
 
 export class Screening {
   public constructor(

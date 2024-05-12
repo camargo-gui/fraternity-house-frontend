@@ -100,7 +100,6 @@ export const EmployeeScreen = ({
 
       {!isEditting && (
         <FormInput
-          label="Primeira senha"
           type="password"
           placeholder="Primeira senha"
           id="password"

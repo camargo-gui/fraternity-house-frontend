@@ -5,33 +5,29 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { ObjectionIllnessesService } from '../../../services/objection/objection-illnesses-service';
 import { ApplicationContext } from '../../../../application-context';
 import { noop } from 'lodash';
 import FilterableSelect, {
   type Option,
 } from '../../../components/filterable-select/filterable-select';
-import { IlnessesTable } from '../../../components/screening-tables/illnesses-table';
-import {
-  CenterRow,
-  SimpleButton,
-  TabWrapper,
-} from '../resident-screening-form.styles';
+import { CenterRow, SimpleButton, TabWrapper } from '../screening.styles';
 import { Button } from '../../../../common/components/button/button';
-import { Illnesses } from '../../../entities/illnesses';
+import { ObjectionSpecialNeedsService } from '../../../services/objection/objection-special-needs-servic';
+import { SpecialNeeds } from '../../../entities/special-needs';
+import { SpecialNeedsTable } from '../../../components/screening-tables/special-needs-table';
 import { type ScreeningProps } from './types';
 
-export const IllnessesTab = ({
+export const SpecialNeedsTab = ({
+  enableEdit,
   currentScreening,
   setCurrentScreening,
-  enableEdit,
 }: ScreeningProps): ReactElement => {
   const { httpClient } = useContext(ApplicationContext);
 
   const [showSelect, setShowSelect] = useState(false);
 
-  const [selectedIllness, setSelectedIlness] = useState<Option | undefined>();
-  const [illnesses, setIllnesses] = useState<
+  const [selectedNeed, setSelectedNeed] = useState<Option | undefined>();
+  const [specialNeeds, setSpecialNeeds] = useState<
     Array<{
       value: string;
       label: string;
@@ -39,13 +35,13 @@ export const IllnessesTab = ({
   >([]);
 
   const fetchIllnesses = useCallback(async (): Promise<void> => {
-    const response = await new ObjectionIllnessesService().getIllnesses(
+    const response = await new ObjectionSpecialNeedsService().getSpecialNeeds(
       httpClient,
     );
-    setIllnesses(
-      response?.map((illnesses) => ({
-        value: String(illnesses.id),
-        label: illnesses.name,
+    setSpecialNeeds(
+      response?.map((needs) => ({
+        value: String(needs.id),
+        label: needs.name,
       })) ?? [],
     );
   }, []);
@@ -56,9 +52,9 @@ export const IllnessesTab = ({
 
   const handleRegisterIllness = (): void => {
     if (
-      selectedIllness !== undefined &&
-      currentScreening.Illnesses.filter(
-        (illness) => illness.id === Number(selectedIllness?.value),
+      selectedNeed !== undefined &&
+      currentScreening.SpecialNeeds.filter(
+        (need) => need.id === Number(selectedNeed?.value),
       ).length > 0
     ) {
       return;
@@ -66,11 +62,11 @@ export const IllnessesTab = ({
 
     setCurrentScreening({
       ...currentScreening,
-      Illnesses: [
-        ...currentScreening.Illnesses,
-        new Illnesses(
-          selectedIllness?.label ?? '',
-          Number(selectedIllness?.value),
+      SpecialNeeds: [
+        ...currentScreening.SpecialNeeds,
+        new SpecialNeeds(
+          selectedNeed?.label ?? '',
+          Number(selectedNeed?.value),
         ),
       ],
     });
@@ -85,13 +81,13 @@ export const IllnessesTab = ({
       return (
         <CenterRow>
           <FilterableSelect
-            options={illnesses}
+            options={specialNeeds}
             placeholder={'Selecione'}
             onChange={(option) => {
-              setSelectedIlness(option);
+              setSelectedNeed(option);
             }}
           />
-          {selectedIllness && (
+          {selectedNeed && (
             <Button
               margin="0px 16px"
               onClick={handleRegisterIllness}
@@ -108,7 +104,7 @@ export const IllnessesTab = ({
           setShowSelect(true);
         }}
       >
-        + Registrar nova enfermidade
+        + Registrar nova necessidade
       </SimpleButton>
     );
   };
@@ -116,9 +112,9 @@ export const IllnessesTab = ({
   return (
     <TabWrapper>
       {renderRegister()}
-      {currentScreening.Illnesses.length !== 0 && (
+      {currentScreening.SpecialNeeds.length !== 0 && (
         <div style={{ width: '100%', paddingBottom: '2%' }}>
-          <IlnessesTable
+          <SpecialNeedsTable
             enableEdit={enableEdit}
             currentScreening={currentScreening}
             setCurrentScreening={setCurrentScreening}

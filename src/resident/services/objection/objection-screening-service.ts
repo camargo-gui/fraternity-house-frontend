@@ -1,4 +1,3 @@
-import { noop } from 'lodash';
 import { type HttpClient } from '../../../common/http-client/http-client';
 import { Screening } from '../../entities/screening';
 import { type ScreeningService } from '../interfaces/screening-service';
@@ -21,15 +20,11 @@ export class ObjectionScreeningService implements ScreeningService {
     httpClient: HttpClient,
     screening: Screening,
   ): Promise<void> {
-    try {
-      await httpClient.request({
-        path: this.url,
-        method: 'post',
-        data: { screening },
-      });
-    } catch (error) {
-      noop();
-    }
+    await httpClient.request({
+      path: this.url,
+      method: 'post',
+      data: { screening },
+    });
   }
 
   public async update(

@@ -12,7 +12,7 @@ import { StockEntryScreen } from '../../../stock/screens/stock-entry-screen/stoc
 import { StockExit } from '../../../stock/screens/stock-exit/stock-exit';
 import { HistoricScreen } from '../../../stock/screens/historic/historic';
 import { RoleEnum } from '../../../login/services/interfaces/role';
-import { ResidentScreeniing } from '../../../resident/screens/resident-screening/resident-screening';
+import { ResidentScreeniing } from '../../../resident/screens/screening/screening';
 
 export enum Screens {
   Files = 'Files',

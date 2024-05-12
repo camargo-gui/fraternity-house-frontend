@@ -46,7 +46,7 @@ export class HttpClient {
           .map((message: string) => message)
           .join('\n'),
       );
-      throw new Error();
+      throw error;
     }
   }
 }

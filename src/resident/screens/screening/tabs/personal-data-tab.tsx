@@ -1,6 +1,6 @@
 import { FormInput } from '../../../../common/components/form-input/form-input';
 import { Wrapper } from '../../resident/resident.styles';
-import { HalfColum, MinorColumn, Row } from '../resident-screening-form.styles';
+import { HalfColum, MinorColumn, Row } from '../screening.styles';
 import { type ReactElement } from 'react';
 import { type ScreeningProps } from './types';
 

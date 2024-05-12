@@ -3,7 +3,7 @@ import { TransparentButton } from '../../../employee/screens/employee.styles';
 import { type Illnesses } from '../../entities/illnesses';
 import TableComponent from '../../../common/components/table/table';
 import { FaTrash } from 'react-icons/fa';
-import { type ScreeningProps } from '../../screens/resident-screening/tabs/types';
+import { type ScreeningProps } from '../../screens/screening/tabs/types';
 
 export const IlnessesTable = ({
   enableEdit,

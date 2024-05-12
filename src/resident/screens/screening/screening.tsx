@@ -7,18 +7,13 @@ import {
 } from 'react';
 import { ResidentScreeningTabs } from './enum/resident-screening-tabs';
 import { PersonalDataTab } from './tabs/personal-data-tab';
-import {
-  ButtonRow,
-  CancelButton,
-  TabText,
-  TabsRow,
-} from './resident-screening-form.styles';
+import { ButtonRow, CancelButton, TabText, TabsRow } from './screening.styles';
 import { Screening } from '../../entities/screening';
 import { initialScreeningState } from './tabs/types';
 import { ResponsibleTab } from './tabs/responsible-tab';
 import { ObjectionScreeningService } from '../../services/objection/objection-screening-service';
 import { ApplicationContext } from '../../../application-context';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setLoading } from '../../../redux/slices/loadingSlice';
 import { IllnessesTab } from './tabs/illnesses-tab';
 import { SpecialNeedsTab } from './tabs/special-needs-tab';
@@ -27,6 +22,8 @@ import { handleScreeningNavigation } from '../../navigation/handle-screening-nav
 import { noop } from 'lodash';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { type RootState } from '../../../redux/store/store';
+import LoadingSpinner from '../../../common/components/loading-spinner/loading-spinner';
 
 export const ResidentScreeniing = (): ReactElement => {
   const dispatch = useDispatch();
@@ -80,7 +77,8 @@ export const ResidentScreeniing = (): ReactElement => {
       context.httpClient,
       id,
     );
-    setIsFirstScreening(!data?.id_resident);
+    setIsFirstScreening(!data);
+    setIsEditting(!data);
     setCurrentScreening(Screening.fromDTO(data, Number(id)));
     setBackupScreening(Screening.fromDTO(data, Number(id)));
     dispatch(setLoading(false));
@@ -128,6 +126,10 @@ export const ResidentScreeniing = (): ReactElement => {
       </TabsRow>
     );
   };
+
+  const isLoadingg = useSelector((state: RootState) => state.loading.isLoading);
+
+  if (isLoadingg) return <LoadingSpinner />;
 
   return (
     <>

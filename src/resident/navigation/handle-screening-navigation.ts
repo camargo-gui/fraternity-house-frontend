@@ -1,5 +1,5 @@
 import { noop } from 'lodash';
-import { ResidentScreeningTabs } from '../screens/resident-screening/enum/resident-screening-tabs';
+import { ResidentScreeningTabs } from '../screens/screening/enum/resident-screening-tabs';
 
 interface Response {
   onPrevious: () => void;
