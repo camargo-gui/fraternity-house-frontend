@@ -13,9 +13,10 @@ import { StockExit } from '../../../stock/screens/stock-exit/stock-exit';
 import { HistoricScreen } from '../../../stock/screens/historic/historic';
 import { RoleEnum } from '../../../login/services/interfaces/role';
 import { ResidentScreeniing } from '../../../resident/screens/screening/screening';
-import { PhysicologicalContainer } from '../../../accompaniment/screens/physicological/physicological-container';
-import { NutritionistContainer } from '../../../accompaniment/screens/nutritionist/nutritionist-container';
-import { PhysiotherapistContainer } from '../../../accompaniment/screens/physiotherapist/physiotherapist-container';
+import { ListNutritionistAccompaniments } from '../../../accompaniment/screens/nutritionist/list-nutritionist-accompaniments';
+import { AccompanimentScreenForm } from '../../../accompaniment/screens/accompaniment-screen-form/accompaniment-screen-form';
+import { ListPhysicologicalAccompaniments } from '../../../accompaniment/screens/physicological/list-physicological-accompaniments';
+import { ListPhysiotherapistAccompaniments } from '../../../accompaniment/screens/physiotherapist/list-physiotherapist-accompaniments';
 
 export enum Screens {
   Files = 'Files',
@@ -142,15 +143,15 @@ export const screenList: ScreenListItemProps[] = [
   {
     title: 'Psicólogo',
     icon: Icon.psychologist_icon,
-    route: '/psicologico',
-    element: PhysicologicalContainer,
+    route: '/PSYCHOLOGIST',
+    element: ListPhysicologicalAccompaniments,
     allowedRoles: [RoleEnum.Psicologo],
   },
   {
     title: 'Nutricionista',
     icon: Icon.nutritionist_icon,
-    route: '/nutricionista',
-    element: NutritionistContainer,
+    route: '/NUTRITIONIST',
+    element: ListNutritionistAccompaniments,
     allowedRoles: [
       RoleEnum.Administrador,
       RoleEnum.Funcionario,
@@ -160,10 +161,24 @@ export const screenList: ScreenListItemProps[] = [
     ],
   },
   {
+    title: 'Novo acompanhamento',
+    icon: Icon.nutritionist_icon,
+    route: '/:type/formulario/:id',
+    element: AccompanimentScreenForm,
+    allowedRoles: [
+      RoleEnum.Administrador,
+      RoleEnum.Funcionario,
+      RoleEnum.Nutricionista,
+      RoleEnum.Psicologo,
+      RoleEnum.EducadorFisico,
+    ],
+    notShouldRender: true,
+  },
+  {
     title: 'Avaliação Física',
     icon: Icon.physical_icon,
-    route: '/avaliacao-fisica',
-    element: PhysiotherapistContainer,
+    route: '/PHYSIOTHERAPIST',
+    element: ListPhysiotherapistAccompaniments,
     allowedRoles: [
       RoleEnum.Administrador,
       RoleEnum.Funcionario,

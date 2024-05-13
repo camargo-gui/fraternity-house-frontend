@@ -14,18 +14,21 @@ import { noop } from 'lodash';
 interface Props {
   type: 'PSYCHOLOGIST' | 'PHYSIOTHERAPIST' | 'NUTRITIONIST';
   accompaniments: Accompaniment[];
-  setScreen: (screen: boolean) => void;
+  navigate: (id: string) => void;
 }
 
 export const AccompanimentTableContainer = ({
   type,
   accompaniments,
-  setScreen,
+  navigate,
 }: Props): ReactElement => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [editDisabled, setEditDisabled] = useState<boolean>(true);
   const [modalState, setModalState] = useState<'TABLE' | 'DETAILED'>('TABLE');
-  const [selectedResidentName, setSelectedResidentName] = useState('');
+  const [selectedResident, setSelectedResident] = useState<{
+    name: string;
+    id: number;
+  }>({ name: '', id: 0 });
   const { httpClient } = useContext(ApplicationContext);
   const [showModal, setShowModal] = useState(false);
   const [selectedAccompaniment, setSelectedAccompaniment] =
@@ -35,7 +38,10 @@ export const AccompanimentTableContainer = ({
   >(null);
 
   const handleOpenModal = (accompaniment: Accompaniment): void => {
-    setSelectedResidentName(accompaniment.residentName);
+    setSelectedResident({
+      name: accompaniment.residentName,
+      id: accompaniment.id,
+    });
     getAccompanimentByResident(accompaniment.id).catch(noop);
   };
 
@@ -90,8 +96,8 @@ export const AccompanimentTableContainer = ({
     <AccompanimentTable
       handleOpenModal={handleOpenModal}
       updateAccompaniment={updateAccompaniment}
-      selectedResidentName={selectedResidentName}
-      setSelectedResidentName={setSelectedResidentName}
+      selectedResident={selectedResident}
+      setSelectedResident={setSelectedResident}
       accompanimentsByResident={accompanimentsByResident}
       accompaniments={accompaniments}
       showModal={showModal}
@@ -103,7 +109,7 @@ export const AccompanimentTableContainer = ({
       editDisabled={editDisabled}
       setEditDisabled={setEditDisabled}
       isLoading={isLoading}
-      setScreen={setScreen}
+      navigate={navigate}
       type={type}
     />
   );

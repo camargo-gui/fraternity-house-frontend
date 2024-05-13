@@ -15,17 +15,19 @@ import { Button } from '../../../medicine/screens/medicine.styles';
 import { AccompanimentTableContainer } from '../../components/accompaniment-table/accompaniment-table.container';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '../../../redux/slices/loadingSlice';
+import { useNavigate } from 'react-router-dom';
 
-interface Props {
-  setScreen: (screen: boolean) => void;
-}
-
-export const ListNutritionistAccompaniments = ({
-  setScreen,
-}: Props): ReactElement => {
+export const ListNutritionistAccompaniments = (): ReactElement => {
+  const navigate = useNavigate();
   const { httpClient } = useContext(ApplicationContext);
   const [accompaniments, setAccompaniments] = useState<Accompaniment[]>([]);
   const dispatch = useDispatch();
+
+  const handleNavigate = useCallback((id: string) => {
+    const route = `/NUTRITIONIST/formulario/${id}`;
+    console.log('route:', route);
+    navigate(route);
+  }, []);
 
   const getDetailedAccompaniment = useCallback(async (): Promise<void> => {
     try {
@@ -60,12 +62,12 @@ export const ListNutritionistAccompaniments = ({
       <AccompanimentTableContainer
         accompaniments={accompaniments}
         type="NUTRITIONIST"
-        setScreen={setScreen}
+        navigate={handleNavigate}
       />
       {canCreateNutritionistAccompaniment && (
         <Button
           onClick={() => {
-            setScreen(false);
+            handleNavigate('novo');
           }}
           text="Novo Acompanhamento"
           width="250px"

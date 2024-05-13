@@ -15,17 +15,18 @@ import { noop } from 'lodash';
 import { AccompanimentTableContainer } from '../../components/accompaniment-table/accompaniment-table.container';
 import { setLoading } from '../../../redux/slices/loadingSlice';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-interface Props {
-  setScreen: (screen: boolean) => void;
-}
-
-export const ListPhysicologicalAccompaniments = ({
-  setScreen,
-}: Props): ReactElement => {
+export const ListPhysicologicalAccompaniments = (): ReactElement => {
+  const navigate = useNavigate();
   const { httpClient } = useContext(ApplicationContext);
   const [accompaniments, setAccompaniments] = useState<Accompaniment[]>([]);
   const dispatch = useDispatch();
+
+  const handleNavigate = useCallback((id: string) => {
+    const route = `/PSYCHOLOGIST/formulario/${id}`;
+    navigate(route);
+  }, []);
 
   const getDetailedAccompaniment = useCallback(async (): Promise<void> => {
     try {
@@ -59,12 +60,12 @@ export const ListPhysicologicalAccompaniments = ({
       <AccompanimentTableContainer
         accompaniments={accompaniments}
         type="PSYCHOLOGIST"
-        setScreen={setScreen}
+        navigate={handleNavigate}
       />
       {canCreatePhysicologicalAccompaniment && (
         <Button
           onClick={() => {
-            setScreen(false);
+            handleNavigate('novo');
           }}
           text="Novo Acompanhamento"
           width="250px"

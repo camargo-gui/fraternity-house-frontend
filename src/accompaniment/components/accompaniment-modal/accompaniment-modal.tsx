@@ -25,13 +25,12 @@ interface Props {
   accompanimentsByResident: Accompaniment[] | null;
   showModal: boolean;
   handleCloseModal: () => void;
-  setSelectedResidentName: (resident: string) => void;
-  selectedResidentName: string;
+  selectedResident: { name: string; id: number };
   modalState: 'TABLE' | 'DETAILED';
   editDisabled: boolean;
   setEditDisabled: (state: boolean) => void;
   isLoading: boolean;
-  setScreen: (screen: boolean) => void;
+  navigate: (id: string) => void;
   setModalState: (state: 'TABLE' | 'DETAILED') => void;
   type: 'PSYCHOLOGIST' | 'PHYSIOTHERAPIST' | 'NUTRITIONIST';
 }
@@ -43,13 +42,12 @@ export const AccompanimentModal = ({
   accompanimentsByResident,
   showModal,
   handleCloseModal,
-  setSelectedResidentName,
-  selectedResidentName,
+  selectedResident,
   modalState,
   editDisabled,
   setEditDisabled,
   isLoading,
-  setScreen,
+  navigate,
   setModalState,
   type,
 }: Props): ReactElement => {
@@ -170,7 +168,9 @@ export const AccompanimentModal = ({
 
     return (
       <>
-        <AlignHeaderModal>
+        <AlignHeaderModal
+          canCreateOrEditAccompaniment={canCreateOrEditAccompaniment}
+        >
           <FormInput
             type="date"
             value={dateBegin}
@@ -195,8 +195,7 @@ export const AccompanimentModal = ({
           {canCreateOrEditAccompaniment && (
             <EntryButton
               onClick={() => {
-                setSelectedResidentName(selectedResidentName);
-                setScreen(false);
+                navigate(selectedResident?.id.toString() ?? '');
               }}
               text="Novo acompanhamento"
               width="250px"
@@ -237,7 +236,7 @@ export const AccompanimentModal = ({
       onHide={handleCloseModal}
       size="lg"
       isLoading={isLoading}
-      title={'Acompanhamentos de ' + selectedResidentName}
+      title={'Acompanhamentos de ' + selectedResident.name}
     >
       {modalState === 'TABLE'
         ? renderAccompaniments()

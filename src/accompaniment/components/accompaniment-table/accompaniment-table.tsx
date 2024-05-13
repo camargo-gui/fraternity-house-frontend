@@ -14,14 +14,14 @@ interface Props {
   setSelectedAccompaniment: (accompaniment: Accompaniment) => void;
   showModal: boolean;
   handleCloseModal: () => void;
-  setSelectedResidentName: (resident: string) => void;
-  selectedResidentName: string;
+  setSelectedResident: ({ name, id }: { name: string; id: number }) => void;
+  selectedResident: { name: string; id: number };
   modalState: 'TABLE' | 'DETAILED';
   setModalState: (state: 'TABLE' | 'DETAILED') => void;
   editDisabled: boolean;
   setEditDisabled: (state: boolean) => void;
   isLoading: boolean;
-  setScreen: (screen: boolean) => void;
+  navigate: (id: string) => void;
   type: 'PSYCHOLOGIST' | 'PHYSIOTHERAPIST' | 'NUTRITIONIST';
 }
 
@@ -34,15 +34,14 @@ export const AccompanimentTable = ({
   setSelectedAccompaniment,
   showModal,
   handleCloseModal,
-  setSelectedResidentName,
-  selectedResidentName,
+  type,
+  selectedResident,
   modalState,
   setModalState,
   editDisabled,
   setEditDisabled,
   isLoading,
-  setScreen,
-  type,
+  navigate,
 }: Props): ReactElement => {
   const columns = [
     {
@@ -65,7 +64,7 @@ export const AccompanimentTable = ({
               handleOpenModal(row);
             }}
             leadingIcon={<FaEye color="#002b5e" />}
-            isLoading={isLoading}
+            isLoading={isLoading && selectedResident.id === row.id}
           />
         </div>
       ),
@@ -85,10 +84,9 @@ export const AccompanimentTable = ({
         handleCloseModal={handleCloseModal}
         modalState={modalState}
         setModalState={setModalState}
-        selectedResidentName={selectedResidentName}
-        setSelectedResidentName={setSelectedResidentName}
+        selectedResident={selectedResident}
         isLoading={isLoading}
-        setScreen={setScreen}
+        navigate={navigate}
         accompanimentsByResident={accompanimentsByResident}
         type={type}
       />

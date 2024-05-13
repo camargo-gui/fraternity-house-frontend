@@ -15,17 +15,18 @@ import { Wrapper } from '../../../resident/screens/resident/resident.styles';
 import { AccompanimentTableContainer } from '../../components/accompaniment-table/accompaniment-table.container';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '../../../redux/slices/loadingSlice';
+import { useNavigate } from 'react-router-dom';
 
-interface Props {
-  setScreen: (screen: boolean) => void;
-}
-
-export const ListPhysiotherapistAccompaniments = ({
-  setScreen,
-}: Props): ReactElement => {
+export const ListPhysiotherapistAccompaniments = (): ReactElement => {
+  const navigate = useNavigate();
   const { httpClient } = useContext(ApplicationContext);
   const [accompaniments, setAccompaniments] = useState<Accompaniment[]>([]);
   const dispatch = useDispatch();
+
+  const handleNavigate = useCallback((id: string) => {
+    const route = `/PHYSIOTHERAPIST/formulario/${id}`;
+    navigate(route);
+  }, []);
 
   const getDetailedAccompaniment = useCallback(async (): Promise<void> => {
     try {
@@ -59,12 +60,12 @@ export const ListPhysiotherapistAccompaniments = ({
       <AccompanimentTableContainer
         accompaniments={accompaniments}
         type="PHYSIOTHERAPIST"
-        setScreen={setScreen}
+        navigate={handleNavigate}
       />
       {canCreatePhysiotherapistAccompaniment && (
         <Button
           onClick={() => {
-            setScreen(false);
+            handleNavigate('novo');
           }}
           text="Novo Acompanhamento"
           width="250px"

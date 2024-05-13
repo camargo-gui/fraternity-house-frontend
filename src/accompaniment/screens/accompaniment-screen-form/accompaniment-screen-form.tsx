@@ -13,22 +13,25 @@ import { ObjectionResidentService } from '../../../resident/services/objection/o
 import { ApplicationContext } from '../../../application-context';
 import { ObjectionAccompanimentService } from '../../services/objection/objection-accompaniment-service';
 import { AlignButtons } from './accompaniment-screen-form.styles';
+import { useNavigate } from 'react-router-dom';
+import LoadingSpinner from '../../../common/components/loading-spinner/loading-spinner';
 
-interface Props {
-  setScreen: (screen: boolean) => void;
-  type: 'PSYCHOLOGIST' | 'PHYSIOTHERAPIST' | 'NUTRITIONIST';
-}
-
-export const AccompanimentScreenForm = ({
-  setScreen,
-  type,
-}: Props): ReactElement => {
+export const AccompanimentScreenForm = (): ReactElement => {
+  const navigate = useNavigate();
   const { httpClient } = useContext(ApplicationContext);
   const [residents, setResidents] = useState<Resident[]>([]);
   const [description, setDescription] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedResident, setSelectedResident] = useState<
     Resident | undefined
   >(undefined);
+  const link = window.location.href.split('/');
+  const residentId = link.pop() ?? '';
+  const type: 'NUTRITIONIST' | 'PSYCHOLOGIST' | 'PHYSIOTHERAPIST' =
+    (link[link.length - 2] as
+      | 'NUTRITIONIST'
+      | 'PSYCHOLOGIST'
+      | 'PHYSIOTHERAPIST') ?? '';
   const getAccompanimentTranslation = (typeOriginal: string): string => {
     if (typeOriginal === 'PSYCHOLOGIST') return 'Psicológico';
     else if (typeOriginal === 'PHYSIOTHERAPIST') return 'Físico';
@@ -36,7 +39,13 @@ export const AccompanimentScreenForm = ({
   };
   const translatedType = getAccompanimentTranslation(type);
 
+  const handleSubmit = async (): Promise<void> => {
+    await createAccompaniment();
+    navigate(`/${type}`);
+  };
+
   const getAllResidents = useCallback(async (): Promise<void> => {
+    setIsLoading(true);
     try {
       const response: Resident[] | undefined =
         await new ObjectionResidentService().getAllResidents(httpClient);
@@ -45,12 +54,15 @@ export const AccompanimentScreenForm = ({
       }
     } catch (error) {
       console.error('Erro ao obter os moradores:', error);
+    } finally {
+      setIsLoading(false);
     }
   }, [httpClient]);
 
   const createAccompaniment = useCallback(async (): Promise<void> => {
     try {
       setSelectedResident(undefined);
+      setIsLoading(true);
       setDescription('');
       await new ObjectionAccompanimentService().createAccompaniment(
         httpClient,
@@ -62,12 +74,26 @@ export const AccompanimentScreenForm = ({
       );
     } catch (error) {
       console.error('Erro ao criar o acompanhamento no form:', error);
+    } finally {
+      setIsLoading(false);
     }
   }, [httpClient, description, selectedResident, type]);
 
   useEffect(() => {
     getAllResidents().catch(noop);
   }, []);
+
+  useEffect(() => {
+    if (residentId === 'novo') return;
+    const foundResident = residents.find(
+      (resident) => resident.id === Number(residentId),
+    );
+    setSelectedResident(foundResident);
+  }, [residents, residentId]);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <Wrapper>
@@ -84,6 +110,7 @@ export const AccompanimentScreenForm = ({
         id="resident"
         label="Selecione o morador"
         type="select"
+        disabled={residentId !== 'novo'}
         value={selectedResident?.id?.toString() ?? ''}
         options={residents.map((resident) => ({
           value: String(resident.id),
@@ -112,7 +139,7 @@ export const AccompanimentScreenForm = ({
         label="Digite aqui a descrição do acompanhamento"
         type="textarea"
         value={description}
-        placeholder="RG"
+        placeholder="Descrição"
         onChange={(e) => {
           const target = e.target as HTMLTextAreaElement;
           setDescription(target.value);
@@ -122,14 +149,14 @@ export const AccompanimentScreenForm = ({
         <Button
           text="Cadastrar Acompanhamento"
           onClick={() => {
-            createAccompaniment().catch(noop);
+            handleSubmit().catch(noop);
           }}
           width="300px"
         />
         <Button
           text="Voltar"
           onClick={() => {
-            setScreen(true);
+            navigate(`/${type}`);
           }}
           backgroundColor="#6c757d"
         />
