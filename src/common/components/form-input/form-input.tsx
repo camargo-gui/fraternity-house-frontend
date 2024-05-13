@@ -14,7 +14,8 @@ type InputType =
   | 'textarea'
   | 'password'
   | 'file'
-  | 'number';
+  | 'number'
+  | 'money';
 
 interface Option {
   label: string;
@@ -118,7 +119,7 @@ export const FormInput = ({
           disabled={disabled}
           as={as}
           mask={mask}
-          min={minDate}
+          min={minDate ?? 0}
           style={style}
         />
       );
@@ -178,6 +179,35 @@ export const FormInput = ({
     <Form.Control type="file" onChange={onChange} required={required} />
   );
 
+  const renderMoneyInput = (): ReactElement => {
+    const format = (value: number): string => {
+      console.log(value);
+      return value.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+      });
+    };
+    return (
+      <Form.Control
+        type="text"
+        placeholder={placeholder}
+        value={format(Number(value) ?? '')}
+        onChange={(e) => {
+          const target = e.target as HTMLInputElement;
+          const value = target.value.replace(/\D/g, '');
+          onChange({
+            target: { value: Number(value) / 100 },
+          } as unknown as React.ChangeEvent<unknown>);
+        }}
+        required={required}
+        disabled={disabled}
+        as={as}
+        min={minDate ?? 0}
+        style={style}
+      />
+    );
+  };
+
   const renderInput = (): ReactElement => {
     switch (type) {
       case 'select':
@@ -190,6 +220,8 @@ export const FormInput = ({
         return renderTextarea();
       case 'search':
         return renderSearchInput();
+      case 'money':
+        return renderMoneyInput();
       case 'text':
       default:
         return renderTextInput();
