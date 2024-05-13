@@ -2,6 +2,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
   type ReactElement,
 } from 'react';
@@ -45,6 +46,14 @@ export const ListPhysiotherapistAccompaniments = ({
     getDetailedAccompaniment().catch(noop);
   }, []);
 
+  const role = useMemo(() => {
+    return localStorage.getItem('role');
+  }, []);
+
+  const canCreatePhysiotherapistAccompaniment = useMemo(() => {
+    return role === 'EducadorFisico';
+  }, [role]);
+
   return (
     <Wrapper>
       <AccompanimentTableContainer
@@ -52,13 +61,15 @@ export const ListPhysiotherapistAccompaniments = ({
         type="PHYSIOTHERAPIST"
         setScreen={setScreen}
       />
-      <Button
-        onClick={() => {
-          setScreen(false);
-        }}
-        text="Novo Acompanhamento"
-        width="250px"
-      />
+      {canCreatePhysiotherapistAccompaniment && (
+        <Button
+          onClick={() => {
+            setScreen(false);
+          }}
+          text="Novo Acompanhamento"
+          width="250px"
+        />
+      )}
     </Wrapper>
   );
 };

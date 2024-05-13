@@ -22,6 +22,7 @@ interface Props {
   setEditDisabled: (state: boolean) => void;
   isLoading: boolean;
   setScreen: (screen: boolean) => void;
+  type: 'PSYCHOLOGIST' | 'PHYSIOTHERAPIST' | 'NUTRITIONIST';
 }
 
 export const AccompanimentTable = ({
@@ -41,6 +42,7 @@ export const AccompanimentTable = ({
   setEditDisabled,
   isLoading,
   setScreen,
+  type,
 }: Props): ReactElement => {
   const columns = [
     {
@@ -88,6 +90,7 @@ export const AccompanimentTable = ({
         isLoading={isLoading}
         setScreen={setScreen}
         accompanimentsByResident={accompanimentsByResident}
+        type={type}
       />
     </>
   );

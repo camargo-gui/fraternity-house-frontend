@@ -2,6 +2,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
   type ReactElement,
 } from 'react';
@@ -46,6 +47,14 @@ export const ListNutritionistAccompaniments = ({
     getDetailedAccompaniment().catch(noop);
   }, []);
 
+  const role = useMemo(() => {
+    return localStorage.getItem('role');
+  }, []);
+
+  const canCreateNutritionistAccompaniment = useMemo(() => {
+    return role === 'Nutricionista';
+  }, [role]);
+
   return (
     <Wrapper>
       <AccompanimentTableContainer
@@ -53,13 +62,15 @@ export const ListNutritionistAccompaniments = ({
         type="NUTRITIONIST"
         setScreen={setScreen}
       />
-      <Button
-        onClick={() => {
-          setScreen(false);
-        }}
-        text="Novo Acompanhamento"
-        width="250px"
-      />
+      {canCreateNutritionistAccompaniment && (
+        <Button
+          onClick={() => {
+            setScreen(false);
+          }}
+          text="Novo Acompanhamento"
+          width="250px"
+        />
+      )}
     </Wrapper>
   );
 };

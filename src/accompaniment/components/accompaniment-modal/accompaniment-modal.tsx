@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactElement } from 'react';
+import { useEffect, useMemo, useState, type ReactElement } from 'react';
 import { noop } from 'lodash';
 import { ViewModal } from '../../../common/components/view-modal/view-modal';
 import {
@@ -33,6 +33,7 @@ interface Props {
   isLoading: boolean;
   setScreen: (screen: boolean) => void;
   setModalState: (state: 'TABLE' | 'DETAILED') => void;
+  type: 'PSYCHOLOGIST' | 'PHYSIOTHERAPIST' | 'NUTRITIONIST';
 }
 
 export const AccompanimentModal = ({
@@ -50,6 +51,7 @@ export const AccompanimentModal = ({
   isLoading,
   setScreen,
   setModalState,
+  type,
 }: Props): ReactElement => {
   const [newDescription, setNewDescription] = useState<string>('');
   const [dateBegin, setDateBegin] = useState<string>('');
@@ -79,6 +81,25 @@ export const AccompanimentModal = ({
     },
   ];
 
+  const getRespectiveType = (): string => {
+    switch (type) {
+      case 'PSYCHOLOGIST':
+        return 'Psicologo';
+      case 'PHYSIOTHERAPIST':
+        return 'EducadorFisico';
+      default:
+        return 'Nutricionista';
+    }
+  };
+
+  const role = useMemo(() => {
+    return localStorage.getItem('role');
+  }, []);
+
+  const canCreateOrEditAccompaniment = useMemo(() => {
+    return role === getRespectiveType();
+  }, [role]);
+
   const renderDetailedAccompaniments = (): ReactElement => {
     if (!accompanimentsByResident) return <></>;
     return (
@@ -91,13 +112,15 @@ export const AccompanimentModal = ({
             text="Voltar"
             leadingIcon={<FaArrowLeft />}
           />
-          <EditButton
-            onClick={() => {
-              setEditDisabled(false);
-            }}
-          >
-            Habilitar edição
-          </EditButton>
+          {canCreateOrEditAccompaniment && (
+            <EditButton
+              onClick={() => {
+                setEditDisabled(false);
+              }}
+            >
+              Habilitar edição
+            </EditButton>
+          )}
         </AlignButtons>
         <GoBackButton
           onClick={noop}
@@ -169,16 +192,18 @@ export const AccompanimentModal = ({
             id="dateEnd"
             label="Data Final"
           />
-          <EntryButton
-            onClick={() => {
-              setSelectedResidentName(selectedResidentName);
-              setScreen(false);
-            }}
-            text="Novo acompanhamento"
-            width="250px"
-            margin="10px 0 10px 0"
-            leadingIcon={<FaPlus color="#008425" />}
-          />
+          {canCreateOrEditAccompaniment && (
+            <EntryButton
+              onClick={() => {
+                setSelectedResidentName(selectedResidentName);
+                setScreen(false);
+              }}
+              text="Novo acompanhamento"
+              width="250px"
+              margin="10px 0 10px 0"
+              leadingIcon={<FaPlus color="#008425" />}
+            />
+          )}
         </AlignHeaderModal>
         <TableComponent
           columns={columnsAccompaniment}

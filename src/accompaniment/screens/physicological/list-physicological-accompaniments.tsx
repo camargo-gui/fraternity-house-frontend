@@ -2,6 +2,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
   type ReactElement,
 } from 'react';
@@ -45,6 +46,14 @@ export const ListPhysicologicalAccompaniments = ({
     getDetailedAccompaniment().catch(noop);
   }, []);
 
+  const role = useMemo(() => {
+    return localStorage.getItem('role');
+  }, []);
+
+  const canCreatePhysicologicalAccompaniment = useMemo(() => {
+    return role === 'Psicologo';
+  }, [role]);
+
   return (
     <Wrapper>
       <AccompanimentTableContainer
@@ -52,13 +61,15 @@ export const ListPhysicologicalAccompaniments = ({
         type="PSYCHOLOGIST"
         setScreen={setScreen}
       />
-      <Button
-        onClick={() => {
-          setScreen(false);
-        }}
-        text="Novo Acompanhamento"
-        width="250px"
-      />
+      {canCreatePhysicologicalAccompaniment && (
+        <Button
+          onClick={() => {
+            setScreen(false);
+          }}
+          text="Novo Acompanhamento"
+          width="250px"
+        />
+      )}
     </Wrapper>
   );
 };

@@ -104,6 +104,7 @@ export const AccompanimentTableContainer = ({
       setEditDisabled={setEditDisabled}
       isLoading={isLoading}
       setScreen={setScreen}
+      type={type}
     />
   );
 };
