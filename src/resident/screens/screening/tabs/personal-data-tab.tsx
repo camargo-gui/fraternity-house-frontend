@@ -219,7 +219,7 @@ export const PersonalDataTab = ({
                 income: parseFloat(target.value),
               });
             }}
-            type="number"
+            type="money"
             disabled={!enableEdit}
           />
         </HalfColum>
