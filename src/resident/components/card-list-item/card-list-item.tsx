@@ -79,7 +79,7 @@ export const CardListItem = ({
               src={
                 resident.url_image != null && resident.url_image !== ''
                   ? resident.url_image
-                  : require('../../assets/images/profile.jpg')
+                  : require('../../../assets/images/profile.jpg')
               }
               height="225px"
             />
