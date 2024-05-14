@@ -60,6 +60,16 @@ export const ResidentContainer = (): ReactElement => {
     }
   }
 
+  async function handleReport(): Promise<void> {
+    try {
+      setIsSubmitting(true);
+      await residentService.sendReport(httpClient);
+      setIsSubmitting(false);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   const onScreening = (id: string): void => {
     navigate(`/fichas/triagem/${id}`);
   };
@@ -95,6 +105,8 @@ export const ResidentContainer = (): ReactElement => {
       onEdit={onEdit}
       onDelete={onDelete}
       onScreening={onScreening}
+      handleReport={handleReport}
+      isSubmitting={isSubmitting}
     />
   );
 };

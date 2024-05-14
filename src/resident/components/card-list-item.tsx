@@ -6,6 +6,7 @@ import { type Resident } from '../entities/resident';
 import { ActionButton, Div, DivCardIcons } from './card-list-item.styles';
 import { formatCpf } from '../../utils/format-special-characters';
 import { ConfirmationModal } from '../../common/components/confirmation-modal/confirmation-modal';
+import { Alert } from 'react-bootstrap';
 
 interface Props {
   residents?: Resident[];
@@ -56,67 +57,73 @@ export const CardListItem = ({
 
   return (
     <Div>
-      {residents?.map((resident) => (
-        <Card
-          key={resident.cpf}
-          style={{
-            width: '18%',
-            minWidth: '200px',
-            marginBottom: '20px',
-            marginRight: '10px',
-            marginLeft: '10px',
-          }}
-        >
-          <Card.Img
-            style={{ objectFit: 'cover' }}
-            variant="top"
-            src={
-              resident.url_image != null && resident.url_image !== ''
-                ? resident.url_image
-                : require('../../assets/images/profile.jpg')
-            }
-            height="225px"
-          />
-          <Card.Body
+      {residents?.length === 0 ? (
+        <Alert variant="info" style={{ width: '100%' }}>
+          Nenhum item cadastrado
+        </Alert>
+      ) : (
+        residents?.map((resident) => (
+          <Card
+            key={resident.cpf}
             style={{
-              flex: 1,
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              justifyContent: 'space-between',
+              width: '18%',
+              minWidth: '200px',
+              marginBottom: '20px',
+              marginRight: '10px',
+              marginLeft: '10px',
             }}
           >
-            <div>
-              <Card.Title>{resident.name}</Card.Title>
-              <Card.Text>CPF: {formatCpf(resident.cpf)}</Card.Text>
-            </div>
-            <DivCardIcons>
-              {shouldCanDelete && (
+            <Card.Img
+              style={{ objectFit: 'cover' }}
+              variant="top"
+              src={
+                resident.url_image != null && resident.url_image !== ''
+                  ? resident.url_image
+                  : require('../../assets/images/profile.jpg')
+              }
+              height="225px"
+            />
+            <Card.Body
+              style={{
+                flex: 1,
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                justifyContent: 'space-between',
+              }}
+            >
+              <div>
+                <Card.Title>{resident.name}</Card.Title>
+                <Card.Text>CPF: {formatCpf(resident.cpf)}</Card.Text>
+              </div>
+              <DivCardIcons>
+                {shouldCanDelete && (
+                  <ActionButton
+                    onClick={() => {
+                      openModal(resident.cpf);
+                    }}
+                    leadingIcon={<FaTrash color="red" />}
+                  />
+                )}
                 <ActionButton
                   onClick={() => {
-                    openModal(resident.cpf);
+                    onEdit(resident.cpf);
                   }}
-                  leadingIcon={<FaTrash color="red" />}
+                  leadingIcon={<FaPen color="#2a1aa5" />}
                 />
-              )}
-              <ActionButton
-                onClick={() => {
-                  onEdit(resident.cpf);
-                }}
-                leadingIcon={<FaPen color="#2a1aa5" />}
-              />
-              <ActionButton
-                onClick={() => {
-                  onScreening(String(resident.id) ?? 0);
-                }}
-                leadingIcon={<FaBookOpen color="orange" />}
-              />
-            </DivCardIcons>
-          </Card.Body>
-          {renderDeleteModal()}
-        </Card>
-      ))}
+                <ActionButton
+                  onClick={() => {
+                    onScreening(String(resident.id) ?? 0);
+                  }}
+                  leadingIcon={<FaBookOpen color="orange" />}
+                />
+              </DivCardIcons>
+            </Card.Body>
+            {renderDeleteModal()}
+          </Card>
+        ))
+      )}
     </Div>
   );
 };
