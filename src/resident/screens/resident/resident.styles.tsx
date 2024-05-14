@@ -6,3 +6,11 @@ export const Wrapper = styled.div`
 `;
 
 export const Button = styled(BaseButton)``;
+
+export const AlignButtons = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+`;

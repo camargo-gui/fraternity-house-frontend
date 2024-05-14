@@ -100,4 +100,17 @@ export class ObjectionResidentService implements ResidentService {
       noop();
     }
   }
+
+  public async sendReport(httpClient: HttpClient): Promise<void> {
+    try {
+      await httpClient.request({
+        path: `${this.url}/report`,
+        method: 'post',
+      });
+      toast.success('Relatório enviado com sucesso');
+    } catch (e) {
+      toast.error('Erro ao enviar relatório');
+      console.log('Erro ao enviar relatorio: ', e);
+    }
+  }
 }
