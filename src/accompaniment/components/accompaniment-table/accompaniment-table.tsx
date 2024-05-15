@@ -65,6 +65,7 @@ export const AccompanimentTable = ({
             }}
             leadingIcon={<FaEye color="#002b5e" />}
             isLoading={isLoading && selectedResident.id === row.id}
+            variantSpinner="dark"
           />
         </div>
       ),

@@ -18,6 +18,7 @@ interface Props {
   isLoading?: boolean;
   isDisabled?: boolean;
   fontWeight?: string;
+  variantSpinner?: string;
   id?: string;
 }
 
@@ -26,6 +27,7 @@ export const Button = ({
   leadingIcon,
   isLoading,
   isDisabled,
+  variantSpinner,
   ...props
 }: Props): React.ReactElement => {
   return (
@@ -37,6 +39,7 @@ export const Button = ({
           size="sm"
           role="status"
           aria-hidden="true"
+          variant={variantSpinner ?? 'white'}
         />
       ) : (
         <>
