@@ -14,7 +14,7 @@ export const PersonalDataTab = ({
       <Row>
         <HalfColum>
           <FormInput
-            label="Nome do Pai"
+            label="Nome do Pai *"
             value={currentScreening.father_name}
             id="father_name"
             onChange={(e) => {
@@ -30,7 +30,7 @@ export const PersonalDataTab = ({
         </HalfColum>
         <HalfColum>
           <FormInput
-            label="Nome da Mãe"
+            label="Nome da Mãe *"
             id="mother_name"
             value={currentScreening.mother_name}
             onChange={(e) => {
@@ -48,7 +48,7 @@ export const PersonalDataTab = ({
       <Row>
         <MinorColumn>
           <FormInput
-            label="Religião"
+            label="Religião *"
             id="religion"
             value={currentScreening.religion}
             onChange={(e) => {
@@ -65,7 +65,7 @@ export const PersonalDataTab = ({
 
         <MinorColumn>
           <FormInput
-            label="É fumante?"
+            label="É fumante? *"
             id="religion"
             value={currentScreening.smoking ? 'true' : 'false'}
             onChange={(e) => {
@@ -91,7 +91,7 @@ export const PersonalDataTab = ({
         </MinorColumn>
         <MinorColumn>
           <FormInput
-            label="Data de entrada"
+            label="Data de entrada *"
             id="data"
             value={currentScreening.entry_date.toISOString().split('T')[0]}
             onChange={(e) => {
@@ -109,7 +109,7 @@ export const PersonalDataTab = ({
       <Row>
         <HalfColum>
           <FormInput
-            label="Plano de saúde"
+            label="Plano de saúde *"
             id="health_insurance"
             value={currentScreening.health_insurance}
             onChange={(e) => {
@@ -125,7 +125,7 @@ export const PersonalDataTab = ({
         </HalfColum>
         <HalfColum>
           <FormInput
-            label="Plano funerário"
+            label="Plano funerário *"
             id="funeral_insurance"
             value={currentScreening.funeral_insurance}
             onChange={(e) => {
@@ -143,7 +143,7 @@ export const PersonalDataTab = ({
       <Row>
         <MinorColumn>
           <FormInput
-            label="Quantidade de parentes"
+            label="Quantidade de parentes *"
             id="number_of_sibling"
             value={currentScreening.number_of_sibling.toString()}
             onChange={(e) => {
@@ -159,7 +159,7 @@ export const PersonalDataTab = ({
         </MinorColumn>
         <MinorColumn>
           <FormInput
-            label="Quantidade de filhos"
+            label="Quantidade de filhos *"
             id="number_of_children"
             value={currentScreening.number_of_children.toString()}
             onChange={(e) => {
@@ -175,7 +175,7 @@ export const PersonalDataTab = ({
         </MinorColumn>
         <MinorColumn>
           <FormInput
-            label="Quantidade de netos"
+            label="Quantidade de netos *"
             id="number_of_grandchildren"
             value={currentScreening.number_of_grandchildren.toString()}
             onChange={(e) => {
@@ -193,7 +193,7 @@ export const PersonalDataTab = ({
       <Row>
         <HalfColum>
           <FormInput
-            label="Fonte de renda"
+            label="Fonte de renda *"
             id="source_of_income"
             value={currentScreening.source_of_income}
             onChange={(e) => {
@@ -209,7 +209,7 @@ export const PersonalDataTab = ({
         </HalfColum>
         <HalfColum>
           <FormInput
-            label="Renda"
+            label="Renda *"
             id="income"
             value={currentScreening.income.toString()}
             onChange={(e) => {

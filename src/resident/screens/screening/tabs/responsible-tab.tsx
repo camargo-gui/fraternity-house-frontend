@@ -39,7 +39,7 @@ export const ResponsibleTab = ({
       <Row>
         <FullColumn>
           <FormInput
-            label="Nome do responsável"
+            label="Nome do responsável *"
             value={currentScreening.Responsible.name}
             id="responsible_name"
             onChange={(e) => {
@@ -60,7 +60,7 @@ export const ResponsibleTab = ({
       <Row>
         <MinorColumn>
           <FormInput
-            label="Telefone"
+            label="Telefone *"
             id="phone"
             mask="(00) 00000-0000"
             as={IMaskInput}
@@ -82,7 +82,7 @@ export const ResponsibleTab = ({
 
         <MinorColumn>
           <FormInput
-            label="Estado civil"
+            label="Estado civil *"
             id="civil_state"
             value={currentScreening.Responsible.civil_state}
             onChange={(e) => {
@@ -119,7 +119,7 @@ export const ResponsibleTab = ({
         </MinorColumn>
         <MinorColumn>
           <FormInput
-            label="Profissão"
+            label="Profissão *"
             id="profession"
             value={currentScreening.Responsible.profession}
             onChange={(e) => {
@@ -140,7 +140,7 @@ export const ResponsibleTab = ({
       <Row>
         <HalfColum>
           <FormInput
-            label="Parentesco"
+            label="Parentesco *"
             id="kinship"
             value={currentScreening.Responsible.kinship}
             onChange={(e) => {
@@ -159,7 +159,7 @@ export const ResponsibleTab = ({
         </HalfColum>
         <HalfColum>
           <FormInput
-            label="CEP"
+            label="CEP *"
             id="zip_code"
             mask="00000-000"
             as={IMaskInput}
@@ -182,7 +182,7 @@ export const ResponsibleTab = ({
       <Row>
         <HalfColum>
           <FormInput
-            label="Endereço"
+            label="Endereço *"
             id="address"
             value={currentScreening.Responsible.address}
             onChange={(e) => {
@@ -201,7 +201,7 @@ export const ResponsibleTab = ({
         </HalfColum>
         <HalfColum>
           <FormInput
-            label="Número"
+            label="Número *"
             id="number"
             value={currentScreening.Responsible.number}
             onChange={(e) => {
@@ -222,7 +222,7 @@ export const ResponsibleTab = ({
       <Row>
         <MinorColumn>
           <FormInput
-            label="Bairro"
+            label="Bairro *"
             id="neighborhood"
             value={currentScreening.Responsible.neighborhood}
             onChange={(e) => {
@@ -241,7 +241,7 @@ export const ResponsibleTab = ({
         </MinorColumn>
         <MinorColumn>
           <FormInput
-            label="Cidade"
+            label="Cidade *"
             id="city"
             value={currentScreening.Responsible.city}
             onChange={(e) => {
@@ -260,7 +260,7 @@ export const ResponsibleTab = ({
         </MinorColumn>
         <MinorColumn>
           <FormInput
-            label="Estado"
+            label="Estado *"
             id="state"
             value={currentScreening.Responsible.state}
             onChange={(e) => {
