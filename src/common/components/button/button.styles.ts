@@ -12,6 +12,7 @@ interface StyledButtonProps {
   width?: string;
   fontWeight?: string;
   isDisabled?: boolean;
+  noIconMargin?: boolean;
 }
 
 export const StyledButton = styled.button<StyledButtonProps>`
@@ -36,6 +37,6 @@ export const StyledButton = styled.button<StyledButtonProps>`
       hoverBackgroundColor ?? '#45a049'};
   }
   & > span:first-child {
-    margin-right: 0.5rem;
+    margin-right: ${({ noIconMargin }) => (noIconMargin ? '0' : '0.5rem')};
   }
 `;

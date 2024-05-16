@@ -20,6 +20,7 @@ interface Props {
   fontWeight?: string;
   variantSpinner?: string;
   id?: string;
+  noIconMargin?: boolean;
 }
 
 export const Button = ({

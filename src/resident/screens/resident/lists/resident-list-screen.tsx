@@ -49,6 +49,8 @@ export const ResidentList = ({
           leadingIcon={<FaEnvelope color="#FFF" />}
           isLoading={isSubmitting}
           hoverBackgroundColor="#034da8"
+          noIconMargin={true}
+          width="80px"
         />
       </AlignButtons>
     </>
