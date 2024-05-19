@@ -13,7 +13,7 @@ export class HttpClient {
   private readonly instance;
 
   public constructor() {
-    this.baseUrl = process.env.REACT_APP_API_URL ?? 'http://localhost:3344';
+    this.baseUrl = 'http://localhost:3344';
     this.instance = axios.create({
       baseURL: this.baseUrl,
       headers: {
