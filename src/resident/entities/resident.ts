@@ -5,6 +5,7 @@ export class Resident {
     public name: string,
     public contact_phone: string,
     public birthday: Date,
+    public has_screening: boolean,
     public id?: number,
     public url_image?: string,
   ) {}

@@ -116,7 +116,11 @@ export const CardListItem = ({
                   onClick={() => {
                     onScreening(String(resident.id) ?? 0);
                   }}
-                  leadingIcon={<FaBookOpen color="orange" />}
+                  leadingIcon={
+                    <FaBookOpen
+                      color={resident.has_screening ? 'green' : 'orange'}
+                    />
+                  }
                 />
               </DivCardIcons>
             </Card.Body>

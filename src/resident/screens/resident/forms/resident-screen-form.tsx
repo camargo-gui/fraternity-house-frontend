@@ -22,6 +22,7 @@ const initialResidentState: Resident = {
   contact_phone: '',
   birthday: new Date(),
   url_image: '',
+  has_screening: false,
 };
 
 export const ResidentScreenForm = ({
