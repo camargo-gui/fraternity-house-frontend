@@ -13,12 +13,16 @@ export class NotificationServiceObjection implements NotificationService {
       wasRead: boolean;
     }>
   > {
-    const response = await httpClient.request({
-      path: '/notifications',
-      method: 'get',
-    });
+    try {
+      const response = await httpClient.request({
+        path: '/notifications',
+        method: 'get',
+      });
 
-    return response?.getData(NotificationArrayResponse).toDomain() ?? [];
+      return response?.getData(NotificationArrayResponse).toDomain() ?? [];
+    } catch (error) {
+      return [];
+    }
   }
 
   public async markNotificationsAsRead(httpClient: HttpClient): Promise<void> {

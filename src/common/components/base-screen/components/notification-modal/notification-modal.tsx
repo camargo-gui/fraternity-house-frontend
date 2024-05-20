@@ -26,6 +26,13 @@ export const NotificationModal = ({
     wasRead: boolean;
   }>;
 }): ReactElement => {
+  const incrementDate = (date: string): string => {
+    const [day, month, year] = date.split('/');
+    const newDate = new Date(`${month}/${day}/${year}`);
+    newDate.setDate(newDate.getDate() + 1);
+    return newDate.toLocaleDateString();
+  };
+
   return (
     <ModalContainer isOpen={isModalOpen}>
       <ModalContent>
@@ -47,7 +54,7 @@ export const NotificationModal = ({
                   Horário: {notification.time}
                 </NotificationText>
                 <NotificationDate>
-                  Data final: {notification.endDate}
+                  Data final: {incrementDate(notification.endDate)}
                 </NotificationDate>
               </NotificationItem>
             ))

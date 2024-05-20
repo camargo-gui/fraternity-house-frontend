@@ -11,6 +11,8 @@ import { NotificationModal } from '../notification-modal/notification-modal';
 import { NotificationServiceObjection } from '../../services/objecion/notification-service-objection';
 import { ApplicationContext } from '../../../../../application-context';
 
+const THIRTY_MINUTES = 1800000;
+
 export const ScreenTitle = ({
   screenTitle,
 }: {
@@ -45,12 +47,13 @@ export const ScreenTitle = ({
       httpClient,
     );
     setHasNewNotifications(false);
+    void fetchNotifications();
   };
 
   useEffect(() => {
     void fetchNotifications();
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    const intervalId = setInterval(fetchNotifications, 1800000);
+    const intervalId = setInterval(fetchNotifications, THIRTY_MINUTES);
 
     return () => {
       clearInterval(intervalId);
