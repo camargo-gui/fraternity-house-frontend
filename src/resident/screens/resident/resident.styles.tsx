@@ -14,3 +14,9 @@ export const AlignButtons = styled.div`
   flex-direction: row;
   align-items: center;
 `;
+
+export const SearchRow = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+`;

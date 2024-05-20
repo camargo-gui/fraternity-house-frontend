@@ -132,6 +132,7 @@ export const FormInput = ({
         height: '50px',
         marginBottom: style?.marginBottom ?? '30px',
         width: style?.width,
+        marginLeft: style?.marginLeft,
       }}
     >
       <Form.Control
