@@ -18,4 +18,5 @@ export interface ResidentService {
     imageFile: File | null,
   ) => Promise<void>;
   deleteResident: (httpClient: HttpClient, cpf: string) => Promise<void>;
+  undeleteResident: (httpClient: HttpClient, cpf: string) => Promise<void>;
 }

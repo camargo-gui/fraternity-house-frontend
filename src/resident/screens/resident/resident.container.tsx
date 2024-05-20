@@ -7,6 +7,9 @@ import { ResidentScreenForm } from './forms/resident-screen-form';
 import { ResidentList } from './lists/resident-list-screen';
 import LoadingSpinner from '../../../common/components/loading-spinner/loading-spinner';
 import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
+import { ConfirmationModal } from '../../../common/components/confirmation-modal/confirmation-modal';
+import { noop } from 'lodash';
 
 enum Screen {
   Register = 'Register',
@@ -26,16 +29,42 @@ export const ResidentContainer = (): ReactElement => {
   const { residents, refetch, isLoading } = useResident({ httpClient });
   const residentService = new ObjectionResidentService();
 
+  const [showUndeleteModal, setShowUndeleteModal] = useState<boolean>(false);
+  const [residentToUndelete, setResidentToUndelete] =
+    useState<Resident | null>();
+
   async function handleSubmit(resident: Resident): Promise<void> {
     setIsSubmitting(true);
     if (isEditing && editingResident !== null) {
       await residentService.updateResident(httpClient, resident, selectedFile);
       void refetch();
     } else {
-      await residentService.postResident(httpClient, resident, selectedFile);
-      void refetch();
+      try {
+        await residentService.postResident(httpClient, resident, selectedFile);
+        void refetch();
+      } catch (error) {
+        console.log(error);
+        if (error instanceof AxiosError && error.response?.status === 409) {
+          setResidentToUndelete(
+            error.response.data.resident as Resident | null,
+          );
+          setShowUndeleteModal(true);
+        }
+      }
     }
     setIsSubmitting(false);
+  }
+
+  async function onUndelete(): Promise<void> {
+    if (residentToUndelete) {
+      await residentService.undeleteResident(
+        httpClient,
+        residentToUndelete.cpf,
+      );
+      void refetch();
+      setShowUndeleteModal(false);
+      setScreen(Screen.List);
+    }
   }
 
   function onEdit(cpf: string): void {
@@ -90,15 +119,30 @@ export const ResidentContainer = (): ReactElement => {
   }
 
   return screen === Screen.Register ? (
-    <ResidentScreenForm
-      changeScreen={changeScreen}
-      handleSubmit={handleSubmit}
-      isSubmitting={isSubmitting}
-      editingResident={editingResident}
-      isEditing={isEditing}
-      setSelectedFile={setSelectedFile}
-      setEditingResident={setEditingResident}
-    />
+    <>
+      <ResidentScreenForm
+        changeScreen={changeScreen}
+        handleSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
+        editingResident={editingResident}
+        isEditing={isEditing}
+        setSelectedFile={setSelectedFile}
+        setEditingResident={setEditingResident}
+      />
+      <ConfirmationModal
+        title="Morador já cadastrado"
+        body={`Morador: ${residentToUndelete?.name} CPF: ${residentToUndelete?.cpf} já cadastrado no sistema.\n  Deseja reativá-lo?`}
+        show={showUndeleteModal}
+        isLoading={isSubmitting}
+        isConfirmation={true}
+        onConfirm={() => {
+          onUndelete().catch(noop);
+        }}
+        onHide={() => {
+          setShowUndeleteModal(false);
+        }}
+      />
+    </>
   ) : (
     <ResidentList
       changeScreen={changeScreen}

@@ -43,27 +43,23 @@ export class ObjectionResidentService implements ResidentService {
     formData: Resident,
     imageFile: File | null,
   ): Promise<void> {
-    try {
-      await httpClient.request({
-        path: this.url,
-        method: 'post',
-        data: {
-          name: formData.name,
-          cpf: formatSpecialCharacters(formData.cpf),
-          rg: formData.rg,
-          contact_phone: formatSpecialCharacters(formData.contact_phone),
-          birthday: formData.birthday,
-          image: imageFile,
-        },
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+    await httpClient.request({
+      path: this.url,
+      method: 'post',
+      data: {
+        name: formData.name,
+        cpf: formatSpecialCharacters(formData.cpf),
+        rg: formData.rg,
+        contact_phone: formatSpecialCharacters(formData.contact_phone),
+        birthday: formData.birthday,
+        image: imageFile,
+      },
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
 
-      toast.success('Residente cadastrado com sucesso');
-    } catch (e) {
-      noop();
-    }
+    toast.success('Residente cadastrado com sucesso');
   }
 
   public async updateResident(
@@ -105,6 +101,22 @@ export class ObjectionResidentService implements ResidentService {
         data: { cpf },
       });
       toast.success('Residente deletado com sucesso');
+    } catch (e) {
+      noop();
+    }
+  }
+
+  public async undeleteResident(
+    httpClient: HttpClient,
+    cpf: string,
+  ): Promise<void> {
+    try {
+      await httpClient.request({
+        path: `${this.url}/restore`,
+        method: 'put',
+        data: { cpf },
+      });
+      toast.success('Residente reativado com sucesso');
     } catch (e) {
       noop();
     }

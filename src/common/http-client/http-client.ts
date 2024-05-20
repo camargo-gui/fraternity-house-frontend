@@ -1,4 +1,4 @@
-import axios, { type AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import { type HttpClientRequest } from './http-client-request';
 import { HttpClientResponse } from './http-client-response';
@@ -40,13 +40,16 @@ export class HttpClient {
       });
       return new HttpClientResponse(response.status, response.data);
     } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(
-        (axiosError.response?.data as { message: string[] })?.message
-          .map((message: string) => message)
-          .join('\n'),
-      );
-      throw error;
+      if (error instanceof AxiosError) {
+        if (error.response?.data.message) {
+          toast.error(
+            (error.response?.data as { message: string[] })?.message
+              .map((message: string) => message)
+              .join('\n'),
+          );
+        }
+        throw error;
+      }
     }
   }
 }

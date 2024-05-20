@@ -8,6 +8,7 @@ interface ConfirmationModalProps {
   title: string;
   body: string;
   isLoading?: boolean;
+  isConfirmation?: boolean;
 }
 
 export const ConfirmationModal = ({
@@ -17,7 +18,16 @@ export const ConfirmationModal = ({
   title,
   body,
   isLoading,
+  isConfirmation,
 }: ConfirmationModalProps): ReactElement => {
+  const handleButtonProps = (): { variant: string; content: ReactElement } => {
+    const variant = isConfirmation ? 'success' : 'danger';
+    const text = isConfirmation ? 'Confirmar' : 'Excluir';
+
+    const content = isLoading ? <Spinner /> : <>{text}</>;
+
+    return { variant, content };
+  };
   return (
     <Modal show={show} onHide={onHide}>
       <Modal.Header closeButton>
@@ -28,8 +38,8 @@ export const ConfirmationModal = ({
         <Button variant="secondary" onClick={onHide}>
           {'Cancelar'}
         </Button>
-        <Button variant="danger" onClick={onConfirm}>
-          {isLoading ?? false ? <Spinner /> : 'Excluir'}
+        <Button variant={handleButtonProps().variant} onClick={onConfirm}>
+          {handleButtonProps().content}
         </Button>
       </Modal.Footer>
     </Modal>
