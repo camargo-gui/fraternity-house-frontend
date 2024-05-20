@@ -47,7 +47,6 @@ export const ScreenTitle = ({
       httpClient,
     );
     setHasNewNotifications(false);
-    void fetchNotifications();
   };
 
   useEffect(() => {
@@ -60,9 +59,14 @@ export const ScreenTitle = ({
     };
   }, [httpClient]);
 
-  const handleBellClick = (): void => {
-    setIsModalOpen(!isModalOpen);
+  const handleOpenModal = (): void => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = (): void => {
+    setIsModalOpen(false);
     void markAsRead();
+    void fetchNotifications();
   };
 
   return (
@@ -70,14 +74,14 @@ export const ScreenTitle = ({
       <ScreenTitleText>{screenTitle}</ScreenTitleText>
       <UserSection>
         <UserName>Olá, {localStorage.getItem('name')?.split(' ')[0]}</UserName>
-        <BellIconContainer onClick={handleBellClick}>
+        <BellIconContainer onClick={handleOpenModal}>
           <FaBell />
           {hasNewNotifications && <span />}
         </BellIconContainer>
       </UserSection>
       {isModalOpen && (
         <NotificationModal
-          onClose={handleBellClick}
+          onClose={handleCloseModal}
           isModalOpen={isModalOpen}
           notifications={notifications}
         />
