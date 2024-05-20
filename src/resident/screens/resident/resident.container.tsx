@@ -29,7 +29,7 @@ export const ResidentContainer = (): ReactElement => {
   async function handleSubmit(resident: Resident): Promise<void> {
     setIsSubmitting(true);
     if (isEditing && editingResident !== null) {
-      await residentService.updateResident(httpClient, resident);
+      await residentService.updateResident(httpClient, resident, selectedFile);
       void refetch();
     } else {
       await residentService.postResident(httpClient, resident, selectedFile);
@@ -97,6 +97,7 @@ export const ResidentContainer = (): ReactElement => {
       editingResident={editingResident}
       isEditing={isEditing}
       setSelectedFile={setSelectedFile}
+      setEditingResident={setEditingResident}
     />
   ) : (
     <ResidentList

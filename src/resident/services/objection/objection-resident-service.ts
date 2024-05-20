@@ -69,14 +69,23 @@ export class ObjectionResidentService implements ResidentService {
   public async updateResident(
     httpClient: HttpClient,
     resident: Resident,
+    imageFile: File | null,
   ): Promise<void> {
     try {
+      console.log('resident', resident);
       await httpClient.request({
         path: this.url,
         method: 'put',
         data: {
-          ...resident,
+          name: resident.name,
           cpf: formatSpecialCharacters(resident.cpf),
+          rg: resident.rg,
+          contact_phone: formatSpecialCharacters(resident.contact_phone),
+          birthday: resident.birthday,
+          image: imageFile,
+        },
+        headers: {
+          'Content-Type': 'multipart/form-data',
         },
       });
       toast.success('Residente atualizado com sucesso');

@@ -12,6 +12,7 @@ interface Props {
   editingResident: Resident | null;
   isEditing: boolean;
   setSelectedFile: (file: File | null) => void;
+  setEditingResident: (resident: Resident | null) => void;
 }
 
 const initialResidentState: Resident = {
@@ -30,6 +31,7 @@ export const ResidentScreenForm = ({
   editingResident,
   isEditing,
   setSelectedFile,
+  setEditingResident,
 }: Props): ReactElement => {
   const [resident, setResident] = useState<Resident>(
     editingResident ?? initialResidentState,
@@ -37,7 +39,8 @@ export const ResidentScreenForm = ({
   const [cpfError, setCpfError] = useState<string | undefined>(undefined);
 
   function clearFields(): void {
-    setResident(initialResidentState);
+    if (isEditing) setEditingResident(initialResidentState);
+    else setResident(initialResidentState);
   }
 
   const onClick = async (): Promise<void> => {

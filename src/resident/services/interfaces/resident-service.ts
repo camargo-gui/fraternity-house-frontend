@@ -12,6 +12,10 @@ export interface ResidentService {
     resident: Resident,
     imageFile: File | null,
   ) => Promise<void>;
-  updateResident: (httpClient: HttpClient, resident: Resident) => Promise<void>;
+  updateResident: (
+    httpClient: HttpClient,
+    resident: Resident,
+    imageFile: File | null,
+  ) => Promise<void>;
   deleteResident: (httpClient: HttpClient, cpf: string) => Promise<void>;
 }
