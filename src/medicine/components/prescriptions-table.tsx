@@ -14,16 +14,6 @@ interface Props {
   refetch: () => Promise<void>;
 }
 
-function formatDate(date: string): string {
-  const [day, month, year] = date.split('/');
-  return `${year}-${month}-${day}`;
-}
-
-const formatDateForInput = (dateString: string): string => {
-  const date = formatDate(dateString);
-  return new Date(date).toISOString().split('T')[0];
-};
-
 export const PrescriptionsTable = ({
   prescriptions,
   setPrescriptions,
@@ -89,11 +79,11 @@ export const PrescriptionsTable = ({
       try {
         await medicationSheetService.updatePrescription(httpClient, {
           dosage: editedPrescription.dosage,
-          endDate: formatDate(editedPrescription.endDate),
+          endDate: editedPrescription.endDate,
           firstTime: editedPrescription.firstTime,
           frequency: editedPrescription.frequency,
           id: editedPrescription.id,
-          startDate: formatDate(editedPrescription.startDate),
+          startDate: editedPrescription.startDate,
         });
 
         const updatedPrescriptions = prescriptions.map((prescription) => {
@@ -197,7 +187,7 @@ export const PrescriptionsTable = ({
       render: (row: PrescriptionsInterface) =>
         editIndex === row.id ? (
           <FormInput
-            value={formatDateForInput(editedPrescription?.startDate ?? '')}
+            value={editedPrescription?.startDate}
             onChange={(e) => {
               const target = e.target as HTMLInputElement;
               handleChange('startDate', target.value);
@@ -207,7 +197,7 @@ export const PrescriptionsTable = ({
             minDate={new Date().toISOString().split('T')[0]}
           />
         ) : (
-          <>{row.startDate.toString()}</>
+          <>{`${row?.startDate.split('-')[2]}/${row?.startDate.split('-')[1]}/${row?.startDate.split('-')[0]}`}</>
         ),
     },
     {
@@ -216,7 +206,7 @@ export const PrescriptionsTable = ({
       render: (row: PrescriptionsInterface) =>
         editIndex === row.id ? (
           <FormInput
-            value={formatDateForInput(editedPrescription?.endDate ?? '')}
+            value={editedPrescription?.endDate}
             onChange={(e) => {
               const target = e.target as HTMLInputElement;
               handleChange('endDate', target.value);
@@ -226,7 +216,7 @@ export const PrescriptionsTable = ({
             minDate={new Date().toISOString().split('T')[0]}
           />
         ) : (
-          <>{row.endDate.toString()}</>
+          <>{`${row?.endDate.split('-')[2]}/${row?.endDate.split('-')[1]}/${row?.endDate.split('-')[0]}`}</>
         ),
     },
     {

@@ -42,13 +42,11 @@ export const MedicationSheet = ({
         const endDate = new Date(prescription.endDate);
         const startDate = new Date(prescription.startDate);
 
-        startDate.setDate(startDate.getDate() + 1);
-
         return {
           ...prescription,
           medicationSheetId: medicationSheetBody.id,
-          endDate: endDate.toLocaleDateString(),
-          startDate: startDate.toLocaleDateString(),
+          endDate: endDate.toISOString().split('T')[0],
+          startDate: startDate.toISOString().split('T')[0],
         };
       },
     );
