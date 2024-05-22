@@ -68,7 +68,6 @@ export class ObjectionResidentService implements ResidentService {
     imageFile: File | null,
   ): Promise<void> {
     try {
-      console.log('resident', resident);
       await httpClient.request({
         path: this.url,
         method: 'put',
@@ -131,7 +130,6 @@ export class ObjectionResidentService implements ResidentService {
       toast.success('Relatório enviado com sucesso');
     } catch (e) {
       toast.error('Erro ao enviar relatório');
-      console.log('Erro ao enviar relatorio: ', e);
     }
   }
 }

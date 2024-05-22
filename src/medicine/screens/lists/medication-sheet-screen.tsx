@@ -8,6 +8,7 @@ import {
 import { ViewModal } from '../../../common/components/view-modal/view-modal';
 import { PrescriptionsTable } from '../../components/prescriptions-table';
 import { MedicationFilter } from '../medication-filter/medication-filter';
+import { type Employee } from '../../../employee/entities/employee';
 
 interface Props {
   changeScreen: () => void;
@@ -15,6 +16,7 @@ interface Props {
   medicationSheets: MedicationSheetBody[];
   refetch: () => Promise<void>;
   goToMedicationSheetForm: (id: number) => void;
+  employees: Employee[];
 }
 
 export const MedicationSheet = ({
@@ -23,6 +25,7 @@ export const MedicationSheet = ({
   medicationSheets,
   refetch,
   goToMedicationSheetForm,
+  employees,
 }: Props): ReactElement => {
   const [prescriptions, setPrescriptions] = useState<PrescriptionsInterface[]>(
     [],
@@ -67,6 +70,7 @@ export const MedicationSheet = ({
           handleShowPrescriptions={handleShowPrescriptions}
           refetch={refetch}
           goToMedicationSheetForm={goToMedicationSheetForm}
+          employees={employees}
         />
       </div>
 

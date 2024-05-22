@@ -43,7 +43,6 @@ export const ResidentContainer = (): ReactElement => {
         await residentService.postResident(httpClient, resident, selectedFile);
         void refetch();
       } catch (error) {
-        console.log(error);
         if (error instanceof AxiosError && error.response?.status === 409) {
           setResidentToUndelete(
             error.response.data.resident as Resident | null,
@@ -90,13 +89,9 @@ export const ResidentContainer = (): ReactElement => {
   }
 
   async function handleReport(): Promise<void> {
-    try {
-      setIsSubmitting(true);
-      await residentService.sendReport(httpClient);
-      setIsSubmitting(false);
-    } catch (e) {
-      console.log(e);
-    }
+    setIsSubmitting(true);
+    await residentService.sendReport(httpClient);
+    setIsSubmitting(false);
   }
 
   const onScreening = (id: string): void => {

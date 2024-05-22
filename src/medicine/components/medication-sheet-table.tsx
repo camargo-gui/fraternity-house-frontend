@@ -6,12 +6,14 @@ import { TransparentButton } from './medicine-table.styles';
 import { FormInput } from '../../common/components/form-input/form-input';
 import { ApplicationContext } from '../../application-context';
 import { ObjectionMedicationSheetService } from '../services/objection/objection-medication-sheet-service';
+import { type Employee } from '../../employee/entities/employee';
 
 interface Props {
   medicationSheets: MedicationSheetBody[];
   handleShowPrescriptions: (sheet: MedicationSheetBody) => void;
   refetch: () => Promise<void>;
   goToMedicationSheetForm: (residentId: number) => void;
+  employees: Employee[];
 }
 
 export const MedicationSheetTable = ({
@@ -19,31 +21,46 @@ export const MedicationSheetTable = ({
   handleShowPrescriptions,
   refetch,
   goToMedicationSheetForm,
+  employees,
 }: Props): ReactElement => {
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editedObservation, setEditedObservation] = useState<string>('');
+  const [editedResponsible, setEditedResponsible] = useState<string>('');
   const { httpClient } = useContext(ApplicationContext);
   const medicationSheetService = new ObjectionMedicationSheetService();
 
-  const handleEdit = (index: number, observations: string): void => {
+  const employeesOptions = employees.map((e) => ({
+    value: e.id ?? '',
+    label: e.name,
+  }));
+
+  const handleEdit = (
+    index: number,
+    observations: string,
+    responsibleId: string,
+  ): void => {
     setEditIndex(index);
     setEditedObservation(observations);
+    setEditedResponsible(responsibleId);
   };
 
   const handleCancel = (): void => {
     setEditIndex(null);
     setEditedObservation('');
+    setEditedResponsible('');
   };
 
   const handleSave = async (index: number): Promise<void> => {
     await medicationSheetService.updateMedicationSheet(httpClient, {
       id: index,
       observations: editedObservation,
+      responsibleId: Number(editedResponsible),
     });
     await refetch();
 
     setEditIndex(null);
     setEditedObservation('');
+    setEditedResponsible('');
     handleCancel();
   };
 
@@ -59,6 +76,21 @@ export const MedicationSheetTable = ({
     {
       header: 'Responsável pela ficha',
       accessor: 'Employee.name',
+      render: (row: MedicationSheetBody) =>
+        editIndex === row.id ? (
+          <FormInput
+            value={editedResponsible}
+            id="edit-responsible"
+            type="select"
+            onChange={(e) => {
+              const target = e.target as HTMLInputElement;
+              setEditedResponsible(target.value);
+            }}
+            options={employeesOptions}
+          />
+        ) : (
+          row.Employee.name
+        ),
     },
     {
       header: 'Observações',
@@ -111,8 +143,8 @@ export const MedicationSheetTable = ({
     {
       header: 'Editar Ficha',
       accessor: 'actions',
-      render: (row: MedicationSheetBody) =>
-        row.id === editIndex ? (
+      render: (row: MedicationSheetBody) => {
+        return row.id === editIndex ? (
           <div>
             <TransparentButton
               // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -129,11 +161,12 @@ export const MedicationSheetTable = ({
         ) : (
           <TransparentButton
             onClick={() => {
-              handleEdit(row.id, row.observations);
+              handleEdit(row.id, row.observations, row.Employee.id ?? '');
             }}
             leadingIcon={<FaEdit color="#55533a" />}
           />
-        ),
+        );
+      },
     },
   ];
 

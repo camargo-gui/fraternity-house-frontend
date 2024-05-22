@@ -41,7 +41,6 @@ const FilterableSelect: React.FC<FilterableSelectProps> = ({
 
   const handleOptionClick = (option: Option): void => {
     onChange(option);
-    console.log(option);
     setInputValue(options.find((o) => o.value === option.value)?.label ?? '');
     setShowOptions(false);
   };

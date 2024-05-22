@@ -9,7 +9,11 @@ export interface MedicationSheetService {
   ) => Promise<void>;
   updateMedicationSheet: (
     httpClient: HttpClient,
-    medicationSheet: { id: number; observations: string },
+    medicationSheet: {
+      id: number;
+      observations: string;
+      responsibleId: number;
+    },
   ) => Promise<void>;
   getAllPrescriptions: (
     httpClient: HttpClient,

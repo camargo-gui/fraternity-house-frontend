@@ -64,7 +64,6 @@ export const ResidentScreeniing = (): ReactElement => {
       toast.success('Salvo com sucesso');
       navigate('/fichas');
     } catch (error) {
-      console.log(error);
       noop();
     }
     setIsLoading(false);

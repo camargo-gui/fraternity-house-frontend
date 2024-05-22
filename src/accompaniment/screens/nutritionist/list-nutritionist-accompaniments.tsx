@@ -25,7 +25,6 @@ export const ListNutritionistAccompaniments = (): ReactElement => {
 
   const handleNavigate = useCallback((id: string) => {
     const route = `/NUTRITIONIST/formulario/${id}`;
-    console.log('route:', route);
     navigate(route);
   }, []);
 

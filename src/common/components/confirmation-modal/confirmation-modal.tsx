@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
-import { Button, Modal, Spinner } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
+import LoadingSpinner from '../loading-spinner/loading-spinner';
 
 interface ConfirmationModalProps {
   show: boolean;
@@ -24,7 +25,11 @@ export const ConfirmationModal = ({
     const variant = isConfirmation ? 'success' : 'danger';
     const text = isConfirmation ? 'Confirmar' : 'Excluir';
 
-    const content = isLoading ? <Spinner /> : <>{text}</>;
+    const content = isLoading ? (
+      <LoadingSpinner style={{ width: '25px', height: '25px' }} />
+    ) : (
+      <>{text}</>
+    );
 
     return { variant, content };
   };

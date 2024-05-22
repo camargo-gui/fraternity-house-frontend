@@ -1,25 +1,25 @@
 import { useContext, useEffect, useState, type ReactElement } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { ApplicationContext } from '../../application-context';
+import { type ScreenComponentProps } from '../../common/components/base-screen/screen-enum';
 import { ConfirmationModal } from '../../common/components/confirmation-modal/confirmation-modal';
+import { type Resident } from '../../resident/entities/resident';
+import { MedicationSheet as MedicationSheetClass } from '../entities/medication-sheet';
 import type { Medicine } from '../entities/medicine';
+import { Prescription } from '../entities/prescription';
 import { useMedicines } from '../hooks/use-medicine';
+import { ObjectionMedicationSheetService } from '../services/objection/objection-medication-sheet-service';
 import { ObjectionMedicineService } from '../services/objection/objection-medicine-service';
 import { MedicationSheetFormScreen } from './forms/medication-sheet-form/medication-sheet-form-screen';
-import { MedicineFormScreen } from './forms/medicine-form-screen';
-import { MedicineList } from './lists/medicine-list-screen';
-import { GoBackButton, MedicineWrapper } from './medicine.styles';
-import { type ScreenComponentProps } from '../../common/components/base-screen/screen-enum';
-import { useResident } from '../../resident/hooks/use-resident';
 import {
   EMPTY_RECORD,
   type MedicationRecord,
 } from './forms/medication-sheet-form/medication-sheet-table/medication-sheet-table';
-import { Prescription } from '../entities/prescription';
-import { ObjectionMedicationSheetService } from '../services/objection/objection-medication-sheet-service';
-import { MedicationSheet as MedicationSheetClass } from '../entities/medication-sheet';
+import { MedicineFormScreen } from './forms/medicine-form-screen';
 import { MedicationSheet } from './lists/medication-sheet-screen';
-import { type Resident } from '../../resident/entities/resident';
+import { MedicineList } from './lists/medicine-list-screen';
+import { GoBackButton, MedicineWrapper } from './medicine.styles';
+import { useResident } from '../../resident/hooks/use-resident';
 
 enum Screen {
   MedicineRegister = 'MedicineRegister',
@@ -61,6 +61,7 @@ export const MedicineContainer = ({
     pharmacologicalNames,
     pharmacologicalForms,
     medicationSheets,
+    employees,
     refetch,
   } = useMedicines();
   const { residents } = useResident({ httpClient });
@@ -208,6 +209,7 @@ export const MedicineContainer = ({
               setSelectedResidentId(residentId);
               setScreen(Screen.MedicationSheetRegister);
             }}
+            employees={employees}
           />
         );
       case Screen.MedicationSheetRegister:

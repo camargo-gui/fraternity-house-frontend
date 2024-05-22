@@ -12,12 +12,15 @@ import { type PharmacologicalForm } from '../entities/pharmacological-form';
 import { ObjectionPharmacologicalFormService } from '../services/objection/objection-pharmacological-form-service';
 import { type MedicationSheetBody } from '../entities/medication-sheet-body';
 import { ObjectionMedicationSheetService } from '../services/objection/objection-medication-sheet-service';
+import { ObjectionEmployeeService } from '../../employee/services/objection/objection-employee-service';
+import { type Employee } from '../../employee/entities/employee';
 
 export const useMedicines = (): {
   medicines: Medicine[];
   pharmacologicalNames: PharmacologicalName[];
   pharmacologicalForms: PharmacologicalForm[];
   medicationSheets: MedicationSheetBody[];
+  employees: Employee[];
   refetch: () => Promise<void>;
 } => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
@@ -30,6 +33,7 @@ export const useMedicines = (): {
   const [medicationSheets, setMedicineSheets] = useState<MedicationSheetBody[]>(
     [],
   );
+  const [employees, setEmployees] = useState<Employee[]>([]);
 
   const { httpClient } = useContext(ApplicationContext);
   const dispatch: AppDispatch = useDispatch();
@@ -67,6 +71,16 @@ export const useMedicines = (): {
       setMedicineSheets(medicationPrescriptions.medicationSheets);
   }, [httpClient]);
 
+  const fetchEmployees = useCallback(async () => {
+    const response = await new ObjectionEmployeeService().getEmployees(
+      httpClient,
+    );
+
+    if (response !== undefined) {
+      setEmployees(response);
+    }
+  }, [httpClient]);
+
   async function getAllMedicinesInformation(): Promise<void> {
     dispatch(setLoading(true));
 
@@ -75,6 +89,7 @@ export const useMedicines = (): {
       fetchPharmacologicalForms().catch(noop),
       fetchPrescriptions().catch(noop),
       fetchPharmacologicalNames().catch(noop),
+      fetchEmployees().catch(noop),
     ]);
 
     dispatch(setLoading(false));
@@ -90,6 +105,7 @@ export const useMedicines = (): {
     pharmacologicalNames,
     pharmacologicalForms,
     medicationSheets,
+    employees,
     refetch: getAllMedicinesInformation,
   };
 };

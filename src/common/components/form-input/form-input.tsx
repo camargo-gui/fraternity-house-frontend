@@ -182,7 +182,6 @@ export const FormInput = ({
 
   const renderMoneyInput = (): ReactElement => {
     const format = (value: number): string => {
-      console.log(value);
       return value.toLocaleString('pt-BR', {
         style: 'currency',
         currency: 'BRL',

@@ -43,7 +43,11 @@ export class ObjectionMedicationSheetService implements MedicationSheetService {
 
   public async updateMedicationSheet(
     httpClient: HttpClient,
-    medicationSheet: { id: number; observations: string },
+    medicationSheet: {
+      id: number;
+      observations: string;
+      responsibleId: number;
+    },
   ): Promise<void> {
     try {
       await httpClient.request({
@@ -52,6 +56,7 @@ export class ObjectionMedicationSheetService implements MedicationSheetService {
         data: {
           id: medicationSheet.id,
           observations: medicationSheet.observations,
+          responsibleId: medicationSheet.responsibleId,
         },
       });
       toast.success('Ficha de medicação atualizada com sucesso');
