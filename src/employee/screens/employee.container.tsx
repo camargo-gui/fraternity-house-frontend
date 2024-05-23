@@ -18,6 +18,8 @@ import { setLoading } from '../../redux/slices/loadingSlice';
 import { cpf } from 'cpf-cnpj-validator';
 import { toast } from 'react-toastify';
 import { formatSpecialCharacters } from '../../utils/format-special-characters';
+import { AxiosError } from 'axios';
+import { ConfirmationModal } from '../../common/components/confirmation-modal/confirmation-modal';
 
 type Screen = 'EmployeeRegister' | 'EmployeeList';
 
@@ -29,6 +31,12 @@ export const EmployeeContainer = (): ReactElement => {
   const [isEditting, setIsEditting] = useState<boolean>(false);
   const [employeeToEdit, setEmployeeToEdit] = useState<Employee | undefined>();
 
+  const [showUndeleteModal, setShowUndeleteModal] = useState<boolean>(false);
+  const [employeeToUndelete, setEmployeeToUndelete] = useState<Employee | null>(
+    null,
+  );
+
+  console.log(showUndeleteModal);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { httpClient } = useContext(ApplicationContext);
   const dispatch = useDispatch();
@@ -64,17 +72,39 @@ export const EmployeeContainer = (): ReactElement => {
 
   const onSubmit = async (employee: Employee): Promise<void> => {
     setIsSubmitting(true);
-
     if (cpf.isValid(employee.document)) {
-      const response = await new ObjectionEmployeeService().registerEmployee(
-        httpClient,
-        employee,
-      );
-      if (response) changeScreen();
-    } else {
-      toast.error('CPF inválido');
+      try {
+        await new ObjectionEmployeeService().registerEmployee(
+          httpClient,
+          employee,
+        );
+        changeScreen();
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          if (error.response?.status === 409) {
+            setEmployeeToUndelete(
+              error.response.data.employee as Employee | null,
+            );
+            setShowUndeleteModal(true);
+          }
+        } else {
+          toast.error('CPF inválido');
+        }
+      }
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
+  };
+
+  const onUndelete = async (): Promise<void> => {
+    if (employeeToUndelete) {
+      await new ObjectionEmployeeService().undeleteEmployee(
+        httpClient,
+        employeeToUndelete.document,
+      );
+      await fetchEmployees();
+      setShowUndeleteModal(false);
+      setScreen('EmployeeList');
+    }
   };
 
   const onEditPress = (document: string): void => {
@@ -122,14 +152,30 @@ export const EmployeeContainer = (): ReactElement => {
   }
 
   return (
-    <EmployeeScreen
-      roles={roles}
-      isSubmitting={isSubmitting}
-      employeeToEdit={employeeToEdit}
-      isEditting={isEditting}
-      onSubmit={onSubmit}
-      onEdit={onEdit}
-      changeScreen={changeScreen}
-    />
+    <>
+      <EmployeeScreen
+        roles={roles}
+        isSubmitting={isSubmitting}
+        employeeToEdit={employeeToEdit}
+        isEditting={isEditting}
+        onSubmit={onSubmit}
+        onEdit={onEdit}
+        changeScreen={changeScreen}
+      />
+      <ConfirmationModal
+        title="Funcionário já cadastrado"
+        body={`Morador: ${employeeToUndelete?.name} CPF: ${employeeToUndelete?.document} 
+            já cadastrado no sistema.\n  Deseja reativá-lo?`}
+        show={showUndeleteModal}
+        isLoading={isSubmitting}
+        isConfirmation={true}
+        onConfirm={() => {
+          onUndelete().catch(noop);
+        }}
+        onHide={() => {
+          setShowUndeleteModal(false);
+        }}
+      />
+    </>
   );
 };

@@ -11,24 +11,18 @@ export class ObjectionEmployeeService implements EmployeeService {
   public async registerEmployee(
     httpClient: HttpClient,
     employee: Employee,
-  ): Promise<boolean> {
-    try {
-      const { Role, ...employeeData } = employee;
-      await httpClient.request({
-        path: this.apiUrl,
-        method: 'post',
-        data: {
-          ...employeeData,
-          role_id: Number(employee.Role.id),
-          document: formatSpecialCharacters(employee.document),
-          phone: formatSpecialCharacters(employee.phone),
-        },
-      });
-      return true;
-    } catch (e) {
-      noop();
-      return false;
-    }
+  ): Promise<void> {
+    const { Role, ...employeeData } = employee;
+    await httpClient.request({
+      path: this.apiUrl,
+      method: 'post',
+      data: {
+        ...employeeData,
+        role_id: Number(employee.Role.id),
+        document: formatSpecialCharacters(employee.document),
+        phone: formatSpecialCharacters(employee.phone),
+      },
+    });
   }
 
   public async getEmployees(httpClient: HttpClient): Promise<Employee[]> {
@@ -41,21 +35,6 @@ export class ObjectionEmployeeService implements EmployeeService {
       return response?.getData(EmployeeResponse).employees ?? [];
     } catch (e) {
       return [];
-    }
-  }
-
-  public async deleteEmployee(
-    httpClient: HttpClient,
-    document: string,
-  ): Promise<void> {
-    try {
-      document = formatSpecialCharacters(document);
-      await httpClient.request({
-        path: `${this.apiUrl}/${document}`,
-        method: 'delete',
-      });
-    } catch (e) {
-      noop();
     }
   }
 
@@ -79,6 +58,39 @@ export class ObjectionEmployeeService implements EmployeeService {
     } catch (e) {
       noop();
       return false;
+    }
+  }
+
+  public async deleteEmployee(
+    httpClient: HttpClient,
+    document: string,
+  ): Promise<void> {
+    try {
+      document = formatSpecialCharacters(document);
+      await httpClient.request({
+        path: `${this.apiUrl}/${document}`,
+        method: 'delete',
+      });
+    } catch (e) {
+      noop();
+    }
+  }
+
+  public async undeleteEmployee(
+    httpClient: HttpClient,
+    document: string,
+  ): Promise<void> {
+    try {
+      document = formatSpecialCharacters(document);
+      await httpClient.request({
+        path: `${this.apiUrl}/restore`,
+        method: 'put',
+        data: {
+          document,
+        },
+      });
+    } catch (e) {
+      noop();
     }
   }
 }

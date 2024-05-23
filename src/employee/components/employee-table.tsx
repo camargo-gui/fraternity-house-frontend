@@ -51,12 +51,14 @@ export const EmployeeTable = ({
               leadingIcon={<FaEdit color="#002b5e" />}
             />
 
-            <TransparentButton
-              onClick={() => {
-                showDeleteModal(row.document);
-              }}
-              leadingIcon={<FaTrash color="red" />}
-            />
+            {row.name !== localStorage.getItem('name') && (
+              <TransparentButton
+                onClick={() => {
+                  showDeleteModal(row.document);
+                }}
+                leadingIcon={<FaTrash color="red" />}
+              />
+            )}
           </div>
         ) : (
           <div>
