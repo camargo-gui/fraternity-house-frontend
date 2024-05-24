@@ -10,6 +10,9 @@ import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { ConfirmationModal } from '../../../common/components/confirmation-modal/confirmation-modal';
 import { noop } from 'lodash';
+import { ChecklistReportScreen } from '../../components/checklist-report/checklist-report-screen';
+import { ViewModal } from '../../../common/components/view-modal/view-modal';
+import { type DataToSend } from '../../entities/data-to-send';
 
 enum Screen {
   Register = 'Register',
@@ -22,6 +25,7 @@ export const ResidentContainer = (): ReactElement => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [editingResident, setEditingResident] = useState<Resident | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [showReportModal, setShowReportModal] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -88,10 +92,15 @@ export const ResidentContainer = (): ReactElement => {
     }
   }
 
-  async function handleReport(): Promise<void> {
-    setIsSubmitting(true);
-    await residentService.sendReport(httpClient);
-    setIsSubmitting(false);
+  async function handleReport(options: DataToSend): Promise<void> {
+    try {
+      setIsSubmitting(true);
+      await residentService.sendReport(options, httpClient);
+      setIsSubmitting(false);
+      setShowReportModal(false);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   const onScreening = (id: string): void => {
@@ -139,14 +148,31 @@ export const ResidentContainer = (): ReactElement => {
       />
     </>
   ) : (
-    <ResidentList
-      changeScreen={changeScreen}
-      residents={residents}
-      onEdit={onEdit}
-      onDelete={onDelete}
-      onScreening={onScreening}
-      handleReport={handleReport}
-      isSubmitting={isSubmitting}
-    />
+    <>
+      <ResidentList
+        changeScreen={changeScreen}
+        residents={residents}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        onScreening={onScreening}
+        handleReport={() => {
+          setShowReportModal(true);
+        }}
+      />
+      <ViewModal
+        show={showReportModal}
+        children={
+          <ChecklistReportScreen
+            onSubmit={handleReport}
+            isLoading={isSubmitting}
+          />
+        }
+        onHide={() => {
+          setShowReportModal(false);
+        }}
+        size="xl"
+        title="Selecione os campos para o relatório"
+      />
+    </>
   );
 };

@@ -1,3 +1,4 @@
+import { type DataToSend } from './../../entities/data-to-send';
 import { noop } from 'lodash';
 import { toast } from 'react-toastify';
 import { type ResidentService } from '../interfaces/resident-service';
@@ -121,11 +122,15 @@ export class ObjectionResidentService implements ResidentService {
     }
   }
 
-  public async sendReport(httpClient: HttpClient): Promise<void> {
+  public async sendReport(
+    options: DataToSend,
+    httpClient: HttpClient,
+  ): Promise<void> {
     try {
       await httpClient.request({
         path: `${this.url}/report`,
         method: 'post',
+        data: { options },
       });
       toast.success('Relatório enviado com sucesso');
     } catch (e) {

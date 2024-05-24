@@ -47,6 +47,9 @@ interface FormInputProps {
     padding?: string;
     margin?: string;
     marginBottom?: string;
+    display?: string;
+    alignItems?: string;
+    spaceBetween?: string;
   };
   minDate?: string;
 }
@@ -169,10 +172,10 @@ export const FormInput = ({
   const renderCheckbox = (): ReactElement => (
     <Form.Check
       type="checkbox"
-      label={label}
       checked={checked}
       onChange={onChange}
       required={required}
+      label={label}
     />
   );
 
@@ -242,7 +245,7 @@ export const FormInput = ({
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <FloatingLabel
         controlId={id}
-        label={label}
+        label={type === 'checkbox' ? '' : label}
         className="mb-3 custom-floating-label"
       >
         {renderInput()}
