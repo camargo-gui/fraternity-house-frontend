@@ -76,25 +76,6 @@ export const ResidentList = ({
           onDelete={onDelete}
         />
       </Wrapper>
-      <AlignButtons>
-        <Button
-          text="Novo Morador"
-          onClick={changeScreen}
-          backgroundColor="#6c757d"
-          hoverBackgroundColor="#595f64"
-          width="auto"
-        />
-        <Button
-          backgroundColor="#002b5e"
-          onClick={() => {
-            handleReport();
-          }}
-          leadingIcon={<FaEnvelope color="#FFF" />}
-          hoverBackgroundColor="#034da8"
-          noIconMargin={true}
-          width="80px"
-        />
-      </AlignButtons>
     </>
   );
 };
