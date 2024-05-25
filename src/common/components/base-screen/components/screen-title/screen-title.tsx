@@ -86,7 +86,14 @@ export const ScreenTitle = ({
       <ScreenTitleText>{screenTitle}</ScreenTitleText>
       <UserSection>
         <AlignContentHeader>
-          <ImageEmployee src={image} alt="Foto do funcionário" />
+          <ImageEmployee
+            src={
+              image !== ''
+                ? image
+                : require('../../../../../assets/images/avatar.png')
+            }
+            alt="Foto do funcionário"
+          />
           <UserName>
             Olá, {localStorage.getItem('name')?.split(' ')[0]}
           </UserName>
