@@ -1,5 +1,5 @@
 import { type EmployeeService } from '../interfaces/employee-service';
-import { type Employee } from '../../entities/employee';
+import { Employee } from '../../entities/employee';
 import { type HttpClient } from '../../../common/http-client/http-client';
 import { noop } from 'lodash';
 import { EmployeeResponse } from '../response/employee-response';
@@ -11,7 +11,10 @@ export class ObjectionEmployeeService implements EmployeeService {
   public async registerEmployee(
     httpClient: HttpClient,
     employee: Employee,
+    imageFile: File | null,
   ): Promise<void> {
+    console.log('Employee: ', employee);
+    console.log(imageFile);
     const { Role, ...employeeData } = employee;
     await httpClient.request({
       path: this.apiUrl,
@@ -21,6 +24,10 @@ export class ObjectionEmployeeService implements EmployeeService {
         role_id: Number(employee.Role.id),
         document: formatSpecialCharacters(employee.document),
         phone: formatSpecialCharacters(employee.phone),
+        image: imageFile,
+      },
+      headers: {
+        'Content-Type': 'multipart/form-data',
       },
     });
   }
@@ -41,6 +48,7 @@ export class ObjectionEmployeeService implements EmployeeService {
   public async updateEmployee(
     httpClient: HttpClient,
     employee: Employee,
+    imageFile: File | null,
   ): Promise<boolean> {
     const { Role, ...employeeData } = employee;
     try {
@@ -52,6 +60,10 @@ export class ObjectionEmployeeService implements EmployeeService {
           role_id: Number(employee.Role.id),
           document: formatSpecialCharacters(employee.document),
           phone: formatSpecialCharacters(employee.phone),
+          image: imageFile,
+        },
+        headers: {
+          'Content-Type': 'multipart/form-data',
         },
       });
       return true;
@@ -91,6 +103,21 @@ export class ObjectionEmployeeService implements EmployeeService {
       });
     } catch (e) {
       noop();
+    }
+  }
+
+  public async getEmployeeById(
+    httpClient: HttpClient,
+  ): Promise<Employee | undefined> {
+    try {
+      const response = await httpClient.request({
+        path: `${this.apiUrl}/employee`,
+        method: 'get',
+      });
+
+      return response?.getData<Employee>(Employee);
+    } catch (e) {
+      return undefined;
     }
   }
 }

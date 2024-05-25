@@ -11,5 +11,6 @@ export class Employee {
     public createdAt?: Date,
     public updatedAt?: Date,
     public id?: string,
+    public url_image?: string,
   ) {}
 }

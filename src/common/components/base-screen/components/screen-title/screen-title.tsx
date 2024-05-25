@@ -5,11 +5,14 @@ import {
   UserName,
   UserSection,
   BellIconContainer,
+  ImageEmployee,
+  AlignContentHeader,
 } from './screen-title.styles';
 import { FaBell } from 'react-icons/fa';
 import { NotificationModal } from '../notification-modal/notification-modal';
 import { NotificationServiceObjection } from '../../services/objecion/notification-service-objection';
 import { ApplicationContext } from '../../../../../application-context';
+import { ObjectionEmployeeService } from '../../../../../employee/services/objection/objection-employee-service';
 
 const THIRTY_MINUTES = 1800000;
 
@@ -18,6 +21,7 @@ export const ScreenTitle = ({
 }: {
   screenTitle: string;
 }): ReactElement => {
+  const [image, setImage] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [hasNewNotifications, setHasNewNotifications] = useState(false);
   const { httpClient } = useContext(ApplicationContext);
@@ -49,8 +53,16 @@ export const ScreenTitle = ({
     setHasNewNotifications(false);
   };
 
+  const getEmployeeId = async (): Promise<void> => {
+    const employee = await new ObjectionEmployeeService().getEmployeeById(
+      httpClient,
+    );
+    setImage(employee?.url_image ?? '');
+  };
+
   useEffect(() => {
     void fetchNotifications();
+    void getEmployeeId();
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     const intervalId = setInterval(fetchNotifications, THIRTY_MINUTES);
 
@@ -73,7 +85,12 @@ export const ScreenTitle = ({
     <Container>
       <ScreenTitleText>{screenTitle}</ScreenTitleText>
       <UserSection>
-        <UserName>Olá, {localStorage.getItem('name')?.split(' ')[0]}</UserName>
+        <AlignContentHeader>
+          <ImageEmployee src={image} alt="Foto do funcionário" />
+          <UserName>
+            Olá, {localStorage.getItem('name')?.split(' ')[0]}
+          </UserName>
+        </AlignContentHeader>
         <BellIconContainer onClick={handleOpenModal}>
           <FaBell />
           {hasNewNotifications && <span />}

@@ -5,6 +5,7 @@ export interface EmployeeService {
   registerEmployee: (
     httpClient: HttpClient,
     employee: Employee,
+    imageFile: File | null,
   ) => Promise<void>;
 
   getEmployees: (httpClient: HttpClient) => Promise<Employee[]>;
@@ -14,5 +15,6 @@ export interface EmployeeService {
   updateEmployee: (
     httpClient: HttpClient,
     employee: Employee,
+    imageFile: File | null,
   ) => Promise<boolean>;
 }

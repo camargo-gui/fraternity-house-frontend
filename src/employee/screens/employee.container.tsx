@@ -28,6 +28,8 @@ export const EmployeeContainer = (): ReactElement => {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [screen, setScreen] = useState<Screen>('EmployeeList');
 
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
   const [isEditting, setIsEditting] = useState<boolean>(false);
   const [employeeToEdit, setEmployeeToEdit] = useState<Employee | undefined>();
 
@@ -77,6 +79,7 @@ export const EmployeeContainer = (): ReactElement => {
         await new ObjectionEmployeeService().registerEmployee(
           httpClient,
           employee,
+          selectedFile,
         );
         changeScreen();
       } catch (error) {
@@ -123,6 +126,7 @@ export const EmployeeContainer = (): ReactElement => {
     const response = await new ObjectionEmployeeService().updateEmployee(
       httpClient,
       employee,
+      selectedFile,
     );
     setIsSubmitting(false);
     if (response) changeScreen();
@@ -161,6 +165,7 @@ export const EmployeeContainer = (): ReactElement => {
         onSubmit={onSubmit}
         onEdit={onEdit}
         changeScreen={changeScreen}
+        setSelectedFile={setSelectedFile}
       />
       <ConfirmationModal
         title="Funcionário já cadastrado"

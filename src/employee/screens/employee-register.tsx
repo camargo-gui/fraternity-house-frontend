@@ -15,6 +15,7 @@ interface Props {
   onSubmit: (employee: Employee) => Promise<void>;
   changeScreen: () => void;
   onEdit: (employee: Employee) => Promise<void>;
+  setSelectedFile: (file: File | null) => void;
 }
 
 const initialEmployeeState: Employee = {
@@ -27,6 +28,7 @@ const initialEmployeeState: Employee = {
     id: '',
     name: '',
   },
+  url_image: '',
 };
 
 export const EmployeeScreen = ({
@@ -37,6 +39,7 @@ export const EmployeeScreen = ({
   changeScreen,
   onSubmit,
   onEdit,
+  setSelectedFile,
 }: Props): ReactElement => {
   const [employee, setEmployee] = useState<Employee>(
     employeeToEdit ?? initialEmployeeState,
@@ -150,6 +153,21 @@ export const EmployeeScreen = ({
               name: '',
             },
           });
+        }}
+      />
+
+      <FormInput
+        id="resident_image"
+        label="Imagem"
+        type="file"
+        placeholder="Imagem"
+        onChange={(e) => {
+          const files = (e.target as HTMLInputElement).files;
+          if (files !== null && files.length > 0) {
+            setSelectedFile(files[0]);
+          } else {
+            setSelectedFile(null);
+          }
         }}
       />
 

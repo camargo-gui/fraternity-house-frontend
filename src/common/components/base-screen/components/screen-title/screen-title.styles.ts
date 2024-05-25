@@ -13,6 +13,7 @@ export const Container = styled.div`
   justify-content: space-between;
   width: 100%;
   align-items: center;
+  flex-direction: row;
 `;
 
 export const UserName = styled.h2`
@@ -44,4 +45,31 @@ export const BellIconContainer = styled.div`
     background-color: red;
     border-radius: 50%;
   }
+`;
+
+export const ImageEmployee = styled.img`
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 20px;
+  object-fit: cover;
+  border: 2px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.3s ease,
+    width 0.3s ease,
+    height 0.3s ease;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+  }
+`;
+
+export const AlignContentHeader = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  margin-right: 20px;
 `;
