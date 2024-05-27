@@ -36,6 +36,8 @@ export const AccompanimentTableContainer = ({
   const [accompanimentsByResident, setAccompanimentsByResident] = useState<
     Accompaniment[] | null
   >(null);
+  const [filteredAccompaniments, setFilteredAccompaniments] =
+    useState<Accompaniment[]>(accompaniments);
 
   const handleOpenModal = (accompaniment: Accompaniment): void => {
     setSelectedResident({
@@ -88,6 +90,21 @@ export const AccompanimentTableContainer = ({
     [httpClient],
   );
 
+  const handleSearch = (search: string): void => {
+    if (search === '') {
+      setFilteredAccompaniments(accompaniments);
+      return;
+    }
+    const filtered = accompaniments.filter((accompaniment) =>
+      accompaniment.residentName.toLowerCase().startsWith(search.toLowerCase()),
+    );
+    setFilteredAccompaniments(filtered);
+  };
+
+  useEffect(() => {
+    setFilteredAccompaniments(accompaniments);
+  }, [accompaniments]);
+
   useEffect(() => {
     if (accompanimentsByResident !== null) setShowModal(true);
   }, [accompanimentsByResident]);
@@ -99,7 +116,7 @@ export const AccompanimentTableContainer = ({
       selectedResident={selectedResident}
       setSelectedResident={setSelectedResident}
       accompanimentsByResident={accompanimentsByResident}
-      accompaniments={accompaniments}
+      accompaniments={filteredAccompaniments}
       showModal={showModal}
       handleCloseModal={handleCloseModal}
       selectedAccompaniment={selectedAccompaniment}
@@ -110,6 +127,7 @@ export const AccompanimentTableContainer = ({
       setEditDisabled={setEditDisabled}
       isLoading={isLoading}
       navigate={navigate}
+      handleSearch={handleSearch}
       type={type}
     />
   );

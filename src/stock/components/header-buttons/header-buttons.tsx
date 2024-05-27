@@ -52,6 +52,7 @@ export const HeaderButtons = ({
           style={{ marginBottom: '0', width: '500px' }}
           type="search"
           id="stock-search"
+          placeholder="Digite o nome do produto"
           onChange={(e) => {
             const target = e.target as HTMLInputElement;
             setText(target.value);

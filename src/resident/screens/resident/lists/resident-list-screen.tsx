@@ -51,12 +51,13 @@ export const ResidentList = ({
               width="auto"
             />
             <FormInput
-              style={{ marginBottom: '0px', marginLeft: '16px' }}
+              style={{ marginBottom: '0px', marginLeft: '16px', width: '150%' }}
               id="search-resident"
               onChange={(e) => {
                 const target = e.target as HTMLInputElement;
                 setFilterText(target.value);
               }}
+              placeholder="Digite o nome do morador"
               type="search"
             />
           </SearchRow>

@@ -4,6 +4,7 @@ import { type Accompaniment } from '../../entities/accompaniment';
 import { TransparentButton } from '../../../employee/screens/employee.styles';
 import { FaEye } from 'react-icons/fa';
 import { AccompanimentModal } from '../accompaniment-modal/accompaniment-modal';
+import { FormInput } from '../../../common/components/form-input/form-input';
 
 interface Props {
   accompaniments: Accompaniment[];
@@ -23,6 +24,7 @@ interface Props {
   isLoading: boolean;
   navigate: (id: string) => void;
   type: 'PSYCHOLOGIST' | 'PHYSIOTHERAPIST' | 'NUTRITIONIST';
+  handleSearch: (search: string) => void;
 }
 
 export const AccompanimentTable = ({
@@ -42,6 +44,7 @@ export const AccompanimentTable = ({
   setEditDisabled,
   isLoading,
   navigate,
+  handleSearch,
 }: Props): ReactElement => {
   const columns = [
     {
@@ -74,6 +77,15 @@ export const AccompanimentTable = ({
 
   return (
     <>
+      <FormInput
+        id="search-resident"
+        onChange={(e) => {
+          const target = e.target as HTMLInputElement;
+          handleSearch(target.value);
+        }}
+        placeholder="Digite o nome do morador"
+        type="search"
+      />
       <TableComponent columns={columns} data={accompaniments} />
       <AccompanimentModal
         selectedAccompaniment={selectedAccompaniment}
