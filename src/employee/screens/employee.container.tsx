@@ -90,12 +90,12 @@ export const EmployeeContainer = (): ReactElement => {
             );
             setShowUndeleteModal(true);
           }
-        } else {
-          toast.error('CPF inválido');
         }
       }
-      setIsSubmitting(false);
+    } else {
+      toast.error('CPF inválido');
     }
+    setIsSubmitting(false);
   };
 
   const onUndelete = async (): Promise<void> => {
