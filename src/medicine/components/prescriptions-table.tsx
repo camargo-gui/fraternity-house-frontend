@@ -7,6 +7,7 @@ import { type PrescriptionsInterface } from '../entities/medication-sheet-body';
 import { ObjectionMedicationSheetService } from '../services/objection/objection-medication-sheet-service';
 import { ApplicationContext } from '../../application-context';
 import { ConfirmationModal } from '../../common/components/confirmation-modal/confirmation-modal';
+import LoadingSpinner from '../../common/components/loading-spinner/loading-spinner';
 
 interface Props {
   prescriptions: PrescriptionsInterface[];
@@ -28,6 +29,7 @@ export const PrescriptionsTable = ({
     number | null
   >(null);
   const [deleting, setDeleting] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const medicationSheetService = new ObjectionMedicationSheetService();
   const { httpClient } = useContext(ApplicationContext);
@@ -77,6 +79,7 @@ export const PrescriptionsTable = ({
   const handleSave = async (): Promise<void> => {
     if (editedPrescription != null) {
       try {
+        setLoading(true);
         await medicationSheetService.updatePrescription(httpClient, {
           dosage: editedPrescription.dosage,
           endDate: editedPrescription.endDate,
@@ -97,6 +100,7 @@ export const PrescriptionsTable = ({
         setPrescriptions(updatedPrescriptions);
         setEditIndex(null);
         setEditedPrescription(null);
+        setLoading(false);
       } catch (error) {
         console.error('Failed to update prescription:', error);
       }
@@ -232,15 +236,21 @@ export const PrescriptionsTable = ({
                 alignItems: 'center',
               }}
             >
-              <TransparentButton
-                // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                onClick={handleSave}
-                leadingIcon={<FaCheck color="green" />}
-              />
-              <TransparentButton
-                onClick={handleCancel}
-                leadingIcon={<FaTimes color="red" />}
-              />
+              {loading ? (
+                <LoadingSpinner style={{ width: '32px', height: '32px' }} />
+              ) : (
+                <>
+                  <TransparentButton
+                    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                    onClick={handleSave}
+                    leadingIcon={<FaCheck color="green" />}
+                  />
+                  <TransparentButton
+                    onClick={handleCancel}
+                    leadingIcon={<FaTimes color="red" />}
+                  />
+                </>
+              )}
             </div>
           );
         }
