@@ -143,6 +143,32 @@ export const ResponsibleTab = ({
             label="Parentesco *"
             id="kinship"
             value={currentScreening.Responsible.kinship}
+            options={[
+              {
+                label: 'Irmã(o)',
+                value: 'Irmã(o)',
+              },
+              {
+                label: 'Primo(a)',
+                value: 'Primo(a)',
+              },
+              {
+                label: 'Sobrinho(a)',
+                value: 'Sobrinho(a)',
+              },
+              {
+                label: 'Filho(a)',
+                value: 'Filho(a)',
+              },
+              {
+                label: 'Neto(a)',
+                value: 'Neto(a)',
+              },
+              {
+                label: 'Outro',
+                value: 'outro',
+              },
+            ]}
             onChange={(e) => {
               const target = e.target as HTMLInputElement;
               setCurrentScreening({
@@ -153,7 +179,7 @@ export const ResponsibleTab = ({
                 },
               });
             }}
-            type="text"
+            type="select"
             disabled={!enableEdit}
           />
         </HalfColum>

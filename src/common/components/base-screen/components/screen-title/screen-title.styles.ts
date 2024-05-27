@@ -48,8 +48,8 @@ export const BellIconContainer = styled.div`
 `;
 
 export const ImageEmployee = styled.img`
-  width: 60px;
-  height: 60px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   margin-right: 20px;
   object-fit: cover;
