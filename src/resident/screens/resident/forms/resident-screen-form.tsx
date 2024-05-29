@@ -42,6 +42,7 @@ export const ResidentScreenForm = ({
   function clearFields(): void {
     if (isEditing) setEditingResident(initialResidentState);
     else setResident(initialResidentState);
+    setSelectedFile(null);
   }
 
   const onClick = async (): Promise<void> => {
