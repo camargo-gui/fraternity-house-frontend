@@ -7,6 +7,7 @@ import { FormInput } from '../../../common/components/form-input/form-input';
 import { ApplicationContext } from '../../../application-context';
 import { ObjectionMedicationSheetService } from '../../../medicine/services/objection/objection-medication-sheet-service';
 import { type Employee } from '../../../employee/entities/employee';
+import { formatCpf } from '../../../utils/format-special-characters';
 
 interface Props {
   medicationSheets: MedicationSheetBody[];
@@ -172,6 +173,10 @@ export const MedicationSheetListTable = ({
 
   const data = medicationSheets.map((sheet) => ({
     ...sheet,
+    Resident: {
+      ...sheet.Resident,
+      name: `${sheet.Resident.name} (${formatCpf(sheet.Resident.cpf)})`,
+    },
     observations: sheet.observations === '' ? '—' : sheet.observations,
   }));
 
