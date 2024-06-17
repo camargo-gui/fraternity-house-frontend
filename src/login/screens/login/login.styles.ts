@@ -7,6 +7,10 @@ export const Wrapper = styled.div`
   align-items: center;
   height: 100vh;
   width: 100%;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 export const LeftSize = styled.div`
@@ -17,6 +21,10 @@ export const LeftSize = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 export const RightSize = styled.div`
@@ -28,10 +36,18 @@ export const RightSize = styled.div`
   align-items: left;
   flex-direction: column;
   padding: 0 10% 0 10%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 20px;
+    align-items: center;
+  }
 `;
 
 export const Logo = styled.img`
   justify-content: center;
+  max-width: 100%;
+  height: auto;
 `;
 
 export const Button = styled(BaseButton).attrs({
@@ -66,12 +82,14 @@ export const RequirementsBox = styled.div`
   gap: 4px;
 
   width: 60%;
-
   background: rgba(209, 227, 255, 0.1);
-
   border: 1px solid #d1e3ff;
   border-radius: 12px;
   margin-bottom: 16px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 export const IconContainer = styled.div`
@@ -93,4 +111,10 @@ export const ResetRightSize = styled.div`
   flex-direction: column;
   justify-content: center;
   padding: 0 10% 0 10%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 20px;
+    align-items: center;
+  }
 `;

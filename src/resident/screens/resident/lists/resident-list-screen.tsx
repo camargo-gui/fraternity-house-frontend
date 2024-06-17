@@ -64,7 +64,9 @@ export const ResidentList = ({
           <Button
             backgroundColor="#002b5e"
             onClick={handleReport}
-            leadingIcon={<FaEnvelope color="#FFF" />}
+            leadingIcon={
+              <FaEnvelope color="#FFF" style={{ marginTop: '-3px' }} />
+            }
             hoverBackgroundColor="#034da8"
             noIconMargin={true}
             width="80px"

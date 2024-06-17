@@ -1,5 +1,5 @@
 import { type ReactElement } from 'react';
-import { FormInput } from '../../../common/components/form-input/form-input';
+import { FormInput } from '../../common/components/form-input/form-input';
 
 interface Props {
   searchTerm: string;

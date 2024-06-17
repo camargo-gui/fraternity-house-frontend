@@ -10,16 +10,16 @@ import { Prescription } from '../entities/prescription';
 import { useMedicines } from '../hooks/use-medicine';
 import { ObjectionMedicationSheetService } from '../services/objection/objection-medication-sheet-service';
 import { ObjectionMedicineService } from '../services/objection/objection-medicine-service';
-import { MedicationSheetFormScreen } from './forms/medication-sheet-form/medication-sheet-form-screen';
-import {
-  EMPTY_RECORD,
-  type MedicationRecord,
-} from './forms/medication-sheet-form/medication-sheet-table/medication-sheet-table';
 import { MedicineFormScreen } from './forms/medicine-form-screen';
-import { MedicationSheet } from './lists/medication-sheet-screen';
+import { MedicationSheet } from '../../medication-sheet/lists/medication-sheet-screen';
 import { MedicineList } from './lists/medicine-list-screen';
 import { GoBackButton, MedicineWrapper } from './medicine.styles';
 import { useResident } from '../../resident/hooks/use-resident';
+import {
+  EMPTY_RECORD,
+  type MedicationRecord,
+} from '../../medication-sheet/forms/medication-sheet-table/medication-sheet-form-table';
+import { MedicationSheetFormScreen } from '../../medication-sheet/forms/medication-sheet-form-screen';
 
 enum Screen {
   MedicineRegister = 'MedicineRegister',

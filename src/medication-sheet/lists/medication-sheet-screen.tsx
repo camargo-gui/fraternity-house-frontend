@@ -1,14 +1,18 @@
 import { useState, type ReactElement } from 'react';
-import { MedicationSheetTable } from '../../components/medication-sheet-table';
-import { Button, ButtonGroup, WrapperSheet } from '../medicine.styles';
+import { MedicationSheetListTable } from './medication-sheet-list-table/medication-sheet-list-table';
+import {
+  Button,
+  ButtonGroup,
+  WrapperSheet,
+} from '../../medicine/screens/medicine.styles';
 import {
   type PrescriptionsInterface,
   type MedicationSheetBody,
-} from '../../entities/medication-sheet-body';
-import { ViewModal } from '../../../common/components/view-modal/view-modal';
-import { PrescriptionsTable } from '../../components/prescriptions-table';
-import { MedicationFilter } from '../medication-filter/medication-filter';
-import { type Employee } from '../../../employee/entities/employee';
+} from '../../medicine/entities/medication-sheet-body';
+import { ViewModal } from '../../common/components/view-modal/view-modal';
+import { PrescriptionsTable } from './prescriptions/prescriptions-table';
+import { type Employee } from '../../employee/entities/employee';
+import { MedicationFilter } from '../medication-sheet-filter/medication-sheet-filter';
 
 interface Props {
   changeScreen: () => void;
@@ -65,7 +69,7 @@ export const MedicationSheet = ({
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
         />
-        <MedicationSheetTable
+        <MedicationSheetListTable
           medicationSheets={filteredMedicines}
           handleShowPrescriptions={handleShowPrescriptions}
           refetch={refetch}

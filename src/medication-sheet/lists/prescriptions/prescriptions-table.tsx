@@ -1,13 +1,13 @@
 import React, { useContext, useState, type ReactElement } from 'react';
-import TableComponent from '../../common/components/table/table';
-import { TransparentButton } from '../../employee/screens/employee.styles';
+import TableComponent from '../../../common/components/table/table';
+import { TransparentButton } from '../../../employee/screens/employee.styles';
 import { FaEdit, FaTrash, FaCheck, FaTimes } from 'react-icons/fa';
-import { FormInput } from '../../common/components/form-input/form-input';
-import { type PrescriptionsInterface } from '../entities/medication-sheet-body';
-import { ObjectionMedicationSheetService } from '../services/objection/objection-medication-sheet-service';
-import { ApplicationContext } from '../../application-context';
-import { ConfirmationModal } from '../../common/components/confirmation-modal/confirmation-modal';
-import LoadingSpinner from '../../common/components/loading-spinner/loading-spinner';
+import { FormInput } from '../../../common/components/form-input/form-input';
+import { type PrescriptionsInterface } from '../../../medicine/entities/medication-sheet-body';
+import { ObjectionMedicationSheetService } from '../../../medicine/services/objection/objection-medication-sheet-service';
+import { ApplicationContext } from '../../../application-context';
+import { ConfirmationModal } from '../../../common/components/confirmation-modal/confirmation-modal';
+import LoadingSpinner from '../../../common/components/loading-spinner/loading-spinner';
 
 interface Props {
   prescriptions: PrescriptionsInterface[];
