@@ -6,6 +6,18 @@ export const ScreenTitleText = styled.h1`
   color: #002b5e;
   font-weight: 500;
   margin-bottom: 30px;
+  text-align: center;
+
+  @media (max-width: 1024px) {
+    font-size: 22px;
+    text-align: left;
+    margin-left: 10%;
+    margin-top: 15px;
+  }
+
+  @media (max-width: 425px) {
+    font-size: 18px;
+  }
 `;
 
 export const Container = styled.div`
@@ -14,6 +26,10 @@ export const Container = styled.div`
   width: 100%;
   align-items: center;
   flex-direction: row;
+
+  @media (max-width: 1024px) {
+    align-items: center;
+  }
 `;
 
 export const UserName = styled.h2`
@@ -22,12 +38,20 @@ export const UserName = styled.h2`
   color: #002b5e;
   font-weight: 500;
   margin: 0;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
 `;
 
 export const UserSection = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 30px;
+
+  @media (max-width: 1024px) {
+    margin-bottom: 10px;
+  }
 `;
 
 export const BellIconContainer = styled.div`
@@ -64,6 +88,12 @@ export const ImageEmployee = styled.img`
     cursor: pointer;
     transform: scale(1.2);
   }
+
+  @media (max-width: 1024px) {
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+  }
 `;
 
 export const AlignContentHeader = styled.div`
@@ -72,4 +102,8 @@ export const AlignContentHeader = styled.div`
   flex-direction: row;
   justify-content: center;
   margin-right: 20px;
+
+  @media (max-width: 1024px) {
+    margin-right: 0;
+  }
 `;
