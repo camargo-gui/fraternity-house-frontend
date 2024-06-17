@@ -56,6 +56,7 @@ export const MedicineFilter = ({
             const target = e.target as HTMLInputElement;
             setSelectedPharmacologicalName(target.value);
           }}
+          style={{ width: '180px' }}
         />
 
         <FormInput
@@ -74,6 +75,7 @@ export const MedicineFilter = ({
             const target = e.target as HTMLInputElement;
             setSelectedForm(target.value);
           }}
+          style={{ width: '180px' }}
         />
       </SelectContainer>
     </RowWrapper>
