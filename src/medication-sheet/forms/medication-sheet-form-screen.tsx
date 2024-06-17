@@ -1,16 +1,20 @@
 import { useEffect, useState, type ReactElement } from 'react';
 import { FaPlus } from 'react-icons/fa';
-import { ConfirmationModal } from '../../../../common/components/confirmation-modal/confirmation-modal';
-import { FormInput } from '../../../../common/components/form-input/form-input';
-import { type Resident } from '../../../../resident/entities/resident';
-import type { Medicine } from '../../../entities/medicine';
-import { Button, ButtonGroup, WrapperSheet } from '../../medicine.styles';
+import { ConfirmationModal } from '../../common/components/confirmation-modal/confirmation-modal';
+import { FormInput } from '../../common/components/form-input/form-input';
+import { type Resident } from '../../resident/entities/resident';
 import { Row } from './medication-sheet-form-screen.styles';
 import {
   EMPTY_RECORD,
-  MedicationSheetTable,
+  MedicationSheetFormTable,
   type MedicationRecord,
-} from './medication-sheet-table/medication-sheet-table';
+} from './medication-sheet-table/medication-sheet-form-table';
+import { type Medicine } from '../../medicine/entities/medicine';
+import {
+  Button,
+  ButtonGroup,
+  WrapperSheet,
+} from '../../medicine/screens/medicine.styles';
 
 interface Props {
   changeScreen: () => void;
@@ -461,7 +465,7 @@ export const MedicationSheetFormScreen = ({
 
         {renderAddRegisterButton()}
 
-        <MedicationSheetTable
+        <MedicationSheetFormTable
           records={medicationRecords}
           handleEdit={handleEdit}
           handleDelete={handleDelete}

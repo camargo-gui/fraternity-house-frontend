@@ -1,12 +1,13 @@
 import { useContext, useState, type ReactElement } from 'react';
 import { FaCheck, FaEdit, FaEye, FaPlusCircle, FaTimes } from 'react-icons/fa';
-import TableComponent from '../../common/components/table/table';
-import { type MedicationSheetBody } from '../entities/medication-sheet-body';
-import { TransparentButton } from './medicine-table.styles';
-import { FormInput } from '../../common/components/form-input/form-input';
-import { ApplicationContext } from '../../application-context';
-import { ObjectionMedicationSheetService } from '../services/objection/objection-medication-sheet-service';
-import { type Employee } from '../../employee/entities/employee';
+import TableComponent from '../../../common/components/table/table';
+import { type MedicationSheetBody } from '../../../medicine/entities/medication-sheet-body';
+import { TransparentButton } from '../../../medicine/components/medicine-table.styles';
+import { FormInput } from '../../../common/components/form-input/form-input';
+import { ApplicationContext } from '../../../application-context';
+import { ObjectionMedicationSheetService } from '../../../medicine/services/objection/objection-medication-sheet-service';
+import { type Employee } from '../../../employee/entities/employee';
+import { formatCpf } from '../../../utils/format-special-characters';
 
 interface Props {
   medicationSheets: MedicationSheetBody[];
@@ -16,7 +17,7 @@ interface Props {
   employees: Employee[];
 }
 
-export const MedicationSheetTable = ({
+export const MedicationSheetListTable = ({
   medicationSheets,
   handleShowPrescriptions,
   refetch,
@@ -172,6 +173,10 @@ export const MedicationSheetTable = ({
 
   const data = medicationSheets.map((sheet) => ({
     ...sheet,
+    Resident: {
+      ...sheet.Resident,
+      name: `${sheet.Resident.name} (${formatCpf(sheet.Resident.cpf)})`,
+    },
     observations: sheet.observations === '' ? '—' : sheet.observations,
   }));
 

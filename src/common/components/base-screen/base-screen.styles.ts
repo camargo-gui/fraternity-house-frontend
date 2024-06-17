@@ -12,4 +12,8 @@ export const ContentContainer = styled.div`
   height: 98vh;
   padding: 2%;
   width: 1000px;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
 `;

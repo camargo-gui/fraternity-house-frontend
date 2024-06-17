@@ -1,7 +1,7 @@
 import React, { type ReactElement } from 'react';
-import TableComponent from '../../../../../common/components/table/table';
-import { TransparentButton } from '../../../../components/medicine-table.styles';
+import TableComponent from '../../../common/components/table/table';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import { TransparentButton } from '../../../medicine/components/medicine-table.styles';
 
 export interface MedicationRecord {
   id?: number;
@@ -35,7 +35,7 @@ interface MedicationSheetTableProps {
   handleDelete: (index: number) => void;
 }
 
-export const MedicationSheetTable = ({
+export const MedicationSheetFormTable = ({
   records,
   handleEdit,
   handleDelete,
