@@ -4,7 +4,6 @@ export const AlignCheckBox = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  margin-left: 10px;
 `;
 
 export const CheckBoxWrapper = styled.div`
@@ -16,5 +15,11 @@ export const CheckBoxWrapper = styled.div`
 
 export const CheckBoxSelectAll = styled.div`
   margin-bottom: 10px;
+  margin-top: 20px;
+`;
+
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   margin-left: 10px;
 `;

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useMemo, useState, type ReactElement } from 'react';
 import Card from 'react-bootstrap/Card';
-import { FaBookOpen, FaPen, FaTrash } from 'react-icons/fa';
+import { FaBookOpen, FaEnvelope, FaPen, FaTrash } from 'react-icons/fa';
 import { type Resident } from '../../entities/resident';
 import { ActionButton, Div, DivCardIcons } from './card-list-item.styles';
 import { formatCpf } from '../../../utils/format-special-characters';
@@ -13,6 +13,7 @@ interface Props {
   onEdit: (cpf: string) => void;
   onDelete: (cpf: string) => Promise<void>;
   onScreening: (id: string) => void;
+  onSendEmail: (id: string) => void;
 }
 
 export const CardListItem = ({
@@ -20,6 +21,7 @@ export const CardListItem = ({
   onEdit,
   onDelete,
   onScreening,
+  onSendEmail,
 }: Props): ReactElement => {
   const [showConfirmationModal, setShowConfirmationModal] =
     useState<boolean>(false);
@@ -121,6 +123,12 @@ export const CardListItem = ({
                       color={resident.has_screening ? 'green' : 'orange'}
                     />
                   }
+                />
+                <ActionButton
+                  onClick={() => {
+                    onSendEmail(String(resident.id) ?? 0);
+                  }}
+                  leadingIcon={<FaEnvelope color="#2a1aa5" />}
                 />
               </DivCardIcons>
             </Card.Body>

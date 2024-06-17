@@ -25,7 +25,7 @@ export const ResidentContainer = (): ReactElement => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [editingResident, setEditingResident] = useState<Resident | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [showReportModal, setShowReportModal] = useState<boolean>(false);
+  const [showReportModal, setShowReportModal] = useState<string>();
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -97,7 +97,7 @@ export const ResidentContainer = (): ReactElement => {
       setIsSubmitting(true);
       await residentService.sendReport(options, httpClient);
       setIsSubmitting(false);
-      setShowReportModal(false);
+      setShowReportModal(undefined);
     } catch (e) {
       console.log(e);
     }
@@ -155,20 +155,21 @@ export const ResidentContainer = (): ReactElement => {
         onEdit={onEdit}
         onDelete={onDelete}
         onScreening={onScreening}
-        handleReport={() => {
-          setShowReportModal(true);
+        handleReport={(id: string) => {
+          setShowReportModal(id);
         }}
       />
       <ViewModal
-        show={showReportModal}
+        show={showReportModal !== undefined}
         children={
           <ChecklistReportScreen
+            resident={residents?.find((r) => showReportModal === String(r.id))}
             onSubmit={handleReport}
             isLoading={isSubmitting}
           />
         }
         onHide={() => {
-          setShowReportModal(false);
+          setShowReportModal(undefined);
         }}
         size="xl"
         title="Selecione os campos para o relatório"

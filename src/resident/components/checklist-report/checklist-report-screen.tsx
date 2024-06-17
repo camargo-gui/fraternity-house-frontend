@@ -4,21 +4,26 @@ import {
   AlignCheckBox,
   CheckBoxSelectAll,
   CheckBoxWrapper,
+  Container,
 } from './checklist-report-screen.styles';
 import { FormInput } from '../../../common/components/form-input/form-input';
 import { type ReactElement, useState } from 'react';
 import { type DataToSend } from '../../entities/data-to-send';
+import { type Resident } from '../../entities/resident';
 
 interface Props {
+  resident?: Resident;
   onSubmit: (options: DataToSend) => Promise<void>;
   isLoading?: boolean;
 }
 
 export const ChecklistReportScreen = ({
   onSubmit,
+  resident,
   isLoading,
 }: Props): ReactElement => {
   const [options, setOptions] = useState<DataToSend>({
+    residentId: String(resident?.id) ?? '',
     religion: false,
     smoking: false,
     entry_date: false,
@@ -41,6 +46,7 @@ export const ChecklistReportScreen = ({
   const toggleAllOptions = (): void => {
     const newStatus = !allSelected;
     setOptions({
+      residentId: options.residentId,
       religion: newStatus,
       smoking: newStatus,
       entry_date: newStatus,
@@ -61,7 +67,14 @@ export const ChecklistReportScreen = ({
   };
 
   return (
-    <>
+    <Container>
+      <FormInput
+        type="text"
+        value={resident?.name}
+        disabled
+        id="resident-name"
+        onChange={noop}
+      />
       <CheckBoxSelectAll>
         <FormInput
           id="select-all"
@@ -265,6 +278,6 @@ export const ChecklistReportScreen = ({
           text="Gerar relatório"
         />
       </AlignCheckBox>
-    </>
+    </Container>
   );
 };

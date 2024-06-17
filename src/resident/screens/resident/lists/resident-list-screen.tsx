@@ -1,5 +1,4 @@
 import { useEffect, useState, type ReactElement } from 'react';
-import { FaEnvelope } from 'react-icons/fa';
 import { CardListItem } from '../../../components/card-list-item/card-list-item';
 import { type Resident } from '../../../entities/resident';
 import { AlignButtons, Button, SearchRow, Wrapper } from '../resident.styles';
@@ -11,7 +10,7 @@ interface Props {
   onEdit: (cpf: string) => void;
   onScreening: (id: string) => void;
   onDelete: (cpf: string) => Promise<void>;
-  handleReport: () => void;
+  handleReport: (id: string) => void;
 }
 
 export const ResidentList = ({
@@ -61,20 +60,13 @@ export const ResidentList = ({
               type="search"
             />
           </SearchRow>
-          <Button
-            backgroundColor="#002b5e"
-            onClick={handleReport}
-            leadingIcon={<FaEnvelope color="#FFF" />}
-            hoverBackgroundColor="#034da8"
-            noIconMargin={true}
-            width="80px"
-          />
         </AlignButtons>
         <CardListItem
           residents={filteredResidents}
           onEdit={onEdit}
           onScreening={onScreening}
           onDelete={onDelete}
+          onSendEmail={handleReport}
         />
       </Wrapper>
     </>
