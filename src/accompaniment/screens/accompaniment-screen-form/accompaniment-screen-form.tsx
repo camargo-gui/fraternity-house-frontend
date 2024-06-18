@@ -15,6 +15,8 @@ import { ObjectionAccompanimentService } from '../../services/objection/objectio
 import { AlignButtons } from './accompaniment-screen-form.styles';
 import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../../../common/components/loading-spinner/loading-spinner';
+import { AccompanimentStatusModal } from '../accompaniment-status-modal/accompaniment-status-modal';
+import { AccompanimentStatusEnum } from '../../entities/accompaniment-status';
 
 export const AccompanimentScreenForm = (): ReactElement => {
   const navigate = useNavigate();
@@ -38,10 +40,13 @@ export const AccompanimentScreenForm = (): ReactElement => {
     else return 'Nutricional';
   };
   const translatedType = getAccompanimentTranslation(type);
+  const [accompanimentStatus, setAccompanimentStatus] = useState(
+    AccompanimentStatusEnum.Undefined,
+  );
+  const [showStatusModal, setShowStatusModal] = useState<boolean>(false);
 
   const handleSubmit = async (): Promise<void> => {
-    await createAccompaniment();
-    navigate(`/${type}`);
+    setShowStatusModal(true);
   };
 
   const getAllResidents = useCallback(async (): Promise<void> => {
@@ -59,25 +64,30 @@ export const AccompanimentScreenForm = (): ReactElement => {
     }
   }, [httpClient]);
 
-  const createAccompaniment = useCallback(async (): Promise<void> => {
-    try {
-      setSelectedResident(undefined);
-      setIsLoading(true);
-      setDescription('');
-      await new ObjectionAccompanimentService().createAccompaniment(
-        httpClient,
-        {
-          description,
-          residentId: selectedResident?.id ?? 0,
-          type,
-        },
-      );
-    } catch (error) {
-      console.error('Erro ao criar o acompanhamento no form:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [httpClient, description, selectedResident, type]);
+  const createAccompaniment = useCallback(
+    async (status: AccompanimentStatusEnum): Promise<void> => {
+      try {
+        setSelectedResident(undefined);
+        setIsLoading(true);
+        setDescription('');
+        await new ObjectionAccompanimentService().createAccompaniment(
+          httpClient,
+          {
+            description,
+            residentId: selectedResident?.id ?? 0,
+            type,
+          },
+          status,
+        );
+      } catch (error) {
+        console.error('Erro ao criar o acompanhamento no form:', error);
+      } finally {
+        setIsLoading(false);
+        setAccompanimentStatus(AccompanimentStatusEnum.Undefined);
+      }
+    },
+    [httpClient, description, selectedResident, type, accompanimentStatus],
+  );
 
   useEffect(() => {
     getAllResidents().catch(noop);
@@ -95,72 +105,89 @@ export const AccompanimentScreenForm = (): ReactElement => {
     return <LoadingSpinner />;
   }
 
-  return (
-    <Wrapper>
-      <FormInput
-        id="name"
-        label="Nome"
-        placeholder="Nome"
-        value={localStorage.getItem('name') ?? ''}
-        disabled={true}
-        onChange={noop}
-        type="text"
-      />
-      <FormInput
-        id="resident"
-        label="Selecione o morador"
-        type="select"
-        disabled={residentId !== 'novo'}
-        value={selectedResident?.id?.toString() ?? ''}
-        options={residents.map((resident) => ({
-          value: String(resident.id),
-          label: resident.name,
-        }))}
-        onChange={(e) => {
-          const target = e.target as HTMLSelectElement;
-          const selectedId = Number(target.value);
-          const foundResident = residents.find(
-            (resident) => resident.id === selectedId,
-          );
-          setSelectedResident(foundResident);
-        }}
-      />
+  const handleStatusSelection = async (
+    status: AccompanimentStatusEnum,
+  ): Promise<void> => {
+    await createAccompaniment(status);
+    setShowStatusModal(false);
+    navigate(`/${type}`);
+  };
 
-      <FormInput
-        id="type"
-        label="Tipo de Acompanhamento"
-        type="text"
-        value={translatedType}
-        disabled={true}
-        onChange={noop}
-      />
-      <FormInput
-        id="description"
-        label="Digite aqui a descrição do acompanhamento"
-        type="textarea"
-        value={description}
-        placeholder="Descrição"
-        onChange={(e) => {
-          const target = e.target as HTMLTextAreaElement;
-          setDescription(target.value);
-        }}
-      />
-      <AlignButtons>
-        <Button
-          text="Cadastrar Acompanhamento"
-          onClick={() => {
-            handleSubmit().catch(noop);
-          }}
-          width="300px"
+  return (
+    <>
+      <Wrapper>
+        <FormInput
+          id="name"
+          label="Nome"
+          placeholder="Nome"
+          value={localStorage.getItem('name') ?? ''}
+          disabled={true}
+          onChange={noop}
+          type="text"
         />
-        <Button
-          text="Voltar"
-          onClick={() => {
-            navigate(`/${type}`);
+        <FormInput
+          id="resident"
+          label="Selecione o morador"
+          type="select"
+          disabled={residentId !== 'novo'}
+          value={selectedResident?.id?.toString() ?? ''}
+          options={residents.map((resident) => ({
+            value: String(resident.id),
+            label: resident.name,
+          }))}
+          onChange={(e) => {
+            const target = e.target as HTMLSelectElement;
+            const selectedId = Number(target.value);
+            const foundResident = residents.find(
+              (resident) => resident.id === selectedId,
+            );
+            setSelectedResident(foundResident);
           }}
-          backgroundColor="#6c757d"
         />
-      </AlignButtons>
-    </Wrapper>
+
+        <FormInput
+          id="type"
+          label="Tipo de Acompanhamento"
+          type="text"
+          value={translatedType}
+          disabled={true}
+          onChange={noop}
+        />
+        <FormInput
+          id="description"
+          label="Digite aqui a descrição do acompanhamento"
+          type="textarea"
+          value={description}
+          placeholder="Descrição"
+          onChange={(e) => {
+            const target = e.target as HTMLTextAreaElement;
+            setDescription(target.value);
+          }}
+        />
+        <AlignButtons>
+          <Button
+            text="Cadastrar Acompanhamento"
+            onClick={() => {
+              handleSubmit().catch(noop);
+            }}
+            width="300px"
+          />
+          <Button
+            text="Voltar"
+            onClick={() => {
+              navigate(`/${type}`);
+            }}
+            backgroundColor="#6c757d"
+          />
+        </AlignButtons>
+      </Wrapper>
+      {showStatusModal && (
+        <AccompanimentStatusModal
+          showStatusModal={showStatusModal}
+          setShowStatusModal={setShowStatusModal}
+          setAccompanimentStatus={handleStatusSelection}
+        />
+      )}
+    </>
   );
 };

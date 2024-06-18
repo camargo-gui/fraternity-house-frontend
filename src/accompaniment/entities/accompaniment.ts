@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { type AccompanimentStatusEnum } from './accompaniment-status';
 
 export class Accompaniment {
   public constructor(
@@ -10,6 +11,9 @@ export class Accompaniment {
     public type: 'PSYCHOLOGIST' | 'PHYSIOTHERAPIST' | 'NUTRITIONIST',
     public residentName: string,
     public updated_at?: Date | string,
+    public nutritionistStatus?: AccompanimentStatusEnum,
+    public psychologicalStatus?: AccompanimentStatusEnum,
+    public physicalStatus?: AccompanimentStatusEnum,
   ) {}
 
   toDomain(): Accompaniment {
@@ -22,6 +26,9 @@ export class Accompaniment {
       this.type,
       this.residentName,
       moment(this.updated_at ?? new Date()).format('DD/MM/YYYY'),
+      this.nutritionistStatus,
+      this.psychologicalStatus,
+      this.physicalStatus,
     );
   }
 

@@ -2,6 +2,7 @@ import { toast } from 'react-toastify';
 import { type HttpClient } from '../../../common/http-client/http-client';
 import { Accompaniment } from '../../entities/accompaniment';
 import { type AccompanimentService } from '../interface/accompaniment-service';
+import { type AccompanimentStatusEnum } from '../../entities/accompaniment-status';
 
 export class ObjectionAccompanimentService implements AccompanimentService {
   private readonly urlBase = '/accompaniment';
@@ -15,7 +16,25 @@ export class ObjectionAccompanimentService implements AccompanimentService {
         path: this.urlBase + '/list-residents' + `?type=${type}`,
         method: 'get',
       });
-      return response?.getArrayData(Accompaniment) ?? [];
+      const data = response?.getArrayData(Accompaniment) ?? [];
+
+      return (
+        data?.map((data) => {
+          return new Accompaniment(
+            data.id,
+            data.date,
+            data.description,
+            data.residentId,
+            data.employeeId,
+            data.type,
+            data.residentName,
+            data.updated_at,
+            data.nutritionistStatus,
+            data.psychologicalStatus,
+            data.physicalStatus,
+          );
+        }) ?? []
+      );
     } catch (e) {
       return [];
     }
@@ -28,6 +47,7 @@ export class ObjectionAccompanimentService implements AccompanimentService {
       residentId: number;
       type: 'PSYCHOLOGIST' | 'PHYSIOTHERAPIST' | 'NUTRITIONIST';
     },
+    accompanimentStatus: AccompanimentStatusEnum,
   ): Promise<void> {
     try {
       await httpClient.request({
@@ -37,6 +57,7 @@ export class ObjectionAccompanimentService implements AccompanimentService {
           description: accompaniment.description,
           residentId: accompaniment.residentId,
           type: accompaniment.type,
+          accompanimentStatus,
         },
       });
       toast.success('Acompanhamento criado com sucesso!');

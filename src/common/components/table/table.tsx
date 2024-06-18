@@ -74,7 +74,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
             </tr>
           )}
           {data.map((row, rowIndex) => (
-            <tr key={rowIndex}>
+            <tr style={{ verticalAlign: 'middle' }} key={rowIndex}>
               {columns.map((column, colIndex) => {
                 if (column.render !== undefined) {
                   return <td key={colIndex}>{column.render(row)}</td>;

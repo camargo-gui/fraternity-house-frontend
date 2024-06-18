@@ -27,6 +27,32 @@ interface Props {
   handleSearch: (search: string) => void;
 }
 
+const getStatusEmoji = (status: string | undefined): string => {
+  switch (status) {
+    case 'Muito Bom':
+      return '😁';
+    case 'Bom':
+      return '😐';
+    case 'Ruim':
+      return '😔';
+    default:
+      return '❓';
+  }
+};
+
+const getTranslatedStatus = (status: string | undefined): string => {
+  switch (status) {
+    case 'Very Good':
+      return 'Muito Bom';
+    case 'Good':
+      return 'Bom';
+    case 'Bad':
+      return 'Ruim';
+    default:
+      return 'Indefinido';
+  }
+};
+
 export const AccompanimentTable = ({
   accompaniments,
   handleOpenModal,
@@ -72,6 +98,34 @@ export const AccompanimentTable = ({
           />
         </div>
       ),
+    },
+    {
+      header: 'Status do Morador por Acompanhamento',
+      accessor: 'status',
+      render: (row: Accompaniment) => {
+        let status;
+
+        switch (type) {
+          case 'NUTRITIONIST':
+            status = getTranslatedStatus(row.nutritionistStatus);
+            break;
+          case 'PHYSIOTHERAPIST':
+            status = getTranslatedStatus(row.physicalStatus);
+            break;
+          case 'PSYCHOLOGIST':
+            status = getTranslatedStatus(row.psychologicalStatus);
+            break;
+          default:
+            status = 'Indefinido';
+        }
+
+        return (
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '2rem' }}>{getStatusEmoji(status)}</div>
+            <div>{status}</div>
+          </div>
+        );
+      },
     },
   ];
 
